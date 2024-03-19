@@ -15,6 +15,7 @@ export async function handleRegister(req: Request, res: Response) {
 
 		let resp = await registerUser(user);
 
+		
 	
 		return res.send(resp);
 	} catch (e: any) {

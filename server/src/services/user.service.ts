@@ -3,18 +3,21 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import Session from "../models/session.model";
+import { newError } from "../utils";
+import { randomBytes } from 'crypto';
 
 export const registerUser = async (user: UserDocument) => {
     try {
 		let userExists = await User.findOne({email: user.email});
 
         if(userExists) throw {status: 409, message: 'Korisnik vec postoji' }
+        
 
-		user.password = await bcrypt.hash(user.password!, 10);
-        const newUser = new User({...user});
+
+        const newUser = new User({...user, modelNum: randomBytes(4).toString('hex').toUpperCase()});
         const registered = await newUser.save();
 
-        if(!registered) throw { status: 500, message: 'Internal Server Error' }
+        if(!registered) throw {status: 400, message: 'h'};
 
         return {
             status: 200,
@@ -26,6 +29,32 @@ export const registerUser = async (user: UserDocument) => {
 	}
 }
 
+export const sendPasswordMail = async (email: string) => {
+    try {
+        
+    } catch(e: any) {
+
+    }
+}
+
+
+export const setPassword = async (userId: string, password: string) => {
+    try {
+        let user = await User.findOne({_id: userId});
+        if(!user) throw newError(404, 'Korisnik ne postoji!');
+        user.password = await bcrypt.hash(password, 10);
+        
+        await user.save();
+
+        return {
+            status: 200,
+            message: 'Lozinka je sacuvana'
+        }
+
+    } catch(e: any) {
+        throw e;
+    }
+}
 
 export const loginUser = async (email: string, password: string, userAgent: string) => {
     try {
