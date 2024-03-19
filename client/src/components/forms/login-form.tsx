@@ -1,4 +1,16 @@
 import { KeySquare } from "lucide-react";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card"
+import { Input } from "../../components/ui/input"
+import { Label } from "../../components/ui/label"
+import { Select, SelectTrigger, SelectContent, SelectValue, SelectItem } from "../../components/ui/select"
 
 export function LoginForm() {
   return (
