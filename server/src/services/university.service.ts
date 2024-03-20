@@ -1,6 +1,6 @@
-import { newError, newResponse } from 'utils';
+import { newError, newResponse } from '../utils';
 import { UserDocument } from './../models/user.model';
-import University, { UniDocument } from "models/university.model";
+import University, { UniDocument } from "../models/university.model";
 
 
 

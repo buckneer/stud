@@ -1,3 +1,4 @@
+import { UniDocument } from '../models/university.model';
 import { Document, Schema, model, Types } from 'mongoose';
 import { UserDocument } from './user.model';
 
@@ -13,6 +14,7 @@ export interface StudentDocument extends Document {
     dateOfEnrollment: string;
     currentSemester: string;
     grades: string[];
+    universities: UniDocument[]
 }
 
 const StudentSchema = new Schema({
@@ -25,7 +27,8 @@ const StudentSchema = new Schema({
     status: { type: String, enum: ['Budžet', 'Samofinansiranje', 'Done'], required: true },
     dateOfEnrollment: { type: String, required: true },
     currentSemester: { type: String, default: '1'},
-    grades: [{ type: String, ref: 'Grades', index: true }] // Obj.Id
+    grades: [{ type: String, ref: 'Grades', index: true }], // Obj.Id
+    universities: [{type: Schema.ObjectId, required: false, ref: 'University'}],
 });
 
 const Student = model<StudentDocument>('Student', StudentSchema);

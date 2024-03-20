@@ -1,4 +1,5 @@
 
+import { handleAddStudentsUni, handleGetAllUnis, handleNewUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import {Express, Request, Response} from "express";
 
@@ -16,5 +17,9 @@ export default function (app: Express) {
     app.patch('/password', handleSetPassword);
     app.post('/password', handleSendPasswordMail);
 
+
+    app.post('/uni', handleNewUni);
+    app.get('/uni', handleGetAllUnis);
+    app.patch('/uni', handleAddStudentsUni);
 
 }

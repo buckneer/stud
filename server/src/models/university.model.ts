@@ -22,7 +22,6 @@ const UniSchema = new Schema({
     service: [{type: Schema.ObjectId, ref: 'User'}],
     departments: [{type: String}],
     parentUni: {type: String}
-
 })
 
 const University = model<UniDocument>('University', UniSchema);

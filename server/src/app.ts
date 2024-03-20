@@ -31,6 +31,8 @@ app.use(requestLogger);
 
 
 routes(app)
+
+
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // Remove this if errors:
 app.use(unknownEndpoint)
@@ -38,9 +40,8 @@ app.use(errorHandler)
 
 
 app.listen(PORT, () => {
-	log.info(`Server running on port: ${PORT}`)
+	log.info(`Server running on port: ${PORT}`);
 	connectDB();
-	
 })
 
 

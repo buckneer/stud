@@ -1,9 +1,9 @@
 import { UserDocument } from './../models/user.model';
 import { Response, Request } from 'express';
-import log from "logger";
-import { addStudents, addUniversity, getAllUniversities } from 'services/university.service';
+import log from "../logger";
+import { addStudents, addUniversity, getAllUniversities } from '../services/university.service';
 
-export async function handleGetAll(req: Request, res: Response) {
+export async function handleGetAllUnis(req: Request, res: Response) {
     try {
         let resp = await getAllUniversities();
         return res.send(resp);
@@ -29,7 +29,7 @@ export async function handleNewUni(req: Request, res: Response) {
 	}
 }
 
-export async function handleAddProfessors(req: Request, res: Response) {
+export async function handleAddStudentsUni(req: Request, res: Response) {
     try {
 		let students = req.body.students;
         let uniId = req.body.uniId;
