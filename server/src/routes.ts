@@ -13,7 +13,7 @@ export default function (app: Express) {
     app.post('/logout', handleLogout);
 
 
-    app.put('/password', handleSetPassword);
+    app.patch('/password', handleSetPassword);
     app.post('/password', handleSendPasswordMail);
 
 
