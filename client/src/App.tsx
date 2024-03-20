@@ -1,11 +1,14 @@
 import './App.css';
-import { LoginForm } from './components/forms/login-form';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login/Login';
 
 function App() {
   return (
-    <div className="App">
-      <LoginForm />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/login' element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
