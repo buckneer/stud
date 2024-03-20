@@ -1,5 +1,5 @@
 import { apiSlice } from './apiSlice';
-import { setAccess, setRefresh, loggedOut } from '../slices/sessionSlice';
+import { setAccess, setRefresh, loggedOut, setUser } from '../slices/sessionSlice';
 
 const sessionApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -15,6 +15,7 @@ const sessionApiSlice = apiSlice.injectEndpoints({
                   setTimeout(() => {
                     dispatch(setAccess(data.accessToken));
                     dispatch(setRefresh(data.refreshToken));
+                    dispatch(setUser(data.user));
                   }, 1000);
                 } catch (err) {
                   dispatch(loggedOut());

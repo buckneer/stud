@@ -1,14 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
 
+export interface User {
+	email?: string;
+	name?: string;
+	role?: string;
+	confirmed?: boolean;
+	studentId?: string;
+}
+
 export interface Session {
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
+	user: User
 }
 
 const initialState: Session = {
 	accessToken: '',
-	refreshToken: ''
+	refreshToken: '',
+	user: {}
 }
 
 const sessionSlice = createSlice({
@@ -27,6 +37,12 @@ const sessionSlice = createSlice({
 				refreshToken: action.payload
 			}
 		},
+		setUser(state, action: PayloadAction<User>) {
+			return {
+				...state,
+				...action
+			}
+		},
 		loggedOut() {
 			return initialState;
 		},
@@ -34,4 +50,4 @@ const sessionSlice = createSlice({
 });
 
 export default sessionSlice.reducer;
-export const {loggedOut, setAccess, setRefresh } = sessionSlice.actions;
+export const {loggedOut, setAccess, setRefresh, setUser } = sessionSlice.actions;

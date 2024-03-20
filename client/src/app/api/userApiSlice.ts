@@ -9,7 +9,14 @@ const userApiSlice = apiSlice.injectEndpoints({
                 body
             })
         }),
-        setPassword: builder.mutation({
+        sendPasswordMail: builder.mutation({
+            query: (body) => ({
+                url: '/password',
+                method: 'POST',
+                body
+            })  
+        }),
+        setNewPassword: builder.mutation({
             query: (body) => ({
                 url: '/password',
                 method: 'PATCH',
@@ -21,5 +28,5 @@ const userApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useRegisterMutation,
-    useSetPasswordMutation
+    useSetNewPasswordMutation
 } = userApiSlice
