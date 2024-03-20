@@ -6,7 +6,8 @@
   "scripts": {
     "client": "cd client && npm run start",
     "server": "cd server && npm run dev",
-    "install": "cd client && npm install && cd ../server && npm install",
+    "install": "npm install concurrently && cd client && npm install && cd ../server && npm install",
+    "i": "npm install concurrently && cd client && npm install && cd ../server && npm install",
     "dev": "concurrently \"npm run client\" \"npm run server\" ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

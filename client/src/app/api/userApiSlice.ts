@@ -8,6 +8,13 @@ const userApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body
             })
+        }),
+        setPassword: builder.mutation({
+            query: (body) => ({
+                url: '/password',
+                method: 'PATCH',
+                body
+            })
         })
     })
 });
