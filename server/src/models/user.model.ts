@@ -6,9 +6,7 @@ export interface UserDocument extends Document {
     name: string;
     role: string;
     confirmed: boolean;
-    code: string;
-    studentId: string;
-    modelNum?: string;
+    code: string;  
     university?: string;
     phoneNumber?: string;
 }
@@ -20,9 +18,7 @@ const UserSchema = new Schema({
     role: {type: String, default: 'user'},
     confirmed: {type: Boolean, default: false},
     code: {type: String, required: false},
-    university: {type: String, required: false},
-    studentId: {type: String, required: true},
-    modelNum: {type: String, required: true},
+    university: {type: Schema.ObjectId, required: false, ref: 'University'},
     phoneNum: {type: String, required: false}
 });
 
