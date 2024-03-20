@@ -38,7 +38,7 @@ export const sendPasswordMail = async (email: string) => {
 
         user.code = code;
         await user.save();
-        sendMessage({to: email, subject: 'Nova lozinka', text: ` Kod za kreiranje nove lozinke je: ${code} `})
+        sendMessage({to: email, subject: 'Nova lozinka', text: `Kod za kreiranje nove lozinke je: ${code} `})
         return newResponse('Poruka je poslata');
     } catch(e: any) {
         throw e;
@@ -74,8 +74,8 @@ export const loginUser = async (email: string, password: string, userAgent: stri
         let matchingPass = await bcrypt.compare(password, user.password!);
         if (!matchingPass) throw {status: 401, message: 'Pogresna email adresa ili lozinka'}
 
-        const accessToken = jwt.sign({email: user.email, role: user.role}, process.env.JWT_SECRET as string, {expiresIn});
-        const refreshToken = jwt.sign({email: user.email, role: user.role},
+        const accessToken = jwt.sign({id: user.id, email: user.email, role: user.role}, process.env.JWT_SECRET as string, {expiresIn});
+        const refreshToken = jwt.sign({id: user.id, email: user.email, role: user.role},
             process.env.REFRESH_SECRET as string);
 
         let session = {
