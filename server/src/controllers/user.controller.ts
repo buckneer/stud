@@ -1,5 +1,5 @@
 import { UserDocument } from "../models/user.model";
-import { loginUser, logoutUser, refreshAccessToken, registerUser } from "../services/user.service";
+import { loginUser, logoutUser, refreshAccessToken, registerUser, sendPasswordMail, setPassword } from "../services/user.service";
 import {Request, Response} from "express";
 import log from "../logger";
 
@@ -15,14 +15,47 @@ export async function handleRegister(req: Request, res: Response) {
 
 		let resp = await registerUser(user);
 
-		
-	
+
+
 		return res.send(resp);
 	} catch (e: any) {
 		return res.status(e.status).send(e);
 	}
 }
 
+
+export async function handleSetPassword(req: Request, res: Response) {
+	try {
+		let userId = req.body.userId;
+		let code = req.body.code;
+		let password = req.body.password;
+
+		if(!userId) return res.status(400).send({message: 'UserId je obavezan'});
+		if(!code) return res.status(400).send({message: 'Kod je obavezan'});
+		if(!password) return res.status(400).send({message: 'Lozinka je obavezna'});
+
+		let resp = await setPassword(userId, password, code);
+
+		return res.status(200).send(resp);
+	} catch(e: any) {
+		log.error(e.message);
+		return res.status(e.status).send(e);
+	}
+}
+
+export async function handleSendPasswordMail(req: Request, res: Response) {
+	try {
+		let email = req.body.email;
+		if(!email) return res.status(400).send({message: 'Email adresa je obavezna'});
+
+		let resp = await sendPasswordMail(email);
+
+		return res.status(200).send(resp);
+	} catch (e: any) {
+		log.error(e.message);
+		return res.status(e.status).send(e);
+	}
+}
 
 export async function handleLogin(req: Request, res: Response) {
 	try {
@@ -32,7 +65,7 @@ export async function handleLogin(req: Request, res: Response) {
 		
         if(!userAgent || !email || !password ) { return res.status(400).send({message: 'Bad Request'}) };
 
-        let session = await loginUser(email, password, userAgent)
+        let session = await loginUser(email, password, userAgent);
         return res.send(session);
 	} catch (e: any) {
 		log.error(e.message);

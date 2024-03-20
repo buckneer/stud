@@ -3,21 +3,21 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import Session from "../models/session.model";
-import { newError } from "../utils";
+import { newError, newResponse, sendMessage } from "../utils";
 import { randomBytes } from 'crypto';
 
 export const registerUser = async (user: UserDocument) => {
     try {
 		let userExists = await User.findOne({email: user.email});
 
-        if(userExists) throw {status: 409, message: 'Korisnik vec postoji' }
+        if(userExists) throw newError(409, 'Korisnik vec postoji');
         
 
 
         const newUser = new User({...user, modelNum: randomBytes(4).toString('hex').toUpperCase()});
         const registered = await newUser.save();
 
-        if(!registered) throw {status: 400, message: 'h'};
+        if(!registered) throw newError(500, 'Internal Server Error');
 
         return {
             status: 200,
@@ -31,18 +31,27 @@ export const registerUser = async (user: UserDocument) => {
 
 export const sendPasswordMail = async (email: string) => {
     try {
+        let user = await User.findOne({email});
+		let code = randomBytes(4).toString('hex');
         
-    } catch(e: any) {
+        if(!user) throw newError(404, 'Korisnik nije pronadjen!');
 
+        user.code = code;
+        await user.save();
+        sendMessage({to: email, subject: 'Nova lozinka', text: ` Kod za kreiranje nove lozinke je: ${code} `})
+        return newResponse('Poruka je poslata');
+    } catch(e: any) {
+        throw e;
     }
 }
 
 
-export const setPassword = async (userId: string, password: string) => {
+export const setPassword = async (userId: string, password: string, code: string) => {
     try {
-        let user = await User.findOne({_id: userId});
-        if(!user) throw newError(404, 'Korisnik ne postoji!');
+        let user = await User.findOne({_id: userId, code});
+        if(!user) throw newError(404, 'Korisnik ne postoji ili kod neispravan!');
         user.password = await bcrypt.hash(password, 10);
+        user.confirmed = true;
         
         await user.save();
 

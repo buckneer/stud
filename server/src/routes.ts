@@ -1,5 +1,5 @@
 
-import { handleLogin, handleLogout, handleRefresh, handleRegister } from "./controllers/user.controller";
+import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import {Express, Request, Response} from "express";
 
 
@@ -11,6 +11,10 @@ export default function (app: Express) {
     app.post('/register', handleRegister);
     app.post('/refresh', handleRefresh);
     app.post('/logout', handleLogout);
+
+
+    app.put('/password', handleSetPassword);
+    app.post('/password', handleSendPasswordMail);
 
 
 }
