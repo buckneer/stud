@@ -1,4 +1,3 @@
-import { UserDocument } from './../models/user.model';
 import { Response, Request } from 'express';
 import log from "../logger";
 import { addStudents, addUniversity, getAllUniversities } from '../services/university.service';
@@ -41,3 +40,5 @@ export async function handleAddStudentsUni(req: Request, res: Response) {
 		return res.status(e.status).send(e);
 	}
 }
+
+// TODO: add getUniversity()...

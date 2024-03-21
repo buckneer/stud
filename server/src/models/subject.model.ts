@@ -1,14 +1,12 @@
 import { Document, Schema, model, Types } from 'mongoose';
-import { ProfessorDocument } from './professor.model';
-import { DepDocument } from './department.model';
 
 export interface SubjectDocument extends Document {
     name: string;
     code: string;
-    professors: ProfessorDocument[];
-    department: DepDocument;
+    professors: Types.ObjectId[];
+    department: Types.ObjectId;
     espb: number;
-    requiredSub: SubjectDocument[];
+    requiredSub: Types.ObjectId[];
 }
 
 const SubjectSchema = new Schema({ 

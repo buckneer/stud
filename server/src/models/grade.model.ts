@@ -1,15 +1,13 @@
 import { Document, Schema, model, Types } from 'mongoose';
-import { ProfessorDocument } from './professor.model';
-import { StudentDocument } from './student.model';
 
 export interface GradeDocument extends Document {
     subject?: string; // Subject doc
-    professor?: ProfessorDocument;
+    professor?: Types.ObjectId;
     profesorGrade?: number;
     service?: string; // Service doc
     serviceGrade?: number;
     confirmed?: boolean;
-    student: StudentDocument;
+    student: Types.ObjectId;
     period?: string; // Exam period
 }
 
