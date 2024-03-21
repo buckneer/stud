@@ -1,7 +1,9 @@
 import { useLoginMutation } from './../../app/api/sessionApiSlice';
 import React, { useEffect, useState } from 'react';
-import FormCard from '../../components/FormCard/FormCard';
 import {LogIn} from "lucide-react"
+
+import {LockKeyhole } from "lucide-react";
+import {Link} from "react-router-dom";
 
 
 const Login = () => {
@@ -61,55 +63,69 @@ const Login = () => {
             } */}
 
             <div className="w-full h-screen flex justify-center items-center">
-                {/* Ide login komponenta sa states */}
-                <FormCard onSubmitHandler={ handleLogin } title='Login' subtitle='subtitle is going here' Icon={<LogIn />}  >
-                    <div className='FormItem w-full flex flex-col justify-start p-2  items-start'>
-                        <label htmlFor="email" className='text-white my-2 font-semibold uppercase'>E-adresa</label>
-                        <input id="email" className='w-full py-2 px-4 outline-none rounded-sm' type="text" value={email} placeholder='unesite vasu e-adresu' onChange={(e) => setEmail(e.target.value)} autoComplete='off' />
+                <form onSubmit={handleLogin} className="md:block mx-4 md:mx-0 md:p-4 w-full md:w-1/2 lg:w-[450px] h-auto shadow-none md:shadow-md md:rounded-sm bg-[#31263E]">
+                    {/* Header */}
+                    <div id="FormHeader" className="w-full">
+                        <div id="FormHeader" className="w-full text-slate-100">
+                            { 
+                                isLoginLoading ? 
+                                        <div className="">Loader ide ovde...</div> 
+                                        : null
+                            }
+                            { 
+                                isLoginSuccess ?
+                                    <div className="w-full flex justify-center">
+                                        <div className="bg-green-200 border-2 border-green-400 w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 uppercase">Uspesan login!</div> 
+                                    </div>
+                                        : null
+                            }
+                            { 
+                                isLoginError ? 
+                                <div className="w-full flex justify-center">
+                                    <div className="bg-red-200 border-2 border-red-400 w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 uppercase">Greska prilikom prijavljivanja!</div> 
+                                </div>
+                                        : null
+                            }
+					    </div>
+                        <div className="text-3xl text-slate-100 font-semibold p-2 uppercase">Login</div>
+                        <div className="text-slate-200 p-2 italic" >Prijavite se na iStud</div>
                     </div>
-                    <div className='FormItem w-full flex flex-col justify-start p-2  items-start'>
-                        <label htmlFor='password' className='text-white p-2 font-semibold uppercase'>Password</label>
-                        <input id="password" className='w-full py-2 px-4 outline-none rounded-sm' type="password" value={password} placeholder='Unesite lozinku' onChange={(e) => setPassword(e.target.value)} autoComplete='off' />
+                    {/* Content */}
+                    <div className='FormItem w-full flex flex-col justify-start p-2 items-start'>
+                        <label htmlFor="UserEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+                            <input
+                                type="email" id="UserEmail" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete='off'
+                                className="peer h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+                            />
+                            <span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+                                E-adresa
+                            </span>
+                        </label>
                     </div>
-                </FormCard>
 
-               
+                    <div className='FormItem w-full flex flex-col justify-start p-2 items-start'>
+                    <label  htmlFor="UserPassword"className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+                        <input
+                            type="password" id="UserPassword" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete='off'
+                            className="peer h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+                        />
+                        <span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+                            Sifra
+                        </span>
+                        </label>
+                    </div>
+                    {/* FooterCard */}
+                    <div className="FormFooter w-full flex justify-evenly pt-5 gap-2">
+                    <div className="flex text-sm italic justify-center items-center gap-3 text-slate-500 hover:text-slate-200 hover:cursor-pointer">
+                    <LockKeyhole strokeWidth={0.5}/>
+                    <Link to="#">zaboravili ste lozinku</Link>
+                    </div>
+                        <button className="py-2 px-4 bg-slate-300 hover:bg-slate-100 rounded-sm" type="submit"><LogIn /></button>
+                    </div>
+                </form>
             </div>
-
         </>
     );
 }
 
-export default Login
-
-
-//<Card className="">
-//<form onSubmit={handleLogin}>
-  //  <CardHeader>
-    //    <CardTitle>Login</CardTitle>
-      //  <CardDescription>Deploy your new project in one-click.</CardDescription>
-    //</CardHeader>
-    //<CardContent>
-      //  <div className="grid w-full items-center gap-4">
-        //    <div className="flex flex-col space-y-1.5">
-          //      <Label htmlFor="email">E-adresa</Label>
-            //    <Input id="email" type='email' placeholder="Unesite Vasu e-adresu" value={email} onChange={(e) => setEmail(e.target.value)} />
-            //</div>
-            //<div className="flex flex-col space-y-1.5">
-              //  <Label htmlFor="password">Lozinka</Label>
-                //<Input id="password" type='password' placeholder="Unesite Vasu lozinku" value={password} onChange={(e) => setPassword(e.target.value)} />
-           // </div>
-       // </div>
-    // </CardContent>
-    // <CardFooter className="flex flex-col justify-center gap-2">
-       // <Button type="submit">Deploy</Button>
-       // <Bu className="flex items-center justify-end transition duration-200 mx-5 px-5 py-4 cursor-pointer font-normal text-sm rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 ring-inset">
-         //   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 inline-block align-text-top">
-           //     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-            // </svg>
-            // <span className="inline-block ml-1">Zaboravili ste lozinku?</span>
-       // </Bu/tton>
-       // <Button /* onClick={() => setOpen(true)} */>Zaboravili ste lozinku?</Button>
-    // </CardFooter>
-// </form>
-// </Card>
+export default Login;
