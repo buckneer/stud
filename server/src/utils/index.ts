@@ -37,18 +37,12 @@ export const sendMessage = async (message: MailMessage) => {
 
 
 
-export const newError = (status: number, message: string, options?: any) => {
-    return  options ? {
-        status,
-        message,
+export const newError = (status?: number, message?: string, options?: any) => {
+    return {
+        status: status || 500,
+        message: message || 'Internal Server Error',
         ...options
     } 
-    :
-    {
-        status,
-        message,
-        ...options
-    }
 }
 
 export const newResponse = (message: string, status: number = 200, options?: any) => {
