@@ -1,6 +1,6 @@
-import Professor, { ProfessorDocument } from "models/professor.model";
-import University from "models/university.model";
-import { newError, newResponse } from "utils";
+import Professor, { ProfessorDocument } from "../models/professor.model";
+import University from "../models/university.model";
+import { newError, newResponse } from "../utils";
 
 export const addProfessor = async (university: string, professor: ProfessorDocument, user: string) => {
     try {
