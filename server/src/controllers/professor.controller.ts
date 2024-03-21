@@ -1,6 +1,6 @@
 import { ProfessorDocument } from '../models/professor.model';
 import { Request, Response } from "express";
-import { addProfessor, updateProfessor, getProfessor, getProfessors } from 'services/professor.service';
+import { addProfessor, updateProfessor, getProfessor, getProfessors } from '../services/professor.service';
 
 export async function handleAddProfessor(req: Request, res: Response) {
     try {       
