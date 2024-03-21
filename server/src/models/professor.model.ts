@@ -1,17 +1,23 @@
-import { Document, Schema, model, Types } from 'mongoose';
+import { Document, Schema, model } from 'mongoose';
+import { UserDocument } from './user.model';
+import { SubjectDocument } from './subject.model';
+import { GradeDocument } from './grade.model';
+import { UniDocument } from './university.model';
 
 export interface ProfessorDocument extends Document {
     title?: string;
-    subjects: string[];
-    grades: string[];
-    universities: string[];
+    user: UserDocument;
+    subjects: SubjectDocument[];
+    grades: GradeDocument[];
+    universities: UniDocument[];
 }
 
 const ProfessorSchema = new Schema({
     title: { type: String },
-    subjects: [{ type: String, ref: 'Subject', index: true }], // Obj.Id
-    grades: [{ type: String, ref: 'Grade', index: true }], // Obj.Id
-    universities: [{ type: String, ref: 'Univeristy', index: true }] // Obj.Id
+    user: { type: Schema.ObjectId, ref: 'User' },
+    subjects: [{ type: Schema.ObjectId, ref: 'Subject', index: true }], 
+    grades: [{ type: Schema.ObjectId, ref: 'Grade', index: true }],
+    universities: [{ type: Schema.ObjectId, ref: 'Univeristy', index: true }]
 });
 
 const Professor = model<ProfessorDocument>('Professor', ProfessorSchema);

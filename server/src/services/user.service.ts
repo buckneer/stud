@@ -12,8 +12,6 @@ export const registerUser = async (user: UserDocument) => {
 
         if(userExists) throw newError(409, 'Korisnik vec postoji');
         
-
-
         const newUser = new User({...user, modelNum: randomBytes(4).toString('hex').toUpperCase()});
         const registered = await newUser.save();
 
