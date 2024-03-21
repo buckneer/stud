@@ -1,10 +1,9 @@
 import { Document, Schema, model, Types } from 'mongoose';
-import { ExamDocument } from './exam.model';
 
 export interface PeriodDocument extends Document {
     start?: string;
     end?: string;
-    exams: ExamDocument[]
+    exams: Types.ObjectId[]
 }
 
 const PeriodSchema = new Schema({

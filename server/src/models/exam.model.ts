@@ -1,17 +1,12 @@
 import { Document, Schema, model, Types } from 'mongoose';
-import { StudentDocument } from './student.model';
-import { SubjectDocument } from './subject.model';
-import { ProfessorDocument } from './professor.model';
-import { PeriodDocument } from './period.model';
-import { GradeDocument } from './grade.model';
 
 export interface ExamDocument extends Document {
     date?: string;
-    students: StudentDocument[];
-    subject: SubjectDocument;
-    professor: ProfessorDocument //! Can be removed
-    grades: GradeDocument[];
-    period: PeriodDocument;
+    students: Types.ObjectId[];
+    subject: Types.ObjectId;
+    professor: Types.ObjectId //! Can be removed
+    grades: Types.ObjectId[];
+    period: Types.ObjectId;
     ended: boolean;
 }
 

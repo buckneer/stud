@@ -22,7 +22,7 @@ export async function handleGetDepartments(req: Request, res: Response) {
     try {
         let { university } = req.params;
 
-        let resp = getDepartments(university);
+        let resp = await getDepartments(university);
 
         return res.send(resp);
     } catch (e: any) {
@@ -32,9 +32,9 @@ export async function handleGetDepartments(req: Request, res: Response) {
 
 export async function handleGetDepartment(req: Request, res: Response) {
     try {
-        let { id } = req.body;
+        let { department } = req.params;
 
-        let resp = getDepartment(id);
+        let resp = await getDepartment(department);
 
         return res.send(resp);
     } catch (e: any) {

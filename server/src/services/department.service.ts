@@ -33,7 +33,7 @@ export const getDepartment = async (_id: string) => {
         let depObj = await Department.findOne({ _id });
 
         if(!depObj) throw newError(404, 'Nije pronadjen odsek...');
-
+        
         return depObj;
     } catch (e: any) {
         throw e;

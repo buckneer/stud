@@ -32,18 +32,18 @@ export default function (app: Express) {
 
     // Student
     app.post('/student/:university/:user', handleAddStudent);
-    app.get(['/student', '/student/:university'], handleGetStudents);
+    app.get(['/student', '/uni/:university/student'], handleGetStudents);
     app.get('/student/:id', handleGetStudent);
     app.delete('/student/:id', handleDeleteStudent);
 
     // Professor
     app.post('/professor/:university/:user', handleAddProfessor);
     app.get('/professor/:professor', handleGetProfessor);
-    app.get('/professor', handleGetProfessors);
+    app.get('/professor', handleGetProfessors); // <- add all university professors
     app.patch('/professor/:professor', handleUpdateProfessor);
 
     // Departments
     app.post('/department/:university', handleAddDepartment);
-    app.post('/depatment', handleGetDepartment);
-    app.post('/department/:university', handleGetDepartments);
+    app.get('/department/:department', handleGetDepartment);
+    app.get('/uni/:university/department/', handleGetDepartments);
 }

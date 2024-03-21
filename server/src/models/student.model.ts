@@ -1,22 +1,19 @@
 import { Document, Schema, model, Types } from 'mongoose';
-import { UserDocument } from './user.model';
-import { DepDocument } from './department.model';
-import { SubjectDocument } from './subject.model';
-import { UniDocument } from './university.model';
+
 
 export interface StudentDocument extends Document {
     user?: Types.ObjectId;
     studentId?: string;
     modelNum?: string;
-    subjects?: SubjectDocument[];
-    completedSubjects?: SubjectDocument[];
-    department?: DepDocument;
+    subjects?: Types.ObjectId[];
+    completedSubjects?: Types.ObjectId[];
+    department?: Types.ObjectId;
     degree?: string;
     status?: string;
     dateOfEnrollment?: string;
     currentSemester?: string;
     grades?: string[];
-    universities?: UniDocument[]
+    universities?: Types.ObjectId[]
 }
 
 const StudentSchema = new Schema({
