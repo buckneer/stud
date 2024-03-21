@@ -4,7 +4,11 @@ import { handleAddStudent, handleDeleteStudent, handleGetStudent, handleGetStude
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import {Express, Request, Response} from "express";
+<<<<<<< HEAD
 import { roleGuard, userGuard } from "./middleware/routeGuard";
+=======
+import { handleAddDepartment, handleGetDepartment, handleGetDepartments } from "./controllers/department.controller";
+>>>>>>> origin/department-crud
 
 
 export default function (app: Express) {
@@ -41,4 +45,8 @@ export default function (app: Express) {
     app.get('/professor', handleGetProfessors);
     app.patch('/professor/:professor', handleUpdateProfessor);
 
+    // Departments
+    app.post('/department/:university', handleAddDepartment);
+    app.post('/depatment', handleGetDepartment);
+    app.post('/department/:university', handleGetDepartments);
 }
