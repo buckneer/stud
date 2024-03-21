@@ -4,11 +4,8 @@ import { handleAddStudent, handleDeleteStudent, handleGetStudent, handleGetStude
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import {Express, Request, Response} from "express";
-<<<<<<< HEAD
 import { roleGuard, userGuard } from "./middleware/routeGuard";
-=======
 import { handleAddDepartment, handleGetDepartment, handleGetDepartments } from "./controllers/department.controller";
->>>>>>> origin/department-crud
 
 
 export default function (app: Express) {
