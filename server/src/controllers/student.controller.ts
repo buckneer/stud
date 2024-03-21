@@ -5,9 +5,13 @@ import { newResponse } from "../utils";
 
 export async function handleAddStudent(req: Request, res: Response) {
     try {
-        let {student, userId} = req.body;
+        let { student } = req.body;
+        
+        // TODO implement university everywhere where it's needed
+        let userId: string = req.params.user;
+        let university: string = req.params.university;
 
-        let resp = await addStudent(userId, student);
+        let resp = await addStudent(userId, student, university);
         console.log(resp);
         res.send(resp);
     } catch (e: any) {
@@ -18,7 +22,9 @@ export async function handleAddStudent(req: Request, res: Response) {
 
 export async function handleGetStudents(req: Request, res: Response) {
     try {
-        let resp = await getStudents();
+        let { university } = req.params;
+
+        let resp = await getStudents(university);
         console.log(resp);
         res.send(resp);
     } catch (e: any) {
@@ -53,7 +59,7 @@ export async function handleUpdateStudent(req: Request, res: Response) {
 
 export async function handleDeleteStudent(req: Request, res: Response) {
     try {
-        let { id } = req.body;
+        let id = req.params.id;
 
         let resp = await deleteStudent(id);
         return res.send(newResponse('Korisnik je obrisan'));
