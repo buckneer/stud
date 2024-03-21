@@ -100,7 +100,8 @@
   
       "outDir": "dist/",
   
-      "baseUrl": "src",
+      "baseUrl": "./src/",
+      // "baseUrl": "./src",
       "paths": {
         "@config/*": ["config/*"]
       }
