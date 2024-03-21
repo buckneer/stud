@@ -2,6 +2,7 @@ import { Document, Schema, model, Types } from 'mongoose';
 import { UserDocument } from './user.model';
 import { DepDocument } from './department.model';
 import { SubjectDocument } from './subject.model';
+import { UniDocument } from './university.model';
 
 export interface StudentDocument extends Document {
     user?: Types.ObjectId;
