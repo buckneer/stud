@@ -1,4 +1,5 @@
 
+import { handleAddProfessor, handleGetProfessor, handleGetProfessors, handleUpdateProfessor } from "controllers/professor.controller";
 import { handleAddStudent, handleDeleteStudent, handleGetStudent, handleGetStudents } from "./controllers/student.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
@@ -9,12 +10,13 @@ export default function (app: Express) {
     app.get("/healthcheck", (request: Request, response: Response) => response.sendStatus(200));
 
 
-    // User
+    // Session
     app.post('/login', handleLogin);
-    app.post('/register', handleRegister);
     app.post('/refresh', handleRefresh);
     app.post('/logout', handleLogout);
-
+    
+    // User
+    app.post('/register', handleRegister);
     app.patch('/password', handleSetPassword);
     app.post('/password', handleSendPasswordMail);
 
@@ -24,9 +26,15 @@ export default function (app: Express) {
     app.patch('/uni', handleAddStudentsUni);
 
     // Student
-    app.post('/student', handleAddStudent);
-    app.get('/student', handleGetStudents);
+    app.post('/student/:university/:user', handleAddStudent);
+    app.get(['/student', '/student/:university'], handleGetStudents);
     app.get('/student/:id', handleGetStudent);
-    app.delete('/student', handleDeleteStudent);
+    app.delete('/student/:id', handleDeleteStudent);
+
+    // Professor
+    app.post('/professor/:university/:user', handleAddProfessor);
+    app.get('/professor/:professor', handleGetProfessor);
+    app.get('/professor', handleGetProfessors);
+    app.patch('/professor/:professor', handleUpdateProfessor);
 
 }

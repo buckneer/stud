@@ -41,9 +41,10 @@ export const getProfessor = async (professor: string) => {
     }
 }
 
-export const getProfessors = async (university: string) => {
+export const getProfessors = async (university: string = '') => {
     try {
-        let professorsObj = await Professor.find({ universities: { $has: university }});
+        let query = university ? { universities: university } : {};
+        let professorsObj = await Professor.find(query);
 
         return professorsObj || {};
 
@@ -52,19 +53,19 @@ export const getProfessors = async (university: string) => {
     }
 }
 
-export const editProfessor = async (professor: string, data: ProfessorDocument) => {
+export const updateProfessor = async (professor: string, data: ProfessorDocument) => {
     try {
         let professorObj = await Professor.findOne({ _id: professor });
 
         if(!professorObj) throw newError(404, 'Greška prilikom pristupanja!');
 
-        let edited = await Professor.updateOne({ _id: professorObj._id }, { 
+        let updated = await Professor.updateOne({ _id: professorObj._id }, { 
             $set: {
                 ...data
             }
         });
 
-        if(!edited) throw newError(500, 'Internal Server Error');
+        if(!updated) throw newError(500, 'Internal Server Error');
 
         return newResponse('Uspešno menjanje profesora!');
 

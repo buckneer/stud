@@ -1,6 +1,6 @@
 import { ProfessorDocument } from '../models/professor.model';
 import { Request, Response } from "express";
-import { addProfessor, editProfessor, getProfessor, getProfessors } from 'services/professor.service';
+import { addProfessor, updateProfessor, getProfessor, getProfessors } from 'services/professor.service';
 
 export async function handleAddProfessor(req: Request, res: Response) {
     try {       
@@ -44,12 +44,12 @@ export async function handleGetProfessors(req: Request, res: Response) {
     }
 }
 
-export async function handleEditProfessor(req: Request, res: Response) {
+export async function handleUpdateProfessor(req: Request, res: Response) {
     try {
         let professor = req.params.professor;
         let data: ProfessorDocument = req.body;
 
-        let resp = await editProfessor(professor, data);
+        let resp = await updateProfessor(professor, data);
 
         return res.status(200).send(resp);
     } catch(e: any) {

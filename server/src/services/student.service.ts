@@ -4,13 +4,13 @@ import User from "../models/user.model";
 import { newError, newResponse } from "../utils";
 
 
-export const addStudent = async (userId: string, student: StudentDocument) => {
+export const addStudent = async (userId: string, student: StudentDocument, university: string) => {
 
 
     // TODO check if the user with same Id is already registered as student
 
     let newStudent = new Student(student);
-    let user = await User.findOne({_id: userId});
+    let user = await User.findOne({ _id: userId });
 
     if(!user) throw newError(404, 'Korisnik nije pronađen!');
 
@@ -24,10 +24,11 @@ export const addStudent = async (userId: string, student: StudentDocument) => {
 }
 
 
-export const getStudents = async () => {
+export const getStudents = async (university: string = '') => {
+    let query = university ?  { universities: university } : {};
 
     // TODO omit password and code from the results
-    let students = Student.find().populate('user');
+    let students = Student.find(query).populate('user');
 
     return students;
 }
