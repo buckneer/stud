@@ -42,6 +42,7 @@ export interface Professor {
 export interface Uni {
   _id?: string;
   name: string;
+	email?: string;
 	students?: string[];
 	professors?: string[];
 	service?: string[];
