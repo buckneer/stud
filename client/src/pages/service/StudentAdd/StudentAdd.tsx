@@ -14,7 +14,7 @@ const StudentAdd = () => {
 		console.log(studentId, subject, currentSemester, degree);
 		// TODO: Preuzmi kormilo odavde Jovane 
 	}
-	
+
 	return (
 		<form onSubmit={handleStudentAdd}>
 			<input type="text" placeholder='Broj indexa' value={studentId} onChange={(e) => setStudentId(e.target.value)} />
