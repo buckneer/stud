@@ -9,7 +9,7 @@ export interface UniDocument extends Document {
     students?: UserDocument[];
     professors?: UserDocument[];
     service?: UserDocument[];
-    departments?: string[]; // TODO New Model
+    departments?: string[];
     parentUni?: string;
 }
 

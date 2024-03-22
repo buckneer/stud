@@ -6,6 +6,7 @@ import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPas
 import {Express, Request, Response} from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleGetDepartment, handleGetDepartments } from "./controllers/department.controller";
+import { handleAddSubject, handleGetSubject, handleGetSubjects } from "./controllers/subject.controller";
 
 
 export default function (app: Express) {
@@ -46,4 +47,10 @@ export default function (app: Express) {
     app.post('/department/:university', handleAddDepartment);
     app.get('/department/:department', handleGetDepartment);
     app.get('/uni/:university/department/', handleGetDepartments);
+
+    // Subject
+    app.post('/subject/:department/', handleAddSubject);
+    app.get('/subject/id/:id', handleGetSubject);
+    app.get('/subject/:department', handleGetSubjects);
+    
 }
