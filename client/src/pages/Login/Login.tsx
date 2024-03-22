@@ -45,7 +45,7 @@ const Login = () => {
     }, []);
 
     return (
-        <>
+        <div>
             {/* { 
                 isLoginLoading ? 
                     <>Loader ide ovde...</> 
@@ -91,18 +91,26 @@ const Login = () => {
                         <div className="text-slate-200 p-2 italic" >Prijavite se na iStud</div>
                     </div>
                     {/* Content */}
-                    <div className='FormItem w-full flex flex-col justify-start p-2 items-start'>
+                    <div className='FormItem w-full flex flex-col justify-start p-2 items-start relative'>
                         <label htmlFor="UserEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
                             <input
                                 type="email" id="UserEmail" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete='off'
-                                className="peer h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+                                className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
                             />
                             <span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
                                 E-adresa
                             </span>
+                            <span className="pointer-events-none absolute inset-y-0 end-0 grid w-10 place-content-center text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5 peer-focus/second:pt-2">
+                                    <path
+                                        fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.404 14.596A6.5 6.5 0 1116.5 10a1.25 1.25 0 01-2.5 0 4 4 0 10-.571 2.06A2.75 2.75 0 0018 10a8 8 0 10-2.343 5.657.75.75 0 00-1.06-1.06 6.5 6.5 0 01-9.193 0zM10 7.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"
+                                    />
+                                </svg>
+                            </span>
                         </label>
                     </div>
-
+                    {/* ------- */}
                     <div className='FormItem w-full flex flex-col justify-start p-2 items-start'>
                     <label  htmlFor="UserPassword"className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
                         <input
@@ -123,8 +131,13 @@ const Login = () => {
                         <button className="py-2 px-4 bg-slate-300 hover:bg-slate-100 rounded-sm" type="submit"><LogIn /></button>
                     </div>
                 </form>
+
+
+                
+
+                
             </div>
-        </>
+        </div>
     );
 }
 
