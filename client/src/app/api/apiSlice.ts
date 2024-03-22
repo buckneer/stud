@@ -6,6 +6,11 @@ const url = 'http://localhost:1337';
 
 const mutex: Mutex = new Mutex();
 
+const tags: string[] = [ 
+	'Uni', 'Unis', 'UniStudents',
+	'Student', 'Students', 'Professor',
+	'Professors', 'Department', 'Departments'
+];
 
 const baseQuery = fetchBaseQuery({ 
   baseUrl: `${url}/`, 
@@ -72,6 +77,7 @@ FetchBaseQueryError
 }
 
 export const apiSlice = createApi({
-  baseQuery: baseQueryWithReauth,
-  endpoints: (builder) => ({}),
+	baseQuery: baseQueryWithReauth,
+  tagTypes: tags,
+	endpoints: (builder) => ({}),
 });
