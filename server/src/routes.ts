@@ -7,6 +7,7 @@ import {Express, Request, Response} from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleGetDepartment, handleGetDepartments } from "./controllers/department.controller";
 import { handleAddSubject, handleGetSubject, handleGetSubjects } from "./controllers/subject.controller";
+import { handleAddGrade, handleGetGrade, handleGetGrades } from "./controllers/grade.controller";
 
 
 export default function (app: Express) {
@@ -44,7 +45,7 @@ export default function (app: Express) {
     app.patch('/professor/:professor', handleUpdateProfessor);
 
     // Departments
-    app.post('/department/:university', handleAddDepartment);
+    app.post('/department/', handleAddDepartment);
     app.get('/department/:department', handleGetDepartment);
     app.get('/uni/:university/department/', handleGetDepartments);
 
@@ -53,4 +54,9 @@ export default function (app: Express) {
     app.get('/subject/id/:id', handleGetSubject);
     app.get('/subject/:department', handleGetSubjects);
     
+
+    // Grade
+    app.post('/grades/', handleAddGrade);
+    app.get('/grades/id/:id', handleGetGrade);
+    app.get('/grades/', handleGetGrades);
 }
