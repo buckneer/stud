@@ -9,7 +9,7 @@ export async function handleAddExam(req: Request, res: Response) {
 
         let resp = await addExam(data);
 
-        return res.status(resp);
+        return res.send(resp);
     } catch (e: any) {
         return res.status(e.status).send(e); 
     }

@@ -14,13 +14,13 @@ export const addExam = async (data: ExamDocument) => {
 
     if(!saved) return newError(500, 'Internal Server Error');
 
-    return newResponse('Ispitni rok je sačuvan');
+    return newResponse('Ispit je sačuvan');
 }
 
 export const getExam = async (_id: string) => {
     
     let exam = await Exam.findOne({_id});
-    if(!exam) return newError(404, 'Ispitni rok nije pronađen');
+    if(!exam) return newError(404, 'Ispit nije pronađen');
 
     return exam;
 }
@@ -32,9 +32,9 @@ export const getExams = async () => {
 }
 
 export const updateExam = async (_id: string, data: any) => {
-    let depObj = await Exam.findOne({ _id });
+    let examObj = await Exam.findOne({ _id });
 
-    if(!depObj) throw newError(404, 'Greška prilikom pristupanja!');
+    if(!examObj) throw newError(404, 'Greška prilikom pristupanja!');
 
     let updated = await Exam.updateOne({ _id }, {
         $set: {
@@ -44,5 +44,5 @@ export const updateExam = async (_id: string, data: any) => {
 
     if(!updated) throw newError(500, 'Internal Server Error');
 
-    return newResponse('Ispitni rok uspešno ažuriran');
+    return newResponse('Ispit uspešno ažuriran');
 }

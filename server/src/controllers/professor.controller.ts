@@ -9,9 +9,8 @@ export async function handleAddProfessor(req: Request, res: Response) {
         }
 
         let uni: string = req.params.university;
-        let user: string = req.params.user;
         // add error handling here...
-        let resp: any = await addProfessor(uni, professor, user);
+        let resp: any = await addProfessor(uni, professor);
 
         return res.status(resp.status).send(resp);
     } catch (e: any) {

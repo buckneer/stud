@@ -57,3 +57,23 @@ export interface Department {
 	students?: string[];
 	professors?: string[];
 }
+
+export interface Subject {
+	name?: string;
+	code?: string;
+	professors?: string[];
+	department?: string;
+	espb?: number;
+	requiredSub?: string[];
+}
+
+export interface Grade {
+	subject?: string; 
+	professor?: string;
+	profesorGrade?: number;
+	service?: string; 
+	serviceGrade?: number;
+	confirmed?: boolean;
+	student: string;
+	period?: string; 
+}

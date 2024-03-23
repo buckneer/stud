@@ -2,16 +2,13 @@ import Professor, { ProfessorDocument } from "../models/professor.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils";
 
-export const addProfessor = async (university: string, professor: ProfessorDocument, user: string) => {
+export const addProfessor = async (university: string, professor: ProfessorDocument) => {
     try {
         let universityObj = await University.findOne({ _id: university });
        
         if(!universityObj) throw newError(404, 'Greška prilikom pristupanja!');
 
-        let newProfessor = new Professor ({
-            ...professor,
-            user
-        });
+        let newProfessor = new Professor (professor);
 
         let added = await newProfessor.save();
 
@@ -19,7 +16,7 @@ export const addProfessor = async (university: string, professor: ProfessorDocum
 
         return {
             status: 200,
-            message: `Korisnik sa ID-em '${user}' je dodat kao profesor`,
+            message: `Korisnik sa ID-em '${added.user}' je dodat kao profesor`,
             _id: added._id
         }
     } catch (e: any) {

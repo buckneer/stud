@@ -3,15 +3,16 @@ import { Student } from "./types/types";
 
 interface UniUser {
 	university: string,
-	user: string
+	body: Student
 }
 
 const studentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addStudent: builder.mutation <void, UniUser>({
-			query: ({ university, user }) => ({
-				url: `/student/${university}/${user}`,
-				method: 'POST'
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/student`,
+				method: 'POST',
+				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['UniStudents']
 		}),
