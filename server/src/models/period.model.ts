@@ -3,8 +3,8 @@ import { Document, Schema, model, Types } from 'mongoose';
 export interface PeriodDocument extends Document {
     start?: string;
     end?: string;
-    exams: Types.ObjectId[];
-    university: Types.ObjectId; // maybe this is not needed
+    exams?: Types.ObjectId[];
+    university?: Types.ObjectId; // maybe this is not needed
     // perhaps this is needed: 
     // department: Types.ObjectId;
 }

@@ -6,9 +6,14 @@ interface UniDep {
 	body: Department
 }
 
+interface UpdateDep {
+	id: string;
+	body: Department;
+}
+
 const departmentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addDepartment: builder.mutation <unknown, UniDep>({
+		addDepartment: builder.mutation <unknown, UniDep> ({
 			query: ({ university, body }) => ({
 				url: `/department/${university}/`,
 				method: 'POST',
@@ -16,17 +21,25 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Department', 'Departments'],
 		}),
-		getDepartment: builder.query <Department, string>({
+		getDepartment: builder.query <Department, string> ({
 			query: (department) => ({
-				url: `/department/${department}`
+				url: `/department/${department}/`
 			}),
 			providesTags: (result, error) => error ? [] : ['Department'],
 		}),
-		getUniDepartments: builder.query <Department[], string>({
+		getUniDepartments: builder.query <Department[], string> ({
 			query: (university) => ({
 				url: `/uni/${university}/department/`
 			}),
 			providesTags: (result, error) => error ? [] : ['Department', 'Departments'],
+		}),
+		updateDeparment: builder.mutation <unknown, UpdateDep> ({
+			query: ({ id, body }) => ({
+				url: `/department/${id}/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['Department', 'Departments'],
 		})
 	})
 });
@@ -35,4 +48,5 @@ export const {
 	useAddDepartmentMutation,
 	useGetDepartmentQuery,
 	useGetUniDepartmentsQuery,
+	useUpdateDeparmentMutation,
 } = departmentApiSlice;

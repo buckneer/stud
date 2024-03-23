@@ -1,16 +1,16 @@
 import { apiSlice } from "./apiSlice";
 import { Subject } from "./types/types";
 
-interface SubjectDep {
-	department: string;
-	body: Subject
+interface UpdateSubject {
+	id: string;
+	body: Subject;
 }
 
 const subjectApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addSubject: builder.mutation <void, SubjectDep> ({
-			query: ({ department, body }) => ({
-				url: `/department/${department}/subject/`,
+		addSubject: builder.mutation <unknown, Subject> ({
+			query: (body) => ({
+				url: `/subject/`,
 				method: 'POST',
 				body
 			}),
@@ -28,11 +28,21 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 			}),
 			providesTags: (result, error) => error ? [] : ['Subjects'],
 		}),
+		updateSubject: builder.mutation <unknown, UpdateSubject> ({
+			query: ({ id, body }) => ({
+				url: `/subject/${id}/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects'],
+		}),
+
 	})
 });
 
 export const {
 	useAddSubjectMutation,
 	useGetSubjectQuery,
-	useGetDepSubjectsQuery
+	useGetDepSubjectsQuery,
+	useUpdateSubjectMutation
 } = subjectApiSlice;

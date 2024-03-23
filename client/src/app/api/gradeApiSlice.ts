@@ -1,10 +1,15 @@
 import { apiSlice } from "./apiSlice";
 import { Grade } from "./types/types";
 
+interface UpdateGrade {
+	id: string;
+	body: Grade;
+}
+
 const gradeApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addGrade: builder.mutation <void, Grade> ({
-			query: () => ({
+		addGrade: builder.mutation <unknown, Grade> ({
+			query: (body) => ({
 				url: '/grades/',
 				method: 'POST'
 			}),
@@ -12,15 +17,22 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 		}),
 		getGrade: builder.query <Grade, string> ({
 			query: (id) => ({
-				url: `/grades/${id}`
+				url: `/grades/${id}/`
 			}),
 			providesTags: (result, error) => error ? [] : ['Grade']
 		}),
 		getGrades: builder.query <Grade[], void> ({
 			query: () => ({
-				url: '/grades'
+				url: '/grades/'
 			}),
 			providesTags: (result, error) => error ? [] : ['Grades']
+		}),
+		updateGrade: builder.mutation <unknown, UpdateGrade> ({
+			query: ({ id, body }) => ({
+				url: `/grades/${id}/`,
+				method: 'PATCH',
+				body
+			})
 		})
 	})
 });
@@ -28,5 +40,6 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 export const {
 	useAddGradeMutation,
 	useGetGradeQuery,
-	useGetGradesQuery
+	useGetGradesQuery,
+	useUpdateGradeMutation
 } = gradeApiSlice;

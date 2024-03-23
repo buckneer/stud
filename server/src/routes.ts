@@ -1,13 +1,15 @@
 
 import { handleAddProfessor, handleGetProfessor, handleGetProfessors, handleUpdateProfessor } from "./controllers/professor.controller";
-import { handleAddStudent, handleDeleteStudent, handleGetStudent, handleGetStudents } from "./controllers/student.controller";
+import { handleAddStudent, handleDeleteStudent, handleGetStudent, handleGetStudents, handleUpdateStudent } from "./controllers/student.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
-import {Express, Request, Response} from "express";
+import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
-import { handleAddDepartment, handleGetDepartment, handleGetDepartments } from "./controllers/department.controller";
-import { handleAddSubject, handleGetSubject, handleGetSubjects } from "./controllers/subject.controller";
-import { handleAddGrade, handleGetGrade, handleGetGrades } from "./controllers/grade.controller";
+import { handleAddDepartment, handleGetDepartment, handleGetDepartments, handleUpdateDepartment } from "./controllers/department.controller";
+import { handleAddSubject, handleGetSubject, handleGetSubjects, handleUpdateSubject } from "./controllers/subject.controller";
+import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
+import { handleAddExam, handleGetExam, handleGetExams, handleUpdateExam } from "./controllers/exam.controller";
+import { handleAddPeriod, handleGetPeriod, handleGetPeriods, handleUpdatePeriod } from "./controllers/period.controller";
 
 
 export default function (app: Express) {
@@ -30,13 +32,16 @@ export default function (app: Express) {
     // University
     app.post('/uni', handleNewUni);
     app.get('/uni', handleGetAllUnis);
+    // app.get('/uni/:id, handleGetUni);
     app.patch('/uni', handleAddStudentsUni);
+    // app.patch('/uni/:id', handleUpdateUni);
 
     // Student
     app.post('/uni/:university/student', handleAddStudent);
     app.get(['/student', '/uni/:university/student'], handleGetStudents);
     app.get('/student/:id', handleGetStudent);
     app.delete('/student/:id', handleDeleteStudent);
+    app.patch('/student/:id', handleUpdateStudent);
 
     // Professor
     app.post('/uni/:university/professor/', handleAddProfessor);
@@ -46,22 +51,32 @@ export default function (app: Express) {
 
     // Departments
     app.post('/department/', handleAddDepartment);
+    app.patch('/department/:department', handleUpdateDepartment);
     app.get('/department/:department', handleGetDepartment);
     app.get('/uni/:university/department/', handleGetDepartments);
 
     // Subject
-    app.post('/department/:department/subject/', handleAddSubject);
+    app.post('/subject/', handleAddSubject);
+    app.patch('/subject/:id', handleUpdateSubject);
     app.get('/subject/:id', handleGetSubject);
     app.get('/department/:department/subject/', handleGetSubjects);
     
     // Grade
     app.post('/grades/', handleAddGrade);
+    app.patch('/grades/:id', handleUpdateGrade);
     app.get('/grades/:id', handleGetGrade);
     app.get('/grades/', handleGetGrades);
 
     // Exam
-    
+    app.post('/exam/', handleAddExam);
+    app.patch('/exam/:id/', handleUpdateExam);
+    app.get('/exam/:id/', handleGetExam);
+    app.get('/exam/', handleGetExams);
 
     // Period
+    app.post('/period', handleAddPeriod);
+    app.patch('/period/:id', handleUpdatePeriod);
+    app.get('/period/:id', handleGetPeriod);
+    app.get('/period/', handleGetPeriods);
 
 }

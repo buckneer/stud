@@ -41,7 +41,7 @@ export interface Professor {
 
 export interface Uni {
   _id?: string;
-  name: string;
+  name?: string;
 	email?: string;
 	students?: string[];
 	professors?: string[];
@@ -51,7 +51,7 @@ export interface Uni {
 };
 
 export interface Department {
-	_id: string;
+	_id?: string;
 	name?: string;
 	university?: string;
 	students?: string[];
@@ -59,6 +59,7 @@ export interface Department {
 }
 
 export interface Subject {
+	_id?: string;
 	name?: string;
 	code?: string;
 	professors?: string[];
@@ -68,6 +69,7 @@ export interface Subject {
 }
 
 export interface Grade {
+	_id?: string;
 	subject?: string; 
 	professor?: string;
 	profesorGrade?: number;
@@ -76,4 +78,23 @@ export interface Grade {
 	confirmed?: boolean;
 	student: string;
 	period?: string; 
+}
+
+export interface Period {
+	_id?: string;
+	start?: string;
+	end?: string;
+	exams?: string[];
+	university?: string;
+}
+
+export interface Exam {
+	_id?: string;
+	date?: string;
+	students?: string[];
+	subject?: string;
+	professor?: string //! Can be removed
+	grades?: string[];
+	period?: string;
+	ended?: boolean;
 }

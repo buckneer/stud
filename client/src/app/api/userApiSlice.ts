@@ -4,21 +4,21 @@ const userApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		register: builder.mutation <unknown, User>({
 			query: (body) => ({
-			url: '/register',
-			method: 'POST',
-			body
+				url: '/register/',
+				method: 'POST',
+				body
 			})
-		}),
+	}	),
 		sendPasswordMail: builder.mutation <unknown, User>({
 			query: (body) => ({
-			url: '/password',
-			method: 'POST',
-			body
+				url: '/password/',
+				method: 'POST',
+				body
 			})  
 		}),
 		setNewPassword: builder.mutation <unknown, User>({
 			query: (body) => ({
-				url: '/password',
+				url: '/password/',
 				method: 'PATCH',
 				body
 			})

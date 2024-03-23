@@ -12,7 +12,9 @@ const tags: string[] = [
   'Professor', 'Professors', 
   'Department', 'Departments',
   'Subject', 'Subjects',
-  'Grade', 'Grades'
+  'Grade', 'Grades',
+  'Exam', 'Exams',
+  'Period', 'Periods'
 ];
 
 const baseQuery = fetchBaseQuery({ 
