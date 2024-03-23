@@ -58,4 +58,3 @@ export const newResponse = (message: string, status: number = 200, options?: any
         ...options
     }
 }
-

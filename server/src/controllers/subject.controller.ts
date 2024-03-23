@@ -9,7 +9,6 @@ export async function handleAddSubject(req: Request, res: Response) {
         let data = {
             ...req.body
         }
-
         let resp = await addSubject(department, data);
 
         return res.status(200).send(resp);

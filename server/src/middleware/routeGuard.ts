@@ -7,7 +7,7 @@ import { UserRequest, UserToken } from './UserRequest';
 
 
 
-export const userGuard = async (req: UserRequest, res: Response, next: NextFunction) => {
+export const userGuard = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     if(!authHeader) return res.status(403).send(newError(403, 'Authorization heder je obavezan'));
 
