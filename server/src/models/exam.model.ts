@@ -2,12 +2,12 @@ import { Document, Schema, model, Types } from 'mongoose';
 
 export interface ExamDocument extends Document {
     date?: string;
-    students: Types.ObjectId[];
-    subject: Types.ObjectId;
-    professor: Types.ObjectId //! Can be removed
-    grades: Types.ObjectId[];
-    period: Types.ObjectId;
-    ended: boolean;
+    students?: Types.ObjectId[];
+    subject?: Types.ObjectId;
+    professor?: Types.ObjectId //! Can be removed
+    grades?: Types.ObjectId[];
+    period?: Types.ObjectId;
+    ended?: boolean;
 }
 
 const ExamSchema = new Schema({ 
