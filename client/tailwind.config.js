@@ -1,4 +1,18 @@
+const { colors: defaultColors } = require('tailwindcss/defaultTheme')
+
+const colors = {
+  ...defaultColors,
+  ...{
+      'dark-blue': '#1B264F',
+      'light-blue': '#274690',
+      'smoke-white': '#F5F3F5',
+  },
+}
+
+
+
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -51,6 +65,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        colors
       },
       borderRadius: {
         lg: "var(--radius)",

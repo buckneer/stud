@@ -62,33 +62,37 @@ const Login = () => {
                     : null
             } */}
 
-            <div className="w-full h-screen flex justify-center items-center">
-                <form onSubmit={handleLogin} className="md:block mx-4 md:mx-0 md:p-4 w-full md:w-1/2 lg:w-[450px] h-auto shadow-none md:shadow-md md:rounded-sm bg-[#31263E]">
+            <div className="flex-grow flex items-center justify-center">
+                <form onSubmit={handleLogin} className="bg-white rounded-2xl p-4 w-1/3 shadow-md">
                     {/* Header */}
                     <div id="FormHeader" className="w-full">
+                        
+                        <div className='flex flex-col justify-center items-center'>
+                            <div className="text-3xl font-semibold p-2 uppercase text-blue-800">Login</div>
+                            <div className="text-gray-400 p-2" >Prijavite se na Stud</div>
+                        </div>
+
                         <div id="FormHeader" className="w-full text-slate-100">
                             { 
                                 isLoginLoading ? 
-                                        <div className="">Loader ide ovde...</div> 
+                                        <div className="">Loader ide ovde...</div>
                                         : null
                             }
                             { 
                                 isLoginSuccess ?
                                     <div className="w-full flex justify-center">
-                                        <div className="bg-green-200 border-2 border-green-400 w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 uppercase">Uspesan login!</div> 
+                                        <div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešan login!</div> 
                                     </div>
                                         : null
                             }
                             { 
                                 isLoginError ? 
                                 <div className="w-full flex justify-center">
-                                    <div className="bg-red-200 border-2 border-red-400 w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 uppercase">Greska prilikom prijavljivanja!</div> 
+                                    <div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom prijavljivanja!</div> 
                                 </div>
                                         : null
                             }
 					    </div>
-                        <div className="text-3xl text-slate-100 font-semibold p-2 uppercase">Login</div>
-                        <div className="text-slate-200 p-2 italic" >Prijavite se na iStud</div>
                     </div>
                     {/* Content */}
                     <div className='FormItem w-full flex flex-col justify-start p-2 items-start relative'>
@@ -123,13 +127,11 @@ const Login = () => {
                         </label>
                     </div>
                     {/* FooterCard */}
-                    <div className="FormFooter w-full flex justify-evenly pt-5 gap-2">
-                    <div className="flex text-sm italic justify-center items-center gap-3 text-slate-500 hover:text-slate-200 hover:cursor-pointer">
-                    <LockKeyhole strokeWidth={0.5}/>
-                    <Link to="#">zaboravili ste lozinku</Link>
+                    <div className='footer flex items-center justify-center flex-col'>
+                        <Link to="#" className='text-gray-400 hover:underline'>Zaboravljena lozinka?</Link>
+                        <button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isLoginLoading}>Login</button>
                     </div>
-                        <button className="py-2 px-4 bg-slate-300 hover:bg-slate-100 rounded-sm" type="submit"><LogIn /></button>
-                    </div>
+                    
                 </form>
 
 
