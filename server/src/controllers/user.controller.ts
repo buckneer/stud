@@ -19,7 +19,7 @@ export async function handleRegister(req: Request, res: Response) {
 
 		return res.send(resp);
 	} catch (e: any) {
-		return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -39,7 +39,7 @@ export async function handleSetPassword(req: Request, res: Response) {
 		return res.status(200).send(resp);
 	} catch(e: any) {
 		log.error(e.message);
-		return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -53,7 +53,7 @@ export async function handleSendPasswordMail(req: Request, res: Response) {
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		log.error(e.message);
-		return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -69,7 +69,7 @@ export async function handleLogin(req: Request, res: Response) {
         return res.send(session);
 	} catch (e: any) {
 		log.error(e.message);
-		return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -84,7 +84,7 @@ export async function handleRefresh(req: Request, res: Response) {
         return res.send(resp);
 	} catch (e: any) {
 		log.error(e.message);
-		return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -108,6 +108,6 @@ export async function handleLogout(req: Request, res: Response) {
 
 	} catch (e: any) {
 		log.error(e.message);
-		return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }

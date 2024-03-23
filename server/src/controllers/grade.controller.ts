@@ -13,7 +13,7 @@ export async function handleAddGrade(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -24,7 +24,7 @@ export async function handleGetGrades(req: Request, res: Response) {
 
         return res.status(200).send(grades);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -36,7 +36,7 @@ export async function handleGetGrade(req: Request, res: Response) {
 
         return res.status(200).send(grade);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -54,6 +54,6 @@ export async function handleUpdateGrade(req: Request, res: Response) {
         return res.status(200).send(resp);
 
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

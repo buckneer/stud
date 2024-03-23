@@ -12,12 +12,13 @@ export const getAllUniversities = async () => {
     }
 }
 
-export const getById = async (_id: string) => {
-    try {
-        return await University.findOne({ _id });
-    } catch(e: any) {
-        throw e;
-    }
+export const getUni = async (_id: string) => {
+    let uniObj = await University.findOne({ _id });
+
+    if(!uniObj) throw newError(404, 'Ne postoji univerzitet!');
+
+    return uniObj;
+
 }
 
 export const addUniversity = async (university: UniDocument) => {

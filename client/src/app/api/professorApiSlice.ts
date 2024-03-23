@@ -28,9 +28,12 @@ const professorApiSlice = apiSlice.injectEndpoints({
 			}),
 			providesTags: (result, error) => error ? [] : ['Professor'],
 		}),
-		// getAllProfessors: builder.query({
-		// 	query: (university)
-		// }),
+		getProfessors: builder.query({
+			query: (university) => ({
+				url: `/uni/${university}/professor/`
+			}),
+			providesTags: (result, error) => error ? [] : ['Professors'],
+		}),
 		updateProfessor: builder.mutation <Professor, ProfBody> ({
 			query: ({ professor, body }) => ({
 				url: `/professor/${professor}/`,
@@ -45,5 +48,6 @@ const professorApiSlice = apiSlice.injectEndpoints({
 export const {
 	useAddProfessorMutation,
 	useGetProfessorQuery,
+	useGetProfessorsQuery,
 	useUpdateProfessorMutation
 } = professorApiSlice;

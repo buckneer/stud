@@ -15,7 +15,7 @@ export async function handleAddStudent(req: Request, res: Response) {
         res.send(resp);
     } catch (e: any) {
         log.error(e.message);
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 } 
 
@@ -28,7 +28,7 @@ export async function handleGetStudents(req: Request, res: Response) {
         res.send(resp);
     } catch (e: any) {
         log.error(e.message);
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -43,7 +43,7 @@ export async function handleGetStudent(req: Request, res: Response) {
         return res.send(resp);
     } catch (e: any) {
         log.error(e.message);
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -52,7 +52,7 @@ export async function handleUpdateStudent(req: Request, res: Response) {
         return res.send("Implement");
     } catch (e: any) {
         log.error(e.message);
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -65,6 +65,6 @@ export async function handleDeleteStudent(req: Request, res: Response) {
 
     } catch (e: any) {
         log.error(e.message);
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

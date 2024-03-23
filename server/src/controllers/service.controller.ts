@@ -14,7 +14,7 @@ export async function handleAddService(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -25,7 +25,7 @@ export async function handleUpdateService(req: Request, res: Response) {
 
         let resp: any = await updateService(service, data);
     } catch (e: any) {
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -37,6 +37,6 @@ export async function handleGetServices(req: Request, res: Response) {
         
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

@@ -12,7 +12,7 @@ export async function handleAddPeriod(req: Request, res: Response) {
 		return res.send(resp);
 
 	} catch (e: any ) {
-		return res.status(e.status).send(e); 
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -21,7 +21,7 @@ export async function handleGetPeriods(req: Request, res: Response) {
 		let periods;
 		return res.send(periods);
 	} catch (e: any ) {
-		return res.status(e.status).send(e); 
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -34,7 +34,7 @@ export async function handleGetPeriod(req: Request, res: Response) {
 		return res.send(resp);
 
 	} catch (e: any ) {
-		return res.status(e.status).send(e); 
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
 
@@ -46,6 +46,6 @@ export async function handleUpdatePeriod(req: Request, res: Response) {
 			...req.body
 		}
 	} catch (e: any ) {
-		return res.status(e.status).send(e); 
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }

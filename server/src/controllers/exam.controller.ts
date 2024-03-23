@@ -11,7 +11,7 @@ export async function handleAddExam(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }
 
@@ -20,7 +20,7 @@ export async function handleGetExams(req: Request, res: Response) {
         let exams = await getExams();
         return res.send(exams);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }
 
@@ -32,7 +32,7 @@ export async function handleGetExam(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }
 
@@ -49,6 +49,6 @@ export async function handleUpdateExam(req: Request, res: Response) {
         return res.status(200).send(resp);
 
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }

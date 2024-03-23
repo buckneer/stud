@@ -14,7 +14,7 @@ export async function handleAddProfessor(req: Request, res: Response) {
 
         return res.status(resp.status).send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -26,7 +26,7 @@ export async function handleGetProfessor(req: Request, res: Response) {
 
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -39,7 +39,7 @@ export async function handleGetProfessors(req: Request, res: Response) {
 
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -52,7 +52,7 @@ export async function handleUpdateProfessor(req: Request, res: Response) {
 
         return res.status(200).send(resp);
     } catch(e: any) {
-        return res.status(e.status).send(e);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 

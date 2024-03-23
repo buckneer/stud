@@ -15,7 +15,7 @@ export async function handleAddDepartment(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }
 
@@ -27,7 +27,7 @@ export async function handleGetDepartments(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }
 
@@ -39,7 +39,7 @@ export async function handleGetDepartment(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }
 
@@ -56,6 +56,6 @@ export async function handleUpdateDepartment(req: Request, res: Response) {
         return res.send(resp);
 
     } catch (e: any) {
-        return res.status(e.status).send(e); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }

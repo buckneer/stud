@@ -16,6 +16,12 @@ const uniApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Uni', 'Unis'] 
 		}),
+		getUni: builder.query <Uni, string> ({
+			query: (id) => ({
+				url: `/uni/${id}/`
+			}),
+			providesTags: (result, error) => error ? [] : ['Uni'],
+		}),
 		getAllUnis: builder.query <Uni[], void> ({
 			query: () => ({
 				url: '/uni/'
@@ -45,6 +51,7 @@ const uniApiSlice = apiSlice.injectEndpoints({
 
 export const {
 	useAddUniMutation,
+	useGetUniQuery,
 	useGetAllUnisQuery,
 	useUniAddStudentsMutation,
 	useUpdateUniMutation

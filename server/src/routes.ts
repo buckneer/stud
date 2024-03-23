@@ -1,7 +1,7 @@
 
 import { handleAddProfessor, handleGetProfessor, handleGetProfessors, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudent, handleDeleteStudent, handleGetStudent, handleGetStudents, handleUpdateStudent } from "./controllers/student.controller";
-import { handleAddStudentsUni, handleGetAllUnis, handleNewUni } from "./controllers/university.controller";
+import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
@@ -32,7 +32,7 @@ export default function (app: Express) {
     // University
     app.post('/uni', handleNewUni);
     app.get('/uni', handleGetAllUnis);
-    // app.get('/uni/:id, handleGetUni);
+    app.get('/uni/:id', handleGetUni);
     app.patch('/uni', handleAddStudentsUni);
     // app.patch('/uni/:id', handleUpdateUni);
 
@@ -46,7 +46,7 @@ export default function (app: Express) {
     // Professor
     app.post('/uni/:university/professor/', handleAddProfessor);
     app.get('/professor/:professor', handleGetProfessor);
-    app.get('/professor', handleGetProfessors); // <- add all university professors
+    app.get('/uni/:university/professor', handleGetProfessors); // <- add all university professors
     app.patch('/professor/:professor', handleUpdateProfessor);
 
     // Departments
