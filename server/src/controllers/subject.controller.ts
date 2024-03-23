@@ -4,11 +4,12 @@ import { addSubject, getSubject, getSubjects, updateSubject } from "../services/
 export async function handleAddSubject(req: Request, res: Response) {
     try {
 
-        let {department} = req.params;
+        let { department } = req.params;
 
         let data = {
             ...req.body
         }
+        
         let resp = await addSubject(department, data);
 
         return res.status(200).send(resp);

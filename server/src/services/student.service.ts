@@ -4,13 +4,13 @@ import User from "../models/user.model";
 import { newError, newResponse } from "../utils";
 
 
-export const addStudent = async (userId: string, student: StudentDocument, university: string) => {
+export const addStudent = async (student: StudentDocument, university: string) => {
 
 
     // TODO check if the user with same Id is already registered as student
 
     let newStudent = new Student(student);
-    let user = await User.findOne({ _id: userId });
+    let user = await User.findOne({ _id: student.user });
 
     if(!user) throw newError(404, 'Korisnik nije pronađen!');
 

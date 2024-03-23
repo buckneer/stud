@@ -8,10 +8,9 @@ export async function handleAddStudent(req: Request, res: Response) {
         let { student } = req.body;
         
         // TODO implement university everywhere where it's needed
-        let userId: string = req.params.user;
         let university: string = req.params.university;
 
-        let resp = await addStudent(userId, student, university);
+        let resp = await addStudent(student, university);
         console.log(resp);
         res.send(resp);
     } catch (e: any) {

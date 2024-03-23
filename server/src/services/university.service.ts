@@ -12,9 +12,9 @@ export const getAllUniversities = async () => {
     }
 }
 
-export const getById = async (id: string) => {
+export const getById = async (_id: string) => {
     try {
-        return await University.findOne({_id: id});
+        return await University.findOne({ _id });
     } catch(e: any) {
         throw e;
     }
