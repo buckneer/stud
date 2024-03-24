@@ -44,18 +44,17 @@ const StudentAdd = () => {
 	const handleStudentAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log(studentId, department, currentSemester, degree);
+		console.log(studentId, department, currentSemester, degree, userId);
 		
 		try {
 			const body = {
 				studentId, department, currentSemester, degree, userId
 			}
 			// needs userId from params...
-			// const result = await studentAdd({ university: uni!, body });
+			const result = await studentAdd({ university: uni!, body });
 		} catch (e: any) {
 			console.error(e);
 		}
-		
 	}
 
 	let content: any;

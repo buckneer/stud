@@ -50,3 +50,11 @@ export const getServices = async (university: string) => {
 
     return serviceObj;
 }
+
+export const getService = async (_id: string) => {
+    let service = await Service.findOne({_id});
+
+    if(!service) throw newError(404, 'Studentska sluzba nije pronadjena');
+
+    return service;
+}

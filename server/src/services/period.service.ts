@@ -1,11 +1,12 @@
 import University from '../models/university.model';
 import Period, { PeriodDocument } from '../models/period.model';
 import { newError, newResponse } from '../utils';
+import Department from '../models/department.model';
 
 export const addPeriod = async (data: PeriodDocument) => {
-	let uniObj = await University.findOne({ _id: data.university });
+	let uniObj = await Department.findOne({ _id: data.department });
 
-	if(!uniObj) return newError(404, 'Univerzitet nije pronađen');
+	if(!uniObj) return newError(404, 'Odsek nije pronađen');
 
 	let newPeriod = new Period(data);
 
