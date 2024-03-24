@@ -12,8 +12,8 @@ export interface StudentDocument extends Document {
     status?: string;
     dateOfEnrollment?: string;
     currentSemester?: string;
-    grades?: string[];
-    universities?: Types.ObjectId[]
+    grades?: Types.ObjectId[];
+    // university?: Types.ObjectId
 }
 
 const StudentSchema = new Schema({
@@ -28,7 +28,7 @@ const StudentSchema = new Schema({
     dateOfEnrollment: { type: String, required: false },
     currentSemester: { type: String, default: '1'},
     grades: [{ type: String, ref: 'Grades', index: true }], // Obj.Id
-    universities: [{type: Schema.ObjectId, required: false, ref: 'University'}],
+    // universitiy: {type: Schema.ObjectId, required: false, ref: 'University'},
 });
 
 const Student = model<StudentDocument>('Student', StudentSchema);

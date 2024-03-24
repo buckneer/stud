@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useGetUniDepartmentsQuery } from './../../../app/api/departmentApiSlice';
 import { useGetUniQuery } from './../../../app/api/uniApiSlice';
 import { useGetProfessorsQuery } from './../../../app/api/professorApiSlice';
+import { useAddSubjectMutation } from '../../../app/api/subjectApiSlice';
 
 
 const SubjectAdd = () => {
@@ -11,6 +12,17 @@ const SubjectAdd = () => {
 	const [ name, setName ] = useState("");
 	const [ code, setCode ] = useState("");
 	const [ department, setDepartment ] = useState('');
+	const [ professor, setProfessor ] = useState('');
+	const [ professors, setProfessors ] = useState([]);
+
+	const [
+		fetchAddSubject,
+		{
+			isLoading: isFetchAddSubjectLoading,
+			isSuccess: isFetchAddSubjectSuccess,
+			isError: isFetchAddSubjectError
+		}
+	] = useAddSubjectMutation();
 
 	const {
 		data: uniData,
@@ -31,7 +43,7 @@ const SubjectAdd = () => {
 	});
 
 	const {
-		data: professors,
+		data: professorsData,
 		isLoading: isProfessorsLoading,
 		isSuccess: isProfessorsSuccess
 	} = useGetProfessorsQuery(uni, {
@@ -41,7 +53,16 @@ const SubjectAdd = () => {
 	const handleSubjectAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-		// Preuzmi kormilo odavde Jovane
+		
+		try {
+			const body = {
+				name, code, department, professors, university: uni
+			}
+
+			const result = await fetchAddSubject(body).unwrap();
+		} catch (e: any) {
+			console.error(e);
+		}
 	}
 
 	let content: any;
@@ -62,10 +83,10 @@ const SubjectAdd = () => {
 							);
 					})}
 				</select>
-				<select id="professors">
-					<option value="0">Izaberite profesora</option>
+				<select id="professors" onChange={(e) => setProfessor(e.target.value)}>
+					<option value="0">Izaberite profesora kasnije...</option>
 					{
-						professors.map((professor: any) => {
+						professorsData.map((professor: any) => {
 							return (
 								<option value={ professor._id }>
 									{ professor.name }
@@ -76,6 +97,7 @@ const SubjectAdd = () => {
 				</select>
 				{/* Ovde dodaj Uslovne predmete */}
 				<input type="number" min={0} placeholder='Broj espb' required />
+				<input type="number" min={1} placeholder="Semestar" required />
 				<button className='bg-white py-2 px-4' type="submit">Potvrdi</button>
 			</form>
 		</>

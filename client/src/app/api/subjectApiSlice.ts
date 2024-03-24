@@ -24,7 +24,13 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 		}),
 		getDepSubjects: builder.query <Subject[], string> ({
 			query: (department) => ({
-				url: `/department/${department}/subject`
+				url: `/dep/${department}/subject/`
+			}),
+			providesTags: (result, error) => error ? [] : ['Subjects'],
+		}),
+		getUniSubjects: builder.query <Subject[], string> ({
+			query: (uni) => ({
+				url: `/uni/${uni}/subject/`
 			}),
 			providesTags: (result, error) => error ? [] : ['Subjects'],
 		}),
@@ -44,5 +50,6 @@ export const {
 	useAddSubjectMutation,
 	useGetSubjectQuery,
 	useGetDepSubjectsQuery,
+	useGetUniSubjectsQuery,
 	useUpdateSubjectMutation
 } = subjectApiSlice;

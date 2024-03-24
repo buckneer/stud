@@ -4,13 +4,13 @@ import { addSubject, getSubject, getSubjects, updateSubject } from "../services/
 export async function handleAddSubject(req: Request, res: Response) {
     try {
 
-        let { department } = req.params;
+        // let { department } = req.params;
 
         let data = {
             ...req.body
         }
         
-        let resp = await addSubject(department, data);
+        let resp = await addSubject(data.department, data);
 
         return res.status(200).send(resp);
     } catch (e: any) {
@@ -20,9 +20,20 @@ export async function handleAddSubject(req: Request, res: Response) {
 
 export async function handleGetSubjects(req: Request, res: Response) {
     try {
-        let {id} = req.params;
+        let { uni, dep } = req.params;
+        let key, value;
 
-        let resp = await getSubjects(id);
+        // shitty workaround, can be changed later or not idk...
+        if(uni) {
+            key = 'university';
+            value = uni;
+        } else if (dep) {
+            key = 'department';
+            value = dep;
+        }
+
+
+        let resp = await getSubjects(key, value);
         
         return res.status(200).send(resp);
     } catch (e: any) {

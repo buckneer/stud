@@ -45,7 +45,7 @@ const Navbar = () => {
 			setHide(false);
 		}
 	}, [path.pathname]);
-
+	
 	return !hide ? 
 		<div className='navbar text-white mx-7 mt-3 flex align-center justify-between'>
 			<div className='branding flex-1'>
@@ -56,7 +56,7 @@ const Navbar = () => {
 					<Home />
 					<div className='hidden group-[.active]:block'>Početna</div>       
 				</NavLink>
-				<NavLink to="/login" className='nav-item flex gap-2 rounded-2xl p-2 align-center group'>
+				<NavLink to="/login" state={{ from: path.pathname  }} className='nav-item flex gap-2 rounded-2xl p-2 align-center group'>
 					<Table />
 					<div className='hidden group-[.active]:block' >Raspored Ispita</div>
 				</NavLink>

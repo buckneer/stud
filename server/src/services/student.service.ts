@@ -1,8 +1,7 @@
-import { ObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 import Student, { StudentDocument } from "../models/student.model";
 import User from "../models/user.model";
 import { newError, newResponse } from "../utils";
-
 
 export const addStudent = async (student: StudentDocument, university: string) => {
 
@@ -33,11 +32,11 @@ export const getStudents = async (university: string = '') => {
     return students;
 }
 
-export const getStudent = async (studentId: string) => {
+export const getStudent = async (_id: string) => {
 
-    if(!Types.ObjectId.isValid(studentId)) throw newError(400, 'Id nije validan');
+    if(!Types.ObjectId.isValid(_id)) throw newError(400, 'Id nije validan');
 
-    let student = await  Student.findOne({_id: studentId}).populate('user');
+    let student = await  Student.findOne({ _id }).populate('user');
     if(!student) throw newError(404, 'Ne postoji student sa tim id-em');
 
     return student;
@@ -47,10 +46,48 @@ export const updateStudent = async (studentId: string, student: StudentDocument)
     // TODO implmenet update student;
 }
 
-export const deleteStudent = async (studentId: string) => {
-    let deleted = await Student.findByIdAndDelete(studentId);
+export const deleteStudent = async (_id: string) => {
+    let deleted = await Student.findByIdAndDelete(_id);
     console.log(deleted);
     return deleted;
 }
 
+export const addStudentToSubjects = async (_id: string, subjects: string[]) => {
+    let studentObj = await Student.findOne({ _id });
 
+    if(!studentObj) throw newError(404, 'Ne postoji student sa tim id-em');
+
+    // TODO: 
+    // - add check if student already has such subjects in his array
+    // - add check if every subjects exist on the department that student is rolled in
+
+    // @ts-ignore
+    studentObj.subjects = [ ...studentObj.subjects, ...subjects ];
+    
+    let updated = await studentObj.save();
+    if(!updated) throw newError();
+
+    return newResponse('Uspešno dodavanje predmeta studentu!');
+}
+
+export const removeStudentFromSubjects = async (_id: string, subjects: string[]) => {
+    let studentObj = await Student.findOne({ _id });
+
+    if(!studentObj) throw newError(404, 'Ne postoji student sa tim id-em');
+
+    // @ts-ignore
+    studentObj.subjects = studentObj.subjects?.filter(subject => subjects.indexOf(subject) === -1);
+
+    return newResponse('Uspešno ste uklonili predmete iz studenta');
+}
+
+export const addSubjectsToCompleted = async (_id: string, subjects: string[]) => {
+    let studentObj = await Student.findOne({ _id });
+
+    if(!studentObj) throw newError(404, 'Ne postoji student sa tim id-em');
+
+    // @ts-ignore 
+    studentObj.completedSubjects = [ ...studentObj.completedSubjects, ...subjects ];
+
+    return newResponse('Uspešno ste označili predmete kao položene!');
+}

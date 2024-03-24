@@ -25,16 +25,16 @@ export const getSubject = async (_id: string) => {
     return subject;
 }
 
-export const getSubjects = async (department?: string) => {
+export const getSubjects = async (key?: string, value?: string) => {
     
-    let subjects: any;
-    if(department) {
-        subjects = await Subject.find({ department })
+    let subjects: any[];
+    console.log(key, value);
+    if(key) {
+        let field = key === 'university' ? { university: value } : { department: value }
+        subjects = await Subject.find(field);
     } else {
         subjects = await Subject.find();
     }
-
-    if(!subjects) throw newError(404, 'Ni jedan predmet nije pronadjen');
 
     return subjects;
 }

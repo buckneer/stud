@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { LogIn } from "lucide-react"
 
 import { LockKeyhole } from "lucide-react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { Helmet } from 'react-helmet';
 import { RootState } from '../../app/store';
 import { useSelector } from 'react-redux';
@@ -12,7 +12,8 @@ import { useSelector } from 'react-redux';
 const Login = () => {
 	const navigate = useNavigate();
 	const session = useSelector((state: RootState) => state.session);
-
+	const location = useLocation();
+	
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 
@@ -42,7 +43,8 @@ const Login = () => {
 			const result = await fetchLogin(body).unwrap();
 			
 			setTimeout(() => {
-				navigate('/');
+				// @ts-ignore
+				(location?.state?.from) ? navigate(location.state.from) : navigate('/');
 			}, 1000);
 
 		} catch (error: any) {
@@ -136,7 +138,7 @@ const Login = () => {
 			
 						</div>
 					</div>
-					: <Navigate to='/' replace />
+					: <Navigate to={location?.state?.from || '/'} replace />
 			}
 		</>
 	);
