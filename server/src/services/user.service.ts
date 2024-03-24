@@ -17,7 +17,6 @@ export const registerUser = async (user: UserDocument) => {
 
         if(!registered) throw newError(500, 'Internal Server Error');
 
-        
 
         return {
             id: registered._id
@@ -72,9 +71,9 @@ export const loginUser = async (email: string, password: string, userAgent: stri
 
         let matchingPass = await bcrypt.compare(password, user.password!);
         if (!matchingPass) throw {status: 401, message: 'Pogresna email adresa ili lozinka'}
-
-        const accessToken = jwt.sign({id: user.id, email: user.email, role: user.role}, process.env.JWT_SECRET as string, {expiresIn});
-        const refreshToken = jwt.sign({id: user.id, email: user.email, role: user.role},
+        console.log(user);
+        const accessToken = jwt.sign({id: user._id, email: user.email, roles: user.roles}, process.env.JWT_SECRET as string, {expiresIn});
+        const refreshToken = jwt.sign({id: user._id, email: user.email, roles: user.roles},
             process.env.REFRESH_SECRET as string);
 
         let session = {
@@ -147,7 +146,7 @@ export const refreshAccessToken = async (refreshToken: string, userAgent: string
 
         if (!user) throw { status: 404, message: 'Korisnik ne postoji!' };
 
-        const accessToken = jwt.sign({email: user.email, role: user.role}, process.env.JWT_SECRET as string, {expiresIn});
+        const accessToken = jwt.sign({id: user._id, email: user.email, roles: user.roles}, process.env.JWT_SECRET as string, {expiresIn});
         
         return {accessToken};
 

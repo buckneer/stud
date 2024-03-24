@@ -4,7 +4,7 @@ export interface UserDocument extends Document {
     email: string;
     password?: string,
     name: string;
-    role: string;
+    roles: string[];
     confirmed: boolean;
     code: string;  
     phoneNumber?: string;
@@ -14,7 +14,7 @@ const UserSchema = new Schema({
     email: {type: String, required: true},
     password: {type: String, required: false},
     name: {type: String, required: true},
-    role: {type: String, default: 'user'},
+    roles: [{type: String, default: 'student'}],
     confirmed: {type: Boolean, default: false},
     code: {type: String, required: false},
     phoneNum: {type: String, required: false}

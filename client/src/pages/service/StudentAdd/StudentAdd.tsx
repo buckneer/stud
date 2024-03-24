@@ -7,7 +7,7 @@ import { useLocation, useParams } from 'react-router-dom';
 const StudentAdd = () => {
 	const { uni } = useParams(); // PMF ID 65fafc2da919db458f7ed90d //!! VOLIM OVO, HVALA TI!
 
-	const [userId, setUserId] = useState<string | null>(null);
+	const [userId, setUserId] = useState('');
 	const [ studentId, setStudentId ] = useState("");
 	const [ department, setDepartment ] = useState("");
 	const [ currentSemester, setCurrentSemester ] = useState("");
@@ -44,12 +44,17 @@ const StudentAdd = () => {
 	const handleStudentAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-		console.log(studentId, department, currentSemester, degree, userId);
+		
 		
 		try {
 			const body = {
-				studentId, department, currentSemester, degree, userId
+				user: userId, 
+				studentId, 
+				department, 
+				currentSemester, 
+				degree, 
 			}
+			console.log(body);
 			// needs userId from params...
 			const result = await studentAdd({ university: uni!, body });
 		} catch (e: any) {
@@ -92,6 +97,19 @@ const StudentAdd = () => {
 					}
 				</div>
 				<form  onSubmit={handleStudentAdd}>
+					{!userId && (
+						<div className='form-control'>
+							<label htmlFor="userId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+								<input
+									type="text" id="userId" placeholder="Broj Indeksa" value={userId!} onChange={(e) => setUserId(e.target.value)} autoComplete='off'
+									className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+								/>
+								<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+									UserId
+								</span>
+							</label>
+						</div>
+					)}
 					<div className='form-control'>
 						<label htmlFor="studentId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
                             <input
@@ -131,9 +149,9 @@ const StudentAdd = () => {
 					<div className='form-control'>
 						<select className='shadow-sm border-0 rounded w-full text-sm' id="degree" onChange={(e) => setDegree(e.target.value)}>
 							<option value="0">Izaberite tip studija</option>
-							<option value="Osnovne" > Osnovne</option>
-							<option value="Master" > Master</option>
-							<option value="Doktorske" > Doktorske</option>
+							<option value="OAS" > Osnovne</option>
+							<option value="MAS" > Master</option>
+							<option value="DAS" > Doktorske</option>
 						</select>
 						
 

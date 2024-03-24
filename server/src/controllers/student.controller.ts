@@ -1,3 +1,4 @@
+import { StudentDocument } from './../models/student.model';
 import { Request, Response } from "express";
 import log from "../logger";
 import { addStudent, addStudentToSubjects, deleteStudent, getStudent, getStudents, removeStudentFromSubjects } from "../services/student.service";
@@ -5,7 +6,7 @@ import { newResponse } from "../utils";
 
 export async function handleAddStudent(req: Request, res: Response) {
     try {
-        let { student } = req.body;
+        let  student = { ...req.body};
         
         // TODO implement university everywhere where it's needed
         let university: string = req.params.university;
