@@ -4,6 +4,7 @@ import {LogIn} from "lucide-react"
 
 import {LockKeyhole } from "lucide-react";
 import {Link} from "react-router-dom";
+import { Helmet } from 'react-helmet';
 
 
 const Login = () => {
@@ -40,28 +41,13 @@ const Login = () => {
         }
     }
 
-    useEffect(() => {
-        document.title = 'Login | Stud';
-    }, []);
+    
 
     return (
         <div>
-            {/* { 
-                isLoginLoading ? 
-                    <>Loader ide ovde...</> 
-                    : null
-            }
-            { 
-                isLoginSuccess ? 
-                    <>Uspesan login</> 
-                    : null
-            }
-            { 
-                isLoginError ? 
-                    <>Greska</> 
-                    : null
-            } */}
-
+            <Helmet>
+                <title>Login | Stud</title>
+            </Helmet>
             <div className="flex-grow flex items-center justify-center">
                 <form onSubmit={handleLogin} className="bg-white rounded-2xl p-4 w-1/3 shadow-md">
                     {/* Header */}

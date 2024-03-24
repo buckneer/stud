@@ -8,7 +8,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
 
-	const hiddenRoutes = ['/login', '/register'];
+	const hiddenRoutes = ['/login'];
 
 	const [hide, setHide]= useState(false)
 	let path = useLocation();
