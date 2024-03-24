@@ -2,7 +2,8 @@ import { apiSlice } from "./apiSlice";
 import { User } from './types/types';
 const userApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		register: builder.mutation <unknown, User>({
+		// TODO change this type if needed
+		register: builder.mutation <{id: string}, User>({
 			query: (body) => ({
 				url: '/register/',
 				method: 'POST',

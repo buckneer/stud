@@ -31,8 +31,20 @@ const Register = () => {
 			}
 
 			const result = await fetchRegister(body).unwrap();
+			console.log(result.id);
 			setTimeout(() => {
-				navigate('/password');
+				// TODO get university id from service that is currently logged in
+				// !! use this variable for that
+				let uni = '65fafc2da919db458f7ed90d'
+
+				// TODO check if role is student
+				// Temporary var!!
+				let whatToAdd = 'student'
+				navigate(`/uni/${uni}/${whatToAdd}/add`, {
+					state: {
+						userId: result.id
+					}
+				});
 			}, 1000)
 		} catch (e: any) {
 			console.error(e);

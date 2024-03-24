@@ -17,9 +17,10 @@ export const registerUser = async (user: UserDocument) => {
 
         if(!registered) throw newError(500, 'Internal Server Error');
 
+        
+
         return {
-            status: 200,
-            message: 'Novi korisnik je registrovan'
+            id: registered._id
         };
         
 	} catch (e: any) {
