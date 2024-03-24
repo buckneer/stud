@@ -37,4 +37,4 @@ const sessionSlice = createSlice({
 });
 
 export default sessionSlice.reducer;
-export const {loggedOut, setAccess, setRefresh, setUser } = sessionSlice.actions;
+export const { loggedOut, setAccess, setRefresh, setUser } = sessionSlice.actions;

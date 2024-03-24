@@ -1,4 +1,4 @@
-import University from "models/university.model";
+import University from "../models/university.model";
 import Subject, { SubjectDocument } from "../models/subject.model"
 import { newError, newResponse } from "../utils";
 import Department from "../models/department.model";
@@ -29,7 +29,7 @@ export const getSubjects = async (department?: string) => {
     
     let subjects: any;
     if(department) {
-        subjects = await Subject.find({department})
+        subjects = await Subject.find({ department })
     } else {
         subjects = await Subject.find();
     }

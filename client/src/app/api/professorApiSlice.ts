@@ -2,7 +2,6 @@ import { apiSlice } from "./apiSlice";
 import { Professor } from "./types/types";
 
 interface ProfUni {
-	user: string,
 	university: string,
 	body: Professor
 }
@@ -15,8 +14,8 @@ interface ProfBody {
 const professorApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addProfessor: builder.mutation <unknown, ProfUni>({
-			query: ({ university, user, body }) => ({
-				url: `/professor/${university}/${user}/`,
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/professor/`,
 				method: 'POST',
 				body
 			}),

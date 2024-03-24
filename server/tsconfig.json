@@ -100,11 +100,6 @@
   
       "outDir": "dist/",
   
-      "baseUrl": "./src/",
-      // "baseUrl": "./src",
-      "paths": {
-        "@config/*": ["config/*"],
-      }
     },
     "include": ["src/**/*"],
     "files": ["src/types/custom.d.ts"]

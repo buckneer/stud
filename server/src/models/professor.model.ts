@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, Types, model } from 'mongoose';
 import { UserDocument } from './user.model';
 import { SubjectDocument } from './subject.model';
 import { GradeDocument } from './grade.model';
@@ -7,9 +7,9 @@ import { UniDocument } from './university.model';
 export interface ProfessorDocument extends Document {
     title?: string;
     user: UserDocument;
-    subjects: SubjectDocument[];
-    grades: GradeDocument[];
-    universities: UniDocument[];
+    subjects: Types.ObjectId[];
+    grades: Types.ObjectId[];
+    universities: Types.ObjectId[];
 }
 
 const ProfessorSchema = new Schema({

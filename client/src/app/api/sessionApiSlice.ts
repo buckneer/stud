@@ -18,7 +18,7 @@ const sessionApiSlice = apiSlice.injectEndpoints({
 						dispatch(setRefresh(data.refreshToken));
 						dispatch(setUser(data.user));
 					}, 1000);
-				} catch (err) {
+				} catch (e: any) {
 					dispatch(loggedOut());
 				}
 			},
@@ -28,7 +28,17 @@ const sessionApiSlice = apiSlice.injectEndpoints({
 				url: '/logout',
 				method: 'POST',
 				body
-			})
+			}),
+			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch(err) {
+          console.log('error', err);
+        } finally {
+          dispatch(loggedOut());
+          dispatch(apiSlice.util.resetApiState());
+        }
+      },
 		}),
 	})
 });

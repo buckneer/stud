@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useAddUniMutation } from '@/src/app/api/uniApiSlice';
+import { useAddUniMutation } from '../../../app/api/uniApiSlice';
 
 const UniAdd = () => {
 	const [ name, setName ] = useState('');

@@ -30,12 +30,6 @@ const SubjectAdd = () => {
 		skip: !uniData
 	});
 
-	const handleSubjectAdd = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		// Preuzmi kormilo odavde Jovane
-	}
-
 	const {
 		data: professors,
 		isLoading: isProfessorsLoading,
@@ -43,6 +37,12 @@ const SubjectAdd = () => {
 	} = useGetProfessorsQuery(uni, {
 		skip: !uni // || !session.accessToken
 	})
+
+	const handleSubjectAdd = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		// Preuzmi kormilo odavde Jovane
+	}
 
 	let content: any;
 
