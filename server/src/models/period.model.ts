@@ -4,17 +4,17 @@ export interface PeriodDocument extends Document {
     start?: string;
     end?: string;
     exams?: Types.ObjectId[];
-    university?: Types.ObjectId; // maybe this is not needed
+    // university?: Types.ObjectId; // maybe this is not needed
     // perhaps this is needed: 
-    // department: Types.ObjectId;
+    department: Types.ObjectId;
 }
 
 const PeriodSchema = new Schema({
     start: {type: String, required: true},
     end: {type: String, required: true},
     exams: [{type: Schema.ObjectId, ref: 'Exam'}],
-    university: {type: Schema.ObjectId, ref: 'University'},
-    // department: {type: Schema.ObjectId, ref: 'Department'}
+    // university: {type: Schema.ObjectId, ref: 'University'},
+    department: {type: Schema.ObjectId, ref: 'Department'}
 });
 
 const Period = model<PeriodDocument>('Period', PeriodSchema);

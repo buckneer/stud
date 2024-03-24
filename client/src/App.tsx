@@ -6,14 +6,16 @@ import Login from './pages/Login/Login';
 import Register from './pages/service/Register/Register';
 import SubjectAdd from './pages/service/SubjectAdd/SubjectAdd';
 import StudentAdd from './pages/service/StudentAdd/StudentAdd';
-import Navbar from './components/Navbar/Navbar';
+
 import Home from './pages/home/Home';
-import Container from './components/Container/Container';
+
 import ProfessorAdd from './pages/service/ProfessorAdd/ProfessorAdd';
 import TokenRequired from './components/auth/TokenRequired';
 import { useSelector } from 'react-redux';
 import { RootState } from './app/store';
 import UniAdd from './pages/admin/UniAdd/UniAdd';
+import Container from './components/container/Container';
+import Navbar from './components/navbar/navbar';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
