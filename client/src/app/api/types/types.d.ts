@@ -8,7 +8,7 @@ export interface User {
 	_id?: string;
 	email?: string;
 	name?: string;
-	role?: string;
+	roles?: string[];
 	confirmed?: boolean;
 	code?: string;
 	phoneNumber?: string;

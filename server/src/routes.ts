@@ -37,8 +37,8 @@ export default function (app: Express) {
     // app.patch('/uni/:id', handleUpdateUni);
 
     // Student
-    // !! With role guard: app.post('/uni/:university/student', userGuard, roleGuard('service'), handleAddStudent);
-    app.post('/uni/:university/student', handleAddStudent);
+    app.post('/uni/:university/student', userGuard, roleGuard('service'), handleAddStudent);
+    // app.post('/uni/:university/student', handleAddStudent);
     app.get(['/student', '/uni/:university/student'], handleGetStudents);
     app.get('/student/:id', handleGetStudent);
     app.delete('/student/:id', handleDeleteStudent);
