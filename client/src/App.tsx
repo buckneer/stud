@@ -10,6 +10,12 @@ import StudentAdd from './pages/service/StudentAdd/StudentAdd';
 import Home from './pages/home/Home';
 
 import ProfessorAdd from './pages/service/ProfessorAdd/ProfessorAdd';
+import DepartmentAdd from './pages/service/DepartmentAdd/DepartmentAdd';
+import PeriodAdd from './pages/service/PeriodAdd/PeriodAdd';
+import ExamAdd from './pages/service/ExamAdd/ExamAdd';
+import GradeAdd from './pages/service/GradeAdd/GradeAdd';
+import ServiceAdd from './pages/service/ServiceAdd/ServiceAdd';
+
 import TokenRequired from './components/auth/TokenRequired';
 import { useSelector } from 'react-redux';
 import { RootState } from './app/store';
@@ -38,7 +44,12 @@ function App() {
               <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
               <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
               <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
-            
+              <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
+              <Route path='/uni/:uni/department/:dep/period/add' element={<PeriodAdd/>} />
+              <Route path='/uni/:uni/department/:dep/exam/add' element={<ExamAdd/>} />
+              <Route path='/uni/:uni/department/:dep/grade/add' element={<GradeAdd/>} />
+              <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
+
               {/* User has to have admin privileges */}
               {/* TODO: CHANGE THIS TO AdminRequired! */}
               <Route element={<TokenRequired />}>
