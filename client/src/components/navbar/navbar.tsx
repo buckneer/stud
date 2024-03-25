@@ -6,9 +6,11 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { RootState } from '../../app/store';
 import { loggedOut } from '../../app/slices/sessionSlice';
 import { useLogoutMutation } from '../../app/api/sessionApiSlice';
+import { CircleUserRound } from "lucide-react"
 
 
 const Navbar = () => {
+	const [isOpen, setIsOpen] = useState(false);
 	const session = useSelector((state: RootState) => state.session);	
 	const dispatch: any = useDispatch();
 	const navigate = useNavigate();
@@ -37,6 +39,8 @@ const Navbar = () => {
 			navigate('/login');
 		}
 	}
+
+
 	
 	useEffect(() => {
 		if(hiddenRoutes.includes(path.pathname)) {
@@ -66,15 +70,37 @@ const Navbar = () => {
 				</NavLink>
 			</div>
 			
-			<div className='user flex-1 text-end'>
+			<div className='user flex flex-1  text-end justify-end items-center'>
 				{
 					session.refreshToken ? 
-						<div onClick={handleLogout}>
-							Logout
+					// <div onClick={handleLogout}>
+						<>
+							<CircleUserRound onClick={() => setIsOpen(!isOpen)} />
 							{
-								isLogoutLoading ? <>Loading...</> : null
+								isOpen ? 
+									<>
+									  <div className="absolute right-5 top-10 text-center z-10 mt-2 w-fit px-5 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+										<div className="py-1" role="none">
+										
+										<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Profile</a>
+										<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">{session.user.name	}</a>
+										</div>
+										<div className="py-1" role="none">
+											<div onClick={handleLogout} className="text-gray-700 cursor-pointer block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">
+												<div className='block mx-2'>
+													<div>
+														{		
+															isLogoutLoading ? <>Loading...</> : "Logout"
+														}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									</>
+									: null
 							}
-						</div>
+						</>
 						: null
 				}
 			</div>
