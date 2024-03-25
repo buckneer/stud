@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import { addExam, getExam, getExams, updateExam, updateGrades, updateStudents } from "../services/exam.service";
+import { addExam, getExam, getExams, updateExam } from "../services/exam.service";
+import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
+import Exam from "../models/exam.model";
 
 export async function handleAddExam(req: Request, res: Response) {
     try {
@@ -53,29 +55,50 @@ export async function handleUpdateExam(req: Request, res: Response) {
     }
 }
 
-export async function handleUpdateStudents(req: Request, res: Response) {
+export async function handleAddStudentsToExam(req: Request, res: Response) {
     try {
         let { id } = req.params;
-        let data = {
-            ...req.body
-        }
-        let resp = await updateStudents(id, data);
-        return resp;
+        let { students } = req.body;
+
+        let resp = await addToModelArray(Exam, id, 'students', students);
+        return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }
 
-export async function handleUpdateGrades(req: Request, res: Response) {
+export async function handleRemoveStudentFromExam(req: Request, res: Response) {
     try {
         let { id } = req.params;
-        let data = {
-            ...req.body
-        }
-        let resp = await updateGrades(id, data);
+        let { student } = req.body;
 
-        return resp;
+        let resp = await removeFromModelArray(Exam, id, 'students', student);
+        return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+    }
+}
+
+export async function handleAddGradesToExam(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { grades } = req.body;
+
+        let resp = await addToModelArray(Exam, id, 'grades', grades);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+    }
+}
+
+export async function handleRemoveGradeFromExam(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { grade } = req.body;
+
+        let resp = await removeFromModelArray(Exam, id, 'grades', grade);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
     }
 }

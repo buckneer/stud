@@ -47,36 +47,36 @@ export const updateExam = async (_id: string, data: any) => {
     return newResponse('Ispit uspešno ažuriran');
 }
 
-export const updateStudents = async (_id: string, data: any) => {
-    let examObject = await Exam.findOne({ _id });
+// export const updateStudents = async (_id: string, data: any) => {
+//     let examObject = await Exam.findOne({ _id });
 
-    if(!examObject) throw newError(404, 'Ispit nije pronadjen');
+//     if(!examObject) throw newError(404, 'Ispit nije pronadjen');
 
-    let newStudents = [...examObject.students!, ...data];
+//     let newStudents = [...examObject.students!, ...data];
     
-    examObject['students'] = newStudents;
+//     examObject['students'] = newStudents;
 
-    let result = await examObject.save();
+//     let result = await examObject.save();
 
-    if(!result) throw newError(500, 'Internal Server Error');
+//     if(!result) throw newError(500, 'Internal Server Error');
 
-    return newResponse('Ispit je ažuriran');
-}
+//     return newResponse('Ispit je ažuriran');
+// }
 
 
-export const updateGrades = async (_id: string, data: any) => {
-    let examObject = await Exam.findOne({ _id });
+// export const updateGrades = async (_id: string, data: any) => {
+//     let examObject = await Exam.findOne({ _id });
 
-    if(!examObject) throw newError(404, 'Ispit nije pronadjen');
+//     if(!examObject) throw newError(404, 'Ispit nije pronadjen');
 
-    let newGrades = [...examObject.grades!, ...data];
+//     let newGrades = [...examObject.grades!, ...data];
     
-    examObject.grades = newGrades;
+//     examObject.grades = newGrades;
 
-    let result = await examObject.save();
+//     let result = await examObject.save();
 
-    if(!result) throw newError(500, 'Internal Server Error');
+//     if(!result) throw newError(500, 'Internal Server Error');
 
-    return newResponse('Ispit je ažuriran');
-}
+//     return newResponse('Ispit je ažuriran');
+// }
 

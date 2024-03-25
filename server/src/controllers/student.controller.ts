@@ -1,8 +1,9 @@
-import { StudentDocument } from './../models/student.model';
+import Student, { StudentDocument } from './../models/student.model';
 import { Request, Response } from "express";
 import log from "../logger";
-import { addStudent, addStudentToSubjects, deleteStudent, getStudent, getStudents, removeStudentFromSubjects } from "../services/student.service";
+import { addStudent, deleteStudent, getStudent, getStudents } from "../services/student.service";
 import { newResponse } from "../utils";
+import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
 
 export async function handleAddStudent(req: Request, res: Response) {
     try {
@@ -73,9 +74,9 @@ export async function handleDeleteStudent(req: Request, res: Response) {
 export async function handleAddStudentToSubjects(req: Request, res: Response) {
     try {
         let { id } = req.params;
-        let subjects: string[] = req.body.subjects;     
+        let subjects = req.body.subjects;     
         
-        let resp = await addStudentToSubjects(id, subjects);
+        let resp = await addToModelArray(Student, id, 'subjects', subjects);
         return res.status(200).send(resp);
 
     } catch (e: any) {
@@ -83,12 +84,12 @@ export async function handleAddStudentToSubjects(req: Request, res: Response) {
     }
 }
 
-export async function handleRemoveStudentFromSubjects(req: Request, res: Response) {
+export async function handleRemoveStudentFromSubject(req: Request, res: Response) {
     try {
         let { id } = req.params;
-        let subjects: string[] = req.body.subjects;
+        let { subject } = req.body;
 
-        let resp = await removeStudentFromSubjects(id, subjects);
+        let resp = await removeFromModelArray(Student, id, 'subjects', subject);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -97,7 +98,10 @@ export async function handleRemoveStudentFromSubjects(req: Request, res: Respons
 
 export async function handleAddSubjectsToCompleted(req: Request, res: Response) {
     try {
+        let { id } = req.params;
+        let subjects = req.body.subjects;
 
+        let resp = await addToModelArray(Student, id, 'completedSubjects', subjects);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }

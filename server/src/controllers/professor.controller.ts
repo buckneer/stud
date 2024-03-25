@@ -1,6 +1,7 @@
-import { ProfessorDocument } from '../models/professor.model';
+import Professor, { ProfessorDocument } from '../models/professor.model';
 import { Request, Response } from "express";
 import { addProfessor, updateProfessor, getProfessor, getProfessors } from '../services/professor.service';
+import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
 
 export async function handleAddProfessor(req: Request, res: Response) {
     try {       
@@ -56,3 +57,74 @@ export async function handleUpdateProfessor(req: Request, res: Response) {
     }
 }
 
+export async function handleAddSubjectsToProfessor(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { subjects } = req.body;
+
+        let resp = await addToModelArray(Professor, id, 'subjects', subjects);
+        return res.status(200).send(resp);
+    } catch(e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleDeleteSubjectFromProfessor(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { subject } = req.body;
+
+        let resp = await removeFromModelArray(Professor, id, 'subjects', subject);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleAddGradesToProfessor(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { grades } = req.body;
+
+        let resp = await addToModelArray(Professor, id, 'grades', grades);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleRemoveGradeFromProfessor(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { grade } = req.body;
+
+        let resp = await removeFromModelArray(Professor, id, 'grades', grade);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleAddProfessorToUni(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { unis } = req.body;
+
+        let resp = await addToModelArray(Professor, id, 'universities', unis);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleRemoveUniFromProfessor(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { uni } = req.body;
+
+        let resp = await removeFromModelArray(Professor, id, 'universities', uni);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}

@@ -1,6 +1,6 @@
 
 import { handleAddProfessor, handleGetProfessor, handleGetProfessors, handleUpdateProfessor } from "./controllers/professor.controller";
-import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubjects, handleUpdateStudent } from "./controllers/student.controller";
+import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent } from "./controllers/student.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
@@ -46,7 +46,7 @@ export default function (app: Express) {
     
     // added here...:
     app.patch('/subject/student/:id', handleAddStudentToSubjects);
-    app.delete('/subject/student/:id', handleRemoveStudentFromSubjects);
+    app.delete('/subject/student/:id', handleRemoveStudentFromSubject);
     //          ????
     app.patch('/completed_subject/student/:id', handleAddSubjectsToCompleted);
 
