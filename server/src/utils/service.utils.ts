@@ -9,7 +9,7 @@ export const objectIdsInModel = async (ModelParam: Model<any>, objectIds: Types.
 
 export const addToModelArray = async (ModelParam: Model<any>, _id: string, key: string, array: Types.ObjectId[]) => {
 	let modelObj = await ModelParam.findOne({ _id });
-
+	
 	if(!modelObj) throw newError(404, 'Ne postoji model sa tim ID-em!');
 
 	let alreadyIn = !array.every(elem => modelObj[key].indexOf(elem) === -1);

@@ -8,8 +8,8 @@ export async function handleAddProfessor(req: Request, res: Response) {
         let professor: ProfessorDocument = {
             ...req.body,
         }
+        let uni = req.body.university;
 
-        let uni: string = req.params.university;
         // add error handling here...
         let resp: any = await addProfessor(uni, professor);
 
@@ -105,7 +105,7 @@ export async function handleRemoveGradeFromProfessor(req: Request, res: Response
     }
 }
 
-export async function handleAddProfessorToUni(req: Request, res: Response) {
+export async function handleAddUniToProfessor(req: Request, res: Response) {
     try {
         let { id } = req.params;
         let { unis } = req.body;

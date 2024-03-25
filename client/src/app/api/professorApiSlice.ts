@@ -1,21 +1,30 @@
 import { apiSlice } from "./apiSlice";
 import { Professor } from "./types/types";
 
-interface ProfUni {
-	university: string,
-	body: Professor
+interface ProfBody {
+	professor: string;
+	body: Professor;
 }
 
-interface ProfBody {
-	professor: string,
-	body: Professor
+interface AddProfUni {
+	university: string;
+	body: {
+		professors: string[];
+	}
+}
+
+interface AddProfSub {
+	professor: string;
+	body: {
+		subjects: string[];
+	}
 }
 
 const professorApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addProfessor: builder.mutation <unknown, ProfUni>({
-			query: ({ university, body }) => ({
-				url: `/uni/${university}/professor/`,
+		addProfessor: builder.mutation <unknown, Professor>({
+			query: (body) => ({
+				url: `/professor/`,
 				method: 'POST',
 				body
 			}),
@@ -40,6 +49,20 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Professor', 'Professors'],
+		}),
+		addProfessorToUni: builder.mutation <unknown, AddProfUni> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/professor/`,
+				method: 'PATCH',
+				body
+			}),
+		}),
+		addProfessorToSubject: builder.mutation <unknown, AddProfSub> ({
+			query: ({ professor, body }) => ({
+				url: `/professor/${professor}/subject`,
+				method: 'PATCH',
+				body
+			}),
 		})
 	})
 });
@@ -48,5 +71,7 @@ export const {
 	useAddProfessorMutation,
 	useGetProfessorQuery,
 	useGetProfessorsQuery,
-	useUpdateProfessorMutation
+	useUpdateProfessorMutation,
+	useAddProfessorToUniMutation,
+	useAddProfessorToSubjectMutation,
 } = professorApiSlice;
