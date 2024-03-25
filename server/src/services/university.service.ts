@@ -31,13 +31,14 @@ export const addUniversity = async (university: UniDocument) => {
     }
 }
 
-export const addStudents = async (uniId: string, studentsToAdd: UserDocument[]) => {
+export const addStudents = async (uniId: string, studentsToAdd: any) => {
     try {
         const uni = await University.findOne({_id: uniId}) as UniDocument;
         if (!uni) throw newError(404, 'Ne postoji fakultet sa tim ID-em');
-        let all: UserDocument[] = [];
+        let all = [];
         all = uni.students ? uni.students.concat(studentsToAdd) : studentsToAdd;
 
+        // @ts-ignore
         uni.students = all;
         await uni.save();
         return newResponse('Sacuvani su novi studenti');
@@ -49,9 +50,9 @@ export const addStudents = async (uniId: string, studentsToAdd: UserDocument[]) 
 
 export const addProfessors = async (uniId: string, professorsToAdd: UserDocument[]) => {
     try {
-        const uni = await University.findOne({_id: uniId}) as UniDocument;
+        const uni = await University.findOne({_id: uniId});
         if (!uni) throw newError(404, 'Ne postoji fakultet sa tim ID-em');
-        let all: UserDocument[] = [];
+        let all= [];
         all = uni.professors ? uni.professors.concat(professorsToAdd) : professorsToAdd;
 
         uni.students = all;
@@ -64,10 +65,10 @@ export const addProfessors = async (uniId: string, professorsToAdd: UserDocument
 
 export const addServices = async (uniId: string, servicesToAdd: UserDocument[]) => {
     try {
-        const uni = await University.findOne({_id: uniId}) as UniDocument;
+        const uni = await University.findOne({_id: uniId});
         if (!uni) throw newError(404, 'Ne postoji fakultet sa tim ID-em');
-        let all: UserDocument[] = [];
-        all = uni.service ? uni.service.concat(servicesToAdd) : servicesToAdd;
+        let all = [];
+        all = uni.services ? uni.services.concat(servicesToAdd) : servicesToAdd;
 
         uni.students = all;
         await uni.save();

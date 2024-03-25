@@ -1,8 +1,5 @@
 import { Document, Schema, Types, model } from 'mongoose';
 import { UserDocument } from './user.model';
-import { SubjectDocument } from './subject.model';
-import { GradeDocument } from './grade.model';
-import { UniDocument } from './university.model';
 
 export interface ProfessorDocument extends Document {
     title?: string;

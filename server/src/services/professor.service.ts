@@ -70,3 +70,59 @@ export const updateProfessor = async (professor: string, data: ProfessorDocument
         throw e;
     }
 }
+
+export const addSubjectsToProfessor = async (_id: string, subjects: string[]) => {
+    let professorObj = await Professor.findOne({ _id });
+
+    if(!professorObj) throw newError(404, 'Ne postoji profesor sa tim id-em');
+
+    // @ts-ignore
+    professorObj.subjects = [ ...professorObj.subjects, ...subjects ];
+    
+    let updated = await professorObj.save();
+    if(!updated) throw newError();
+
+    return newResponse('Uspešno ste dodali predemete profesoru!');
+}
+
+export const removeSubjectsFromProfessor = async (_id: string, subjects: string[]) => {
+    let professorObj = await Professor.findOne({ _id });
+
+    if(!professorObj) throw newError(404, 'Ne postoji profesor sa tim id-em');
+
+    // @ts-ignore 
+    professorObj.subjects = professorObj.subjects?.filter(subject => subjects.indexOf(subject) === -1);
+
+    let updated = await professorObj.save();
+    if(!updated) throw newError();
+
+    return newResponse('Uspešno ste uklonili predmete iz profesora');
+}
+
+export const addGradesToProfessor = async (_id: string, grades: string[]) => {
+    let professorObj = await Professor.findOne({ _id });
+
+    if(!professorObj) throw newError(404, 'Ne postoji profesor sa tim id-em');
+
+    // @ts-ignore
+    professorObj.grades = [ ...professorObj.grades, ...grades ];
+
+    let updated = await professorObj.save();
+    if(!updated) throw newError();
+
+    return newResponse('Uspešno ste dodali ocene profesoru!');
+}
+
+export const removeGradesFromProfessor = async (_id: string, grades: string[]) => {
+    let professorObj = await Professor.findOne({ _id });
+
+    if(!professorObj) throw newError(404, 'Ne postoji profesor sa tim id-em');
+
+    // @ts-ignore 
+    professorObj.subjects = professorObj.subjects?.filter(subject => subjects.indexOf(subject) === -1);
+
+    let updated = await professorObj.save();
+    if(!updated) throw newError();
+
+    return newResponse('Uspešno ste uklonili predmete iz profesora');
+}

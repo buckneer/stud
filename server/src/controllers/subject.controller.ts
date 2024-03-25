@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { addSubject, getSubject, getSubjects, updateSubject } from "../services/subject.service";
+import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
+import Subject from "../models/subject.model";
 
 export async function handleAddSubject(req: Request, res: Response) {
     try {
@@ -67,5 +69,53 @@ export async function handleUpdateSubject(req: Request, res: Response) {
 
     } catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleAddProfessorsToSubject(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { professors } = req.body;
+
+        let resp = await addToModelArray(Subject, id, 'professors', professors);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleRemoveProfessorFromSubject(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { professor } = req.body;
+
+        let resp = await removeFromModelArray(Subject, id, 'professors', professor);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleAddRequiredsToSubject(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { requiredSub } = req.body;
+
+        let resp = await addToModelArray(Subject, id, 'requiredSub', requiredSub);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleRemoveRequiredFromSubject(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { requiredSub } = req.body;
+
+        let resp = await removeFromModelArray(Subject, id, 'requiredSub', requiredSub);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

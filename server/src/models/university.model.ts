@@ -1,18 +1,15 @@
 import { Schema, Document, model } from "mongoose";
 import { UserDocument } from "./user.model";
 
-
-
 export interface UniDocument extends Document {
     name?: string;
     email?: string;
     students?: UserDocument[];
     professors?: UserDocument[];
-    service?: UserDocument[];
+    services?: UserDocument[];
     departments?: string[];
     parentUni?: string;
 }
-
 
 const UniSchema = new Schema({
     name: {type: String, required: true},
@@ -25,6 +22,5 @@ const UniSchema = new Schema({
 })
 
 const University = model<UniDocument>('University', UniSchema);
-
 
 export default University;
