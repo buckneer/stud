@@ -74,16 +74,16 @@ const Navbar = () => {
 				{
 					session.refreshToken ? 
 					// <div onClick={handleLogout}>
-						<>
-							<CircleUserRound onClick={() => setIsOpen(!isOpen)} />
+						<div className='flex gap-2 cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
+							<CircleUserRound />
+							{session.user.name}
 							{
 								isOpen ? 
 									<>
 									  <div className="absolute right-5 top-10 text-center z-10 mt-2 w-fit px-5 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 										<div className="py-1" role="none">
-										
-										<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Profile</a>
-										<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">{session.user.name	}</a>
+											<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Profile</a>
+											<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">{session.user.name	}</a>
 										</div>
 										<div className="py-1" role="none">
 											<div onClick={handleLogout} className="text-gray-700 cursor-pointer block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">
@@ -100,7 +100,7 @@ const Navbar = () => {
 									</>
 									: null
 							}
-						</>
+						</div>
 						: null
 				}
 			</div>

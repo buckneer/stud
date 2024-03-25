@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Select from 'react-select'
 import { useAddProfessorMutation } from '../../../app/api/professorApiSlice';
 import { useParams } from 'react-router-dom';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
@@ -9,10 +10,11 @@ const ProfessorAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
 	const { uni } = useParams();
 	// title, user, subjects, grades, univerisites
-	
+
 	const [ title, setTitle ] = useState('');
 	const [ subjects, setSubjects ] = useState([]);
-	
+
+
 	const {
 		data: subjectsData,
 		isLoading: isSubjectsLoading,
@@ -25,8 +27,9 @@ const ProfessorAdd = () => {
 	const [
 		fetchAddProfessor,
 		{
-			isLoading: isFetchAddProfessorLoading,
-			isSuccess: isFetchAddProfessorSuccess
+			isLoading: isProfessorAddLoading,
+			isSuccess: isProfessorAddSuccess,
+			isError: isProfessorAddError
 		}
 	] = useAddProfessorMutation();
 
@@ -47,27 +50,86 @@ const ProfessorAdd = () => {
 
 	let content: any;
 
-	if(isSubjectsLoading) {
+	if (isSubjectsLoading) {
 		content = <>Loading...</>
 	} else if (isSubjectsSuccess) {
-			content = 
+		content =
 			<>
+				{/* <h1>Dodajvanje profesora</h1>
 				<form onSubmit={handleAddProfessor}>
 					<input id="title" placeholder="Titula" value={title} onChange={(e) => setTitle(e.target.value)} />
 					<select id="subjects">
 						<option value="0">Izaberi predmet kasnije...</option>
-						{/* add subjects.map tomorrow... */}
 					</select>
 					<button type="submit">Unesi profesora!</button>
-				</form>
+				</form> 
+				*/}
+				<div className='flex-grow flex justify-center items-center'>
+					<div className='card'>
+						<div className='form-header'>
+							<div className="form-title">Novi Profesor</div>
+							<div className="form-desc" >Kreiranje novog profesora</div>
+
+							{
+								isProfessorAddLoading ? <div className="">Loader ide ovde...</div> : null
+							}
+							{
+								isProfessorAddSuccess ?
+									<div className="w-full flex justify-center">
+										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspesno dodat profesor!</div>
+									</div>
+									: null
+							}
+							{
+								isProfessorAddError ?
+									<div className="w-full flex justify-center">
+										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom registracije profesora!</div>
+									</div>
+									: null
+							}
+						</div>
+						<form onSubmit={handleAddProfessor}>
+							<div className='form-control'>
+								<label htmlFor="profesorId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+									<input
+										type="text" id="profesorId" placeholder="Ime profesora" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off'
+										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+									/>
+									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+										Ime profesora
+									</span>
+								</label>
+							</div>
+							<div className='form-control'>
+								<label htmlFor="subjects" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+									<input
+										type="text" id="subjects" placeholder="Broj Indeksa" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off'
+										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+									/>
+									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+										Predmeti
+									</span>
+								</label>
+								<Select className='w-full mt-4' options={subjects} />
+
+
+							</div>
+							<div className='footer flex items-center justify-center flex-col'>
+								<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isProfessorAddSuccess}>Kreiraj Profesora</button>
+							</div>
+						</form>
+					</div>
+				</div>
 			</>
 	}
 
+	useEffect(() => {
+		document.title = 'Dodaj profesora | Stud';
+	}, []);
 
 	return (
 		<>
-			{ content }
-			
+			{content}
 		</>
 	)
 }
