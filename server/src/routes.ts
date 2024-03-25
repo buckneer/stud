@@ -57,7 +57,7 @@ export default function (app: Express) {
     app.patch('/professor/:professor', handleUpdateProfessor);
 
     // Departments
-    app.post('/department/', handleAddDepartment);
+    app.post('/uni/:uni/department/', handleAddDepartment);
     app.patch('/department/:department', handleUpdateDepartment);
     app.get('/department/:department', handleGetDepartment);
     app.get('/uni/:university/department/', handleGetDepartments);
