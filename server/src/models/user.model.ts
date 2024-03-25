@@ -14,7 +14,7 @@ const UserSchema = new Schema({
     email: {type: String, required: true},
     password: {type: String, required: false},
     name: {type: String, required: true},
-    roles: [{type: String, default: 'student'}],
+    roles: [{type: String, required: true}],
     confirmed: {type: Boolean, default: false},
     code: {type: String, required: false},
     phoneNum: {type: String, required: false}

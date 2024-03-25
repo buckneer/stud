@@ -10,6 +10,7 @@ export interface ExamDocument extends Document {
     ended?: boolean;
 }
 
+
 const ExamSchema = new Schema({ 
     date: [{type: String}],
     students: [{type: Schema.ObjectId, ref: 'Student'}],

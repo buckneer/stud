@@ -46,3 +46,37 @@ export const updateExam = async (_id: string, data: any) => {
 
     return newResponse('Ispit uspešno ažuriran');
 }
+
+export const updateStudents = async (_id: string, data: any) => {
+    let examObject = await Exam.findOne({ _id });
+
+    if(!examObject) throw newError(404, 'Ispit nije pronadjen');
+
+    let newStudents = [...examObject.students!, ...data];
+    
+    examObject['students'] = newStudents;
+
+    let result = await examObject.save();
+
+    if(!result) throw newError(500, 'Internal Server Error');
+
+    return newResponse('Ispit je ažuriran');
+}
+
+
+export const updateGrades = async (_id: string, data: any) => {
+    let examObject = await Exam.findOne({ _id });
+
+    if(!examObject) throw newError(404, 'Ispit nije pronadjen');
+
+    let newGrades = [...examObject.grades!, ...data];
+    
+    examObject.grades = newGrades;
+
+    let result = await examObject.save();
+
+    if(!result) throw newError(500, 'Internal Server Error');
+
+    return newResponse('Ispit je ažuriran');
+}
+
