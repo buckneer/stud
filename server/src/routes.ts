@@ -66,7 +66,8 @@ export default function (app: Express) {
     app.post('/subject/', handleAddSubject);
     app.patch('/subject/:id', handleUpdateSubject);
     app.get('/subject/:id', handleGetSubject);
-    app.get('/department/:department/subject/', handleGetSubjects);
+    app.get('/department/:dep/subject/', handleGetSubjects);
+    app.get('/uni/:uni/subject/', handleGetSubjects);
     
     // Grade
     app.post('/grades/', handleAddGrade);

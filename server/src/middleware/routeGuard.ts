@@ -36,7 +36,7 @@ export const roleGuard = (role: string) => {
         try {
             console.log(req.user);
             if(!req.user) throw newError(401, 'Niste ulogovani');
-            if(!req.user.roles.includes(role)) throw newError(401, 'STOJ!');
+            if(!req.user.roles.includes(role)) throw newError(403, 'STOJ!');
 
             if(req.user.roles.includes('service')) {
                 // checks only university
@@ -48,7 +48,7 @@ export const roleGuard = (role: string) => {
                 let uni = service.university?.toString();
                 
                 
-                if(uni !== req.params.university) { throw newError(401, 'Ne možetet da pristupite ovom univerzitetu') }
+                if(uni !== req.params.university) { throw newError(403, 'Ne možete da pristupite ovom univerzitetu') }
                 console.log("YOU PASSED ROUTE GUARD");
                 next();
             } 

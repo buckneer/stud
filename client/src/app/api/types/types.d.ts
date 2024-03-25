@@ -64,6 +64,7 @@ export interface Subject {
 	code?: string;
 	professors?: string[];
 	department?: string;
+	university?: string;
 	espb?: number;
 	requiredSub?: string[];
 }

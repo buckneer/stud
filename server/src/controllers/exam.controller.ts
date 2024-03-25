@@ -46,7 +46,7 @@ export async function handleUpdateExam(req: Request, res: Response) {
             ...req.body
         }
 
-        let resp = updateExam(id, data);
+        let resp = await updateExam(id, data);
 
         return res.status(200).send(resp);
 

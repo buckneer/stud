@@ -1,3 +1,5 @@
+// TODO: Proveri da li postoji profesor na univerzitetu, ako ne postoji dodaj ga...
+
 import Professor, { ProfessorDocument } from "../models/professor.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils";

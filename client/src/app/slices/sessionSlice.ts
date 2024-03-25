@@ -27,7 +27,7 @@ const sessionSlice = createSlice({
 		setUser(state, action: PayloadAction<User>) {
 			return {
 				...state,
-				...action
+				user: action.payload
 			}
 		},
 		loggedOut() {

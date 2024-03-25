@@ -64,7 +64,7 @@ const StudentAdd = () => {
 
 	let content: any;
 
-	if(isUniLoading || isDepLoading) {
+	if(isUniLoading || isDepLoading) { 
 		content =
 		<>
 			Loading...
