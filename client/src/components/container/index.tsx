@@ -7,7 +7,7 @@ export interface ContainerProps  {
 }
 
 const Container = ({children} : ContainerProps) => {
-    return <div className='bg-slate-100 m-5 rounded-2xl flex-grow p-5 routes-container'> {children} </div>;
+    return <div className='bg-slate-100 m-5 rounded-2xl flex-1 p-5 routes-container'> {children} </div>;
 }
 
 
