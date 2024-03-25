@@ -1,12 +1,12 @@
 
 import { handleAddProfessor, handleGetProfessor, handleGetProfessors, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent } from "./controllers/student.controller";
-import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni } from "./controllers/university.controller";
+import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni } from "./controllers/university.controller";
 import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleGetDepartment, handleGetDepartments, handleUpdateDepartment } from "./controllers/department.controller";
-import { handleAddSubject, handleGetSubject, handleGetSubjects, handleUpdateSubject } from "./controllers/subject.controller";
+import { handleAddProfessorsToSubject, handleAddSubject, handleGetSubject, handleGetSubjects, handleUpdateSubject } from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import { handleAddExam, handleGetExam, handleGetExams, handleUpdateExam } from "./controllers/exam.controller";
 import { handleAddPeriod, handleGetPeriod, handleGetPeriods, handleUpdatePeriod } from "./controllers/period.controller";
@@ -34,7 +34,8 @@ export default function (app: Express) {
     app.get('/uni', handleGetAllUnis);
     app.get('/uni/:id', handleGetUni);
     app.patch('/uni', handleAddStudentsUni);
-    // app.patch('/uni/:id', handleUpdateUni);
+    app.patch('/uni/')
+    app.patch('/uni/:id/professor/', handleAddProfessorsToUni);
 
     // Student
     app.post('/uni/:university/student', userGuard, roleGuard('service'), handleAddStudent);
@@ -51,10 +52,11 @@ export default function (app: Express) {
     app.patch('/completed_subject/student/:id', handleAddSubjectsToCompleted);
 
     // Professor
-    app.post('/uni/:university/professor/', handleAddProfessor);
+    app.post('/professor/', handleAddProfessor);
     app.get('/professor/:professor', handleGetProfessor);
     app.get('/uni/:university/professor', handleGetProfessors); // <- add all university professors
     app.patch('/professor/:professor', handleUpdateProfessor);
+    app.patch('/professor/:id/subject', handleAddProfessorsToSubject);
 
     // Departments
     app.post('/department/', handleAddDepartment);

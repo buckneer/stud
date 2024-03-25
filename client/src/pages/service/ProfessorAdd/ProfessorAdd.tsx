@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select, { ActionMeta, MultiValue } from 'react-select';
-import { useAddProfessorMutation } from '../../../app/api/professorApiSlice';
-import { useParams } from 'react-router-dom';
+import { useAddProfessorMutation, useAddProfessorToSubjectMutation, useAddProfessorToUniMutation } from '../../../app/api/professorApiSlice';
+import { useLocation, useParams } from 'react-router-dom';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
@@ -14,6 +14,9 @@ type Option = {
 const ProfessorAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
 	const { uni } = useParams();
+	const location = useLocation();
+
+	const [ user, setUser ] = useState('');
 	// title, user, subjects, grades, univerisites
 
 	const [ title, setTitle ] = useState('');
@@ -44,16 +47,43 @@ const ProfessorAdd = () => {
 		}
 	] = useAddProfessorMutation();
 
+	const [
+		addProfToUni,
+		{
+			isLoading: isAddProfToUniLoading,
+			isSuccess: isAddProfToUniSuccess,
+			isError: isAddProfToUniError,
+		}
+	] = useAddProfessorToUniMutation();
+
+	const [
+		addProfToSub,
+		{
+			isLoading: isAddProfToSubLoading,
+			isSuccess: isProfToSubSuccess,
+			isError: isProfToSubError
+		}
+	] = useAddProfessorToSubjectMutation();
+
 	const handleAddProfessor = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-
 		try {
 			const body = {
-				title, subjects: subjects!
-			};
 
-			const result = await fetchAddProfessor({ university: uni!, body }).unwrap();
+				title, subjects: subjects!, university: uni!, user
+			};
+			const result = await fetchAddProfessor(body).unwrap();
+			// @ts-ignore
+			const resultBody: any = { professors: [ result.id ] };
+
+			await addProfToUni({ university: uni!, body: resultBody });
+
+			const subjectBody: any = { subjects: subjects };
+			// FIXME: THIS!
+			// @ts-ignore
+			await addProfToSub({ professor: result.id, body: subjects });
+
 		} catch (e: any) {
 			console.error(e);
 		}
@@ -64,7 +94,6 @@ const ProfessorAdd = () => {
 	if (isSubjectsLoading) {
 		content = <>Loading...</>
 	} else if (isSubjectsSuccess) {
-		let options = 
 		content =
 			<>
 				{/* <h1>Dodajvanje profesora</h1>
@@ -103,6 +132,7 @@ const ProfessorAdd = () => {
 						{/* <form onSubmit={handleAddProfessor}> */}
 						<form onSubmit={handleAddProfessor}>
 							<div className='form-control'>
+								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
 								<label htmlFor="profesorId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 									<input
 										type="text" id="profesorId" placeholder="Zvanje profesora" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off' required
@@ -124,7 +154,7 @@ const ProfessorAdd = () => {
 								})} />
 							</div>
 							<div className='footer flex items-center justify-center flex-col'>
-								<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isProfessorAddSuccess}>Kreiraj Profesora</button>
+								<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Profesora</button>
 							</div>
 						</form>
 					</div>
@@ -133,7 +163,10 @@ const ProfessorAdd = () => {
 	}
 
 	useEffect(() => {
-		document.title = 'Dodaj profesora | Stud';
+		document.title = 'Dodaj profesora | Stud'
+		if(location.state?.userId) {
+			setUser(location.state.userId);
+		}			
 	}, []);
 
 	return (

@@ -72,6 +72,8 @@ export async function handleUpdateSubject(req: Request, res: Response) {
     }
 }
 
+// TODO: add a function to add one professor to more subjects...
+
 export async function handleAddProfessorsToSubject(req: Request, res: Response) {
     try {
         let { id } = req.params;

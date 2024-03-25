@@ -4,9 +4,9 @@ import Professor, { ProfessorDocument } from "../models/professor.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils";
 
-export const addProfessor = async (university: string, professor: ProfessorDocument) => {
+export const addProfessor = async (_id: string, professor: ProfessorDocument) => {
     try {
-        let universityObj = await University.findOne({ _id: university });
+        let universityObj = await University.findOne({ _id });
        
         if(!universityObj) throw newError(404, 'Greška prilikom pristupanja!');
 
