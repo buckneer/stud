@@ -52,7 +52,7 @@ const Navbar = () => {
 	
 	return !hide ? 
 		<div className='navbar text-white mx-7 mt-3 flex align-center justify-between'>
-			<div className='branding flex-1'>
+			<div className='branding flex items-center flex-1'>
 				<h1 className='font-black'>STUD</h1>
 			</div>
 			<div className='menu flex-1 text-center flex gap-2 justify-center align-center'>

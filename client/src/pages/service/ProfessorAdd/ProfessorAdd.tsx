@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import Select from 'react-select'
+import Select, { ActionMeta, MultiValue } from 'react-select';
 import { useAddProfessorMutation } from '../../../app/api/professorApiSlice';
 import { useParams } from 'react-router-dom';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
+
+type Option = {
+	value?: string;
+	label?: string
+}
 
 const ProfessorAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
@@ -12,8 +17,14 @@ const ProfessorAdd = () => {
 	// title, user, subjects, grades, univerisites
 
 	const [ title, setTitle ] = useState('');
-	const [ subjects, setSubjects ] = useState([]);
+	const [ subjects, setSubjects ] = useState<string[]>([]);
 
+	const handleChange = (newSelections: MultiValue<Option>, actionMeta: ActionMeta<Option>) => {
+		console.log(newSelections);
+		let vals = newSelections.map(item => item.value!);
+		
+		setSubjects([...vals]);
+	}
 
 	const {
 		data: subjectsData,
@@ -39,7 +50,7 @@ const ProfessorAdd = () => {
 
 		try {
 			const body = {
-				title, subjects
+				title, subjects: subjects!
 			};
 
 			const result = await fetchAddProfessor({ university: uni!, body }).unwrap();
@@ -53,6 +64,7 @@ const ProfessorAdd = () => {
 	if (isSubjectsLoading) {
 		content = <>Loading...</>
 	} else if (isSubjectsSuccess) {
+		let options = 
 		content =
 			<>
 				{/* <h1>Dodajvanje profesora</h1>
@@ -88,31 +100,28 @@ const ProfessorAdd = () => {
 									: null
 							}
 						</div>
+						{/* <form onSubmit={handleAddProfessor}> */}
 						<form onSubmit={handleAddProfessor}>
 							<div className='form-control'>
 								<label htmlFor="profesorId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 									<input
-										type="text" id="profesorId" placeholder="Ime profesora" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off'
+										type="text" id="profesorId" placeholder="Zvanje profesora" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off' required
 										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
 									/>
 									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Ime profesora
+										Zvanje profesora
 									</span>
 								</label>
 							</div>
 							<div className='form-control'>
-								<label htmlFor="subjects" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-									<input
-										type="text" id="subjects" placeholder="Broj Indeksa" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off'
-										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-									/>
-									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Predmeti
-									</span>
-								</label>
-								<Select className='w-full mt-4' options={subjects} />
-
-
+								{/* {subjectsData.map((subject) => {
+									return (
+										<Select className='w-full mt-4' options={subject} />
+									)
+								})} */}
+								<Select onChange={handleChange} className='w-full outline-none' isMulti options={subjectsData.map((item) => {
+									return {value: item._id, label: item.name};
+								})} />
 							</div>
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isProfessorAddSuccess}>Kreiraj Profesora</button>
