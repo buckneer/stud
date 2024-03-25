@@ -4,6 +4,7 @@ import { useGetUniDepartmentsQuery } from './../../../app/api/departmentApiSlice
 import { useGetUniQuery } from './../../../app/api/uniApiSlice';
 import { useGetProfessorsQuery } from './../../../app/api/professorApiSlice';
 import { useAddSubjectMutation } from '../../../app/api/subjectApiSlice';
+import InputField from '../../../components/InputField/InputField';
 
 
 const SubjectAdd = () => {
@@ -53,16 +54,18 @@ const SubjectAdd = () => {
 	const handleSubjectAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-		
-		try {
-			const body = {
-				name, code, department, professors, university: uni
-			}
 
-			const result = await fetchAddSubject(body).unwrap();
-		} catch (e: any) {
-			console.error(e);
-		}
+		console.log(name);
+		
+		// try {
+		// 	const body = {
+		// 		name, code, department, professors, university: uni
+		// 	}
+
+		// 	const result = await fetchAddSubject(body).unwrap();
+		// } catch (e: any) {
+		// 	console.error(e);
+		// }
 	}
 
 	let content: any;
@@ -96,8 +99,10 @@ const SubjectAdd = () => {
 					}
 				</div>
 				<form className='flex flex-col' onSubmit={handleSubjectAdd}>
-					<input type="text" placeholder="Ime Predmeta" value={name} onChange={(e) => setName(e.target.value)} required />
-					<input type="text" placeholder="Kod" value={code} onChange={(e) => setCode(e.target.value)} required />
+					{/* <input type="text" placeholder="Ime Predmeta" value={name} onChange={(e) => setName(e.target.value)} required /> */}
+					<InputField id='subjName' type='text' name='Ime Predmeta' inputVal={name} setVal={(e) => setName(e.target.value)} />
+					{/* <input type="text" placeholder="Kod" value={code} onChange={(e) => setCode(e.target.value)} required /> */}
+					<InputField id='code' type='text' name='Kod Predmeta' inputVal={code} setVal={(e) => setCode(e.target.value)} />
 					<select id="departments" name="departments" onChange={(e) => setDepartment(e.target.value)}>
 						<option value="0">Izaberite odsek</option>
 						{ departments.map((department) => {
