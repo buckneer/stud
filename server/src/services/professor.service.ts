@@ -15,12 +15,8 @@ export const addProfessor = async (university: string, professor: ProfessorDocum
         let added = await newProfessor.save();
 
         if(!added) throw newError(500, 'Internal Server Error');
-
-        return {
-            status: 200,
-            message: `Korisnik sa ID-em '${added.user}' je dodat kao profesor`,
-            _id: added._id
-        }
+        
+        return {id: added._id};
     } catch (e: any) {
         throw e;
     }

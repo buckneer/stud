@@ -13,7 +13,7 @@ export async function handleAddProfessor(req: Request, res: Response) {
         // add error handling here...
         let resp: any = await addProfessor(uni, professor);
 
-        return res.status(resp.status).send(resp);
+        return res.status(200).send(resp);
     } catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
