@@ -67,6 +67,7 @@ const ProfessorAdd = () => {
 	return (
 		<>
 			{ content }
+			
 		</>
 	)
 }

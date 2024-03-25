@@ -27,7 +27,7 @@ const Register = () => {
 
 		try {
 			const body = {
-				email, name, phoneNumber, role: engRoles[selectedRole]
+				email, name, phoneNumber, roles: [engRoles[selectedRole]]
 			}
 
 			const result = await fetchRegister(body).unwrap();
@@ -39,7 +39,7 @@ const Register = () => {
 
 				// TODO check if role is student
 				// Temporary var!!
-				let whatToAdd = 'student'
+				let whatToAdd = engRoles[selectedRole];
 				navigate(`/uni/${uni}/${whatToAdd}/add`, {
 					state: {
 						userId: result.id
