@@ -96,15 +96,6 @@ const ProfessorAdd = () => {
 	} else if (isSubjectsSuccess) {
 		content =
 			<>
-				{/* <h1>Dodajvanje profesora</h1>
-				<form onSubmit={handleAddProfessor}>
-					<input id="title" placeholder="Titula" value={title} onChange={(e) => setTitle(e.target.value)} />
-					<select id="subjects">
-						<option value="0">Izaberi predmet kasnije...</option>
-					</select>
-					<button type="submit">Unesi profesora!</button>
-				</form> 
-				*/}
 				<div className='flex-grow flex justify-center items-center'>
 					<div className='card'>
 						<div className='form-header'>
@@ -129,7 +120,6 @@ const ProfessorAdd = () => {
 									: null
 							}
 						</div>
-						{/* <form onSubmit={handleAddProfessor}> */}
 						<form onSubmit={handleAddProfessor}>
 							<div className='form-control'>
 								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
@@ -144,11 +134,6 @@ const ProfessorAdd = () => {
 								</label>
 							</div>
 							<div className='form-control'>
-								{/* {subjectsData.map((subject) => {
-									return (
-										<Select className='w-full mt-4' options={subject} />
-									)
-								})} */}
 								<Select onChange={handleChange} className='w-full outline-none' isMulti options={subjectsData.map((item) => {
 									return {value: item._id, label: item.name};
 								})} />

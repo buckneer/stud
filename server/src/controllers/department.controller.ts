@@ -10,9 +10,9 @@ export async function handleAddDepartment(req: Request, res: Response) {
         }
         // data.university;
 
-        // let { university } = req.params;
+        let { uni } = req.params;
 
-        let resp = await addDepartment(data);
+        let resp = await addDepartment(uni, data);
 
         return res.send(resp);
     } catch (e: any) {
