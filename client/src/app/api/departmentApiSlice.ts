@@ -15,7 +15,7 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addDepartment: builder.mutation <unknown, UniDep> ({
 			query: ({ university, body }) => ({
-				url: `/department/${university}/`,
+				url: `/uni/${university}/department/`,
 				method: 'POST',
 				body
 			}),
