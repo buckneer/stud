@@ -20,8 +20,8 @@ import TokenRequired from './components/auth/TokenRequired';
 import { useSelector } from 'react-redux';
 import { RootState } from './app/store';
 import UniAdd from './pages/admin/UniAdd/UniAdd';
-import Container from './components/container/Container';
-import Navbar from './components/navbar/navbar';
+import Container from './components/Container';
+import Navbar from './components/Navbar';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
