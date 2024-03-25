@@ -94,7 +94,7 @@
     @apply flex justify-center flex-col items-center;
   }
   .card .form-header .form-title {
-    @apply text-3xl font-semibold p-2 uppercase text-blue-800;
+    @apply text-3xl font-semibold p-2 uppercase text-gray-800;
   }
   .card .form-header .form-desc {
     @apply text-gray-400 p-2;
@@ -106,7 +106,7 @@
     @apply w-full flex flex-col justify-start p-2 items-start relative;
   }
   .alert-success {
-    @apply bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold;
+    @apply bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-gray-800 font-bold;
   }
   .alert-error {
     @apply bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold;
