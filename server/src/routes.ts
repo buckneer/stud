@@ -37,7 +37,7 @@ export default function (app: Express) {
     app.post('/logout/', handleLogout);
 
     // User
-    app.post('/register/', handleRegister);
+    app.post('/register/', userGuard, handleRegister);
     app.patch('/password/', handleSetPassword);
     app.post('/password/', handleSendPasswordMail);
     app.patch('/user/:id/uni/', handleAddUnisToUser);
