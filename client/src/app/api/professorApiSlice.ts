@@ -13,12 +13,34 @@ interface AddProfUni {
 	}
 }
 
+interface DelProfUni {
+	university: string;
+	body: {
+		professor: string;
+	}
+}
+
 interface AddProfSub {
 	professor: string;
 	body: {
 		subjects: string[];
 	}
 }
+
+interface DelProfSub {
+	professor: string;
+	body: {
+		subject: string;
+	}
+}
+
+interface AddProfGrade {
+	professor: string;
+	body: {
+		grade: string;
+	}
+}
+// TODO: add delete professor later...
 
 const professorApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -56,7 +78,15 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Professors'],
+			invalidatesTags: (result, error) => error ? [] : ['Professors', 'Professor'],
+		}),
+		deleteProfessorFromUni: builder.mutation <unknown, DelProfUni> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/professor`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Professors', 'Professor'],
 		}),
 		addProfessorToSubject: builder.mutation <unknown, AddProfSub> ({
 			query: ({ professor, body }) => ({
@@ -65,6 +95,30 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Professor', 'Subject'],
+		}),
+		deleteProfessorFromSubject: builder.mutation <unknown, DelProfSub> ({
+			query: ({ professor, body }) => ({
+				url: `/professor/${professor}/subject`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['Professor', 'Subject'],
+		}),
+		addProfessorGrade: builder.mutation <unknown, AddProfGrade> ({
+			query: ({ professor, body }) => ({
+				url: `/professor/${professor}/grade/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Professor', 'Grade', 'Grades'],
+		}),
+		deleteProfessorGrade: builder.mutation <unknown, unknown> ({
+			query: ({ professor, body }) => ({
+				url: `/professor/${professor}/grade/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Professor', 'Grade', 'Grades'],
 		})
 	})
 });
@@ -75,5 +129,9 @@ export const {
 	useGetProfessorsQuery,
 	useUpdateProfessorMutation,
 	useAddProfessorToUniMutation,
+	useDeleteProfessorFromUniMutation,
 	useAddProfessorToSubjectMutation,
+	useDeleteProfessorFromSubjectMutation,
+	useAddProfessorGradeMutation,
+	useDeleteProfessorGradeMutation,
 } = professorApiSlice;

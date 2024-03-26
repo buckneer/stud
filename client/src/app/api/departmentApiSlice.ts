@@ -11,6 +11,20 @@ interface UpdateDep {
 	body: Department;
 }
 
+interface AddUniDep {
+	university: string;
+	body: {
+		departments: string[];
+	}
+}
+
+interface DelDep {
+	university: string;
+	body: {
+		department: string;
+	};
+}
+
 const departmentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addDepartment: builder.mutation <unknown, UniDep> ({
@@ -40,6 +54,22 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Department', 'Departments'],
+		}),
+		addUniDepartment: builder.mutation <unknown, AddUniDep> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/department`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['University', 'Department', 'Departments']
+		}),
+		deleteUniDepartment: builder.mutation <unknown, DelDep> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/department`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['University', 'Department', 'Departments']
 		})
 	})
 });
@@ -49,4 +79,6 @@ export const {
 	useGetDepartmentQuery,
 	useGetUniDepartmentsQuery,
 	useUpdateDeparmentMutation,
+	useAddUniDepartmentMutation,
+	useDeleteUniDepartmentMutation,
 } = departmentApiSlice;

@@ -6,6 +6,20 @@ interface UpdatePeriod {
 	body: Period;
 }
 
+interface PeriodExam {
+	period: string;
+	body: {
+		exams: string[];
+	}
+}
+
+interface DelPeriod {
+	period: string;
+	body: {
+		exam: string;
+	}
+}
+
 const periodApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addPeriod: builder.mutation <unknown, Period> ({
@@ -36,6 +50,22 @@ const periodApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Period', 'Periods'],
 		}),
+		addPeriodExams: builder.mutation <unknown, PeriodExam> ({
+			query: ({ period, body }) => ({
+					url: `/period/${period}/exam/`,
+					method: 'PATCH',
+					body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['Period', 'Periods', 'Exam', 'Exams'],
+		}),
+		deletePeriodExam: builder.mutation <unknown, DelPeriod> ({
+			query: ({ period, body }) => ({
+				url: `/period/${period}/exam/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] :  ['Period', 'Periods', 'Exam', 'Exams'],
+		})
 	})
 });
 
@@ -44,4 +74,6 @@ export const {
 	useGetPeriodQuery,
 	useGetPeriodsQuery,
 	useUpdatePeriodMutation,
+	useAddPeriodExamsMutation,
+	useDeletePeriodExamMutation,
 } = periodApiSlice;

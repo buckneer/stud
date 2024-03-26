@@ -18,6 +18,13 @@ interface AddUni {
 	}
 }
 
+interface DelUni {
+	university: string;
+	body: {
+		student: string;
+	}
+}
+
 const studentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addStudent: builder.mutation <unknown, any>({
@@ -32,6 +39,14 @@ const studentApiSlice = apiSlice.injectEndpoints({
 			query: ({ university, body }) => ({
 				url: `/uni/${university}/student/`,
 				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['UniStudents']
+		}),
+		deleteStudentUni: builder.mutation <unknown, DelUni> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/student/`,
+				method: 'DELETE',
 				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['UniStudents']
@@ -62,13 +77,19 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Student', 'Students', 'UniStudents']
-		})
+		}),
+		// addCompleted: builder.mutation <unknown, unknown> ({
+		// 	query: ({  }) => ({
+
+		// 	})
+		// })
 	})
 });
 
 export const {
 	useAddStudentMutation,
 	useAddStudentToUniMutation,
+	useDeleteStudentUniMutation,
 	useGetStudentQuery,
 	useDeleteStudentMutation,
 	useGetUniStudentsQuery
