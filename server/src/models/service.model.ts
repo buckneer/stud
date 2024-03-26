@@ -2,10 +2,10 @@ import { Document, Schema, model, Types } from 'mongoose';
 
 export interface ServiceDocument extends Document {
     user?: Types.ObjectId;
-    university?: Types.ObjectId;
+    university: Types.ObjectId;
 }
 
-const ServiceSchema = new Schema({ 
+const ServiceSchema = new Schema({
     user: {type: Schema.ObjectId, ref: 'User'},
     university: {type: Schema.ObjectId, ref: 'University'}
 });

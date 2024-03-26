@@ -23,8 +23,11 @@ export default function (app: Express) {
     app.post('/login/', handleLogin);
     app.post('/refresh/', handleRefresh);
     app.post('/logout/', handleLogout);
-    
+
     // User
+    app.post('/register', userGuard, handleRegister);
+    app.patch('/password', handleSetPassword);
+    app.post('/password', handleSendPasswordMail);
     app.post('/register/', handleRegister);
     app.patch('/password/', handleSetPassword);
     app.post('/password/', handleSendPasswordMail);
@@ -42,7 +45,7 @@ export default function (app: Express) {
     app.patch('/uni/:id/student/', handleAddStudentsToUni);
     app.patch('/uni/:id/department', handleAddDepartmentsToUni);
     app.delete('/uni/:id/department/', handleRemoveDepartmentFromUni);
-    
+
     // Student
     app.post('/student/', /* userGuard, roleGuard('service'), */ handleAddStudent);
     // app.post('/uni/:university/student', handleAddStudent);
@@ -50,7 +53,7 @@ export default function (app: Express) {
     app.get('/student/:id/', handleGetStudent);
     app.delete('/student/:id/', handleDeleteStudent);
     app.patch('/student/:id/', handleUpdateStudent);
-    
+
     // added here...:
     app.patch('/subject/student/:id/', handleAddStudentToSubjects);
     app.delete('/subject/student/:id/', handleRemoveStudentFromSubject);
@@ -65,7 +68,7 @@ export default function (app: Express) {
     app.patch('/professor/:id/subject/', handleAddProfessorToManySubjects);
     app.patch('/professor/:id/grade/', handleAddGradesToProfessor);
     app.delete('/professor/:id/grade/', handleRemoveGradeFromProfessor);
-    
+
     // Departments
     app.post('/uni/:uni/department/', handleAddDepartment);
     app.patch('/department/:department', handleUpdateDepartment);
@@ -82,7 +85,7 @@ export default function (app: Express) {
     app.delete('/subject/:id/professor/', handleRemoveProfessorFromSubject);
     app.patch('/subject/:id/required/', handleAddRequiredsToSubject);
     app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
-    
+
     // Grade
     app.post('/grades/', handleAddGrade);
     app.patch('/grades/:id', handleUpdateGrade);

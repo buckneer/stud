@@ -2,19 +2,24 @@ import User, { UserDocument } from "../models/user.model";
 import { getUser, loginUser, logoutUser, refreshAccessToken, registerUser, sendPasswordMail, setPassword } from "../services/user.service";
 import {Request, Response} from "express";
 import log from "../logger";
+import {newError} from "../utils";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 
 
 
 export async function handleRegister(req: Request, res: Response) {
 	try {
-        
+
         //@ts-ignore
 		let user : UserDocument = {
 			...req.body
 		}
 
-		let resp = await registerUser(user);
+
+		if(!req.user) return res.status(401).send(newError(401, 'Morate da budete ulogovani!'));
+
+
+		let resp = await registerUser(req.user?.id, user);
 
 
 
@@ -63,7 +68,7 @@ export async function handleLogin(req: Request, res: Response) {
 		let email = req.body.email
 		let password = req.body.password;
 		let userAgent = req.headers['user-agent'];
-		
+
         if(!userAgent || !email || !password ) { return res.status(400).send({message: 'Bad Request'}) };
 
         let session = await loginUser(email, password, userAgent);
@@ -99,13 +104,13 @@ export async function handleLogout(req: Request, res: Response) {
         if(!refreshToken) return res.status(400).send({message: 'Refresh Token je obavezan!'});
 
         let logoutResp = await logoutUser(refreshToken, userAgent);
-			
+
         if (logoutResp) {
             return res.status(200).send(logoutResp);
         } else {
             return res.status(500).send({message: "Internal Server error"});
         }
-			
+
 
 	} catch (e: any) {
 		log.error(e.message);
