@@ -1,7 +1,7 @@
 
 import { handleAddGradesToProfessor, handleAddProfessor, handleGetProfessor, handleGetProfessors, handleRemoveGradeFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent } from "./controllers/student.controller";
-import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni } from "./controllers/university.controller";
+import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni } from "./controllers/university.controller";
 import { handleAddUnisToUser, handleGetUser, handleLogin, handleLogout, handleRefresh, handleRegister, handleRemoveUniFromUser, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
@@ -10,6 +10,7 @@ import { handleAddProfessorsToSubject, handleAddProfessorToManySubjects, handleA
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import { handleAddExam, handleAddGradesToExam, handleAddStudentsToExam, handleGetExam, handleGetExams, handleRemoveGradeFromExam, handleRemoveStudentFromExam, handleUpdateExam } from "./controllers/exam.controller";
 import { handleAddExamToPeriod, handleAddPeriod, handleGetPeriod, handleGetPeriods, handleRemoveExamFromPeriod, handleUpdatePeriod } from "./controllers/period.controller";
+import { handleAddService, handleGetServices } from "./controllers/service.controller";
 
 
 export default function (app: Express) {
@@ -25,9 +26,6 @@ export default function (app: Express) {
     app.post('/logout/', handleLogout);
 
     // User
-    app.post('/register', userGuard, handleRegister);
-    app.patch('/password', handleSetPassword);
-    app.post('/password', handleSendPasswordMail);
     app.post('/register/', handleRegister);
     app.patch('/password/', handleSetPassword);
     app.post('/password/', handleSendPasswordMail);
@@ -40,11 +38,14 @@ export default function (app: Express) {
     app.get('/uni/', handleGetAllUnis);
     app.get('/uni/:id', handleGetUni);
     app.patch('/uni/', handleAddStudentsUni);
-    app.patch('/uni/')
+    app.patch('/uni/'); // <-- TREBA DA SE SREDI!
     app.patch('/uni/:id/professor/', handleAddProfessorsToUni);
     app.patch('/uni/:id/student/', handleAddStudentsToUni);
     app.patch('/uni/:id/department', handleAddDepartmentsToUni);
     app.delete('/uni/:id/department/', handleRemoveDepartmentFromUni);
+    app.patch('/uni/:id/service/', handleAddServicesToUni);
+    app.delete('/uni/:id/service/', handleRemoveServiceFromUni);
+
 
     // Student
     app.post('/student/', /* userGuard, roleGuard('service'), */ handleAddStudent);
@@ -109,4 +110,9 @@ export default function (app: Express) {
     app.get('/period/', handleGetPeriods);
     app.patch('/period/:id/exam/', handleAddExamToPeriod);
     app.delete('/period/:id/exam/', handleRemoveExamFromPeriod);
+
+    // Service
+    app.post('/service/', handleAddService);
+    app.get('/uni/:id/service/', handleGetServices); // uni services...
+    app.delete('/service/:id/'); // <-- IMPLEMENT THIS...
 }
