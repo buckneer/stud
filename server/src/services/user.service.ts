@@ -5,33 +5,39 @@ import "dotenv/config";
 import Session from "../models/session.model";
 import { newError, newResponse, sendMessage } from "../utils";
 import { randomBytes } from 'crypto';
+import {getService, getServiceByUserId} from "./service.service";
 
-export const registerUser = async (user: UserDocument) => {
-    try {
-		let userExists = await User.findOne({email: user.email});
+export const registerUser = async (serviceId: string, user: UserDocument) => {
+	let userExists = await User.findOne({email: user.email});
 
-        if(userExists) throw newError(409, 'Korisnik vec postoji');
-        
-        const newUser = new User({...user, modelNum: randomBytes(4).toString('hex').toUpperCase()});
-        const registered = await newUser.save();
+	if(userExists) throw newError(409, 'Korisnik vec postoji');
 
-        if(!registered) throw newError(500, 'Internal Server Error');
+	let serviceForUni = await getServiceByUserId(serviceId);
 
 
-        return {
-            id: registered._id
-        };
-        
-	} catch (e: any) {
-		throw e;
-	}
+	if(!serviceForUni) throw newError(401, 'Studentska služba nije pronađena');
+
+
+
+
+	const newUser = new User({...user, modelNum: randomBytes(4).toString('hex').toUpperCase()});
+	newUser.universities.push(serviceForUni.university);
+	const registered = await newUser.save();
+
+	if(!registered) throw newError(500, 'Internal Server Error');
+
+
+	return {
+		id: registered._id
+	};
+
 }
 
 export const sendPasswordMail = async (email: string) => {
     try {
         let user = await User.findOne({email});
 		let code = randomBytes(4).toString('hex');
-        
+
         if(!user) throw newError(404, 'Korisnik nije pronadjen!');
 
         user.code = code;
@@ -50,7 +56,7 @@ export const setPassword = async (userId: string, password: string, code: string
         if(!user) throw newError(404, 'Korisnik ne postoji ili kod neispravan!');
         user.password = await bcrypt.hash(password, 10);
         user.confirmed = true;
-        
+
         await user.save();
 
         return {
@@ -93,7 +99,7 @@ export const loginUser = async (email: string, password: string, userAgent: stri
             refreshToken,
             user: loggedInUser
         }
-    
+
     } catch (e: any) {
         throw e;
     }
@@ -102,12 +108,12 @@ export const loginUser = async (email: string, password: string, userAgent: stri
 
 export const logoutUser = async (refreshToken: string, userAgent: string) => {
     try {
-		
+
         let session = await Session.findOne({refreshToken, "active": true, userAgent});
         if(!session) throw { status: 401, message: 'Korisnik nije ulogovan' }
 
-        
-        
+
+
         session.active = false;
         await session.save();
 
@@ -125,7 +131,7 @@ export const getProfile = async(email: string) => {
 
 
 		return user;
-		
+
 	} catch(e: any) {
 		throw e;
 	}
@@ -147,7 +153,7 @@ export const refreshAccessToken = async (refreshToken: string, userAgent: string
         if (!user) throw { status: 404, message: 'Korisnik ne postoji!' };
 
         const accessToken = jwt.sign({id: user._id, email: user.email, roles: user.roles}, process.env.JWT_SECRET as string, {expiresIn});
-        
+
         return {accessToken};
 
 	} catch (e: any) {

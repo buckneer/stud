@@ -64,4 +64,4 @@ export const getServiceByUserId = async (user: string) => {
     if(!service) throw newError(404, 'Studentska sluzba nije pronadjena');
 
     return service;
-}   
+}

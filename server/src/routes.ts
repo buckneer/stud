@@ -23,9 +23,9 @@ export default function (app: Express) {
     app.post('/login', handleLogin);
     app.post('/refresh', handleRefresh);
     app.post('/logout', handleLogout);
-    
+
     // User
-    app.post('/register', handleRegister);
+    app.post('/register', userGuard, handleRegister);
     app.patch('/password', handleSetPassword);
     app.post('/password', handleSendPasswordMail);
 
@@ -45,7 +45,7 @@ export default function (app: Express) {
     app.get('/student/:id', handleGetStudent);
     app.delete('/student/:id', handleDeleteStudent);
     app.patch('/student/:id', handleUpdateStudent);
-    
+
     // added here...:
     app.patch('/subject/student/:id', handleAddStudentToSubjects);
     app.delete('/subject/student/:id', handleRemoveStudentFromSubject);
@@ -71,7 +71,7 @@ export default function (app: Express) {
     app.get('/subject/:id', handleGetSubject);
     app.get('/department/:dep/subject/', handleGetSubjects);
     app.get('/uni/:uni/subject/', handleGetSubjects);
-    
+
     // Grade
     app.post('/grades/', handleAddGrade);
     app.patch('/grades/:id', handleUpdateGrade);
