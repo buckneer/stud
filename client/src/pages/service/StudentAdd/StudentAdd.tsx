@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useGetUniDepartmentsQuery } from './../../../app/api/departmentApiSlice';
-import { useAddStudentMutation } from './../../../app/api/studentApiSlice';
+import { useAddStudentMutation, useAddStudentToUniMutation } from './../../../app/api/studentApiSlice';
 import { useGetUniQuery } from './../../../app/api/uniApiSlice';
 import { useLocation, useParams } from 'react-router-dom';
 
@@ -22,6 +22,15 @@ const StudentAdd = () => {
 			isError: isStudentAddError
 		}
 	] = useAddStudentMutation();
+
+	const [
+		studentAddUni,
+		{
+			isLoading: isStudentAddUniLoading,
+			isSuccess: isStudentAddUniSuccess,
+			isError: isStudentAddUniError
+		}
+	] = useAddStudentToUniMutation();
 
 	const {
 		data: uniData,
@@ -45,7 +54,6 @@ const StudentAdd = () => {
 		event.preventDefault();
 		event.stopPropagation();
 		
-		
 		try {
 			const body = {
 				user: userId, 
@@ -53,10 +61,21 @@ const StudentAdd = () => {
 				department, 
 				currentSemester, 
 				degree, 
+				university: uni!
 			}
-			console.log(body);
-			// needs userId from params...
-			const result = await studentAdd({ university: uni!, body });
+
+			const result = await studentAdd(body).unwrap();
+			console.log(result);
+			const resultBody: any = {
+				university: uni,
+				body: {
+					// @ts-ignore
+					students: [ result.id ]
+				}
+			}
+			console.log(resultBody);
+
+			await studentAddUni(resultBody);
 		} catch (e: any) {
 			console.error(e);
 		}

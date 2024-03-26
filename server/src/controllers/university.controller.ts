@@ -126,3 +126,15 @@ export async function handleRemoveDepartmentFromUni(req: Request, res: Response)
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
+
+export async function handleAddStudentsToUni(req: Request, res: Response) {
+	try {
+		let { id } = req.params;
+		let { students } = req.body;
+
+		let resp = await addToModelArray(University, id, 'students', students);
+		return res.status(200).send(resp);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
