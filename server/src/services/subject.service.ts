@@ -54,3 +54,19 @@ export const updateSubject = async (_id: string, data: SubjectDocument) => {
 
     return newResponse('Uspešno menjanje predmeta!');
 }
+
+export const addProfessorToSubjects = async (_id: string, subjects: string[]) => {
+    let professor = await Professor.findOne({ _id });
+
+    if(!professor) throw newError(404, 'Profesor ne postoji!');
+
+    let updated = await Subject.updateMany({ _id: subjects }, {
+        $addToSet: {
+            professors: _id
+        }
+    });
+
+    if(!updated) throw newError();
+    
+    return newResponse('Uspešno ste dodali profesora na predmete');
+}

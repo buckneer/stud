@@ -79,10 +79,10 @@ const ProfessorAdd = () => {
 
 			await addProfToUni({ university: uni!, body: resultBody });
 
-			const subjectBody: any = { subjects: subjects };
-			// FIXME: THIS!
+			const subjectBody: any = { subjects: subjects! };
+			
 			// @ts-ignore
-			await addProfToSub({ professor: result.id, body: subjects });
+			await addProfToSub({ professor: result.id, body: subjectBody });
 
 		} catch (e: any) {
 			console.error(e);
