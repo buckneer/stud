@@ -14,7 +14,8 @@ const tags: string[] = [
   'Subject', 'Subjects',
   'Grade', 'Grades',
   'Exam', 'Exams',
-  'Period', 'Periods'
+  'Period', 'Periods',
+  'User', 'Users'
 ];
 
 const baseQuery = fetchBaseQuery({ 

@@ -2,7 +2,7 @@
 import { handleAddProfessor, handleGetProfessor, handleGetProfessors, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent } from "./controllers/student.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni } from "./controllers/university.controller";
-import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
+import { handleAddUnisToUser, handleGetUser, handleLogin, handleLogout, handleRefresh, handleRegister, handleRemoveUniFromUser, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleGetDepartment, handleGetDepartments, handleUpdateDepartment } from "./controllers/department.controller";
@@ -28,6 +28,9 @@ export default function (app: Express) {
     app.post('/register', handleRegister);
     app.patch('/password', handleSetPassword);
     app.post('/password', handleSendPasswordMail);
+    app.patch('/user/:id/uni/', handleAddUnisToUser);
+    app.delete('/user/:id/uni/', handleRemoveUniFromUser);
+    app.get('/user/:id', handleGetUser);
 
     // University
     app.post('/uni', handleNewUni);

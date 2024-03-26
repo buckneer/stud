@@ -43,7 +43,6 @@ export const sendPasswordMail = async (email: string) => {
     }
 }
 
-
 export const setPassword = async (userId: string, password: string, code: string) => {
     try {
         let user = await User.findOne({_id: userId, code});
@@ -98,7 +97,6 @@ export const loginUser = async (email: string, password: string, userAgent: stri
         throw e;
     }
 }
-
 
 export const logoutUser = async (refreshToken: string, userAgent: string) => {
     try {
@@ -155,3 +153,12 @@ export const refreshAccessToken = async (refreshToken: string, userAgent: string
 	}
 }
 
+export const getUser = async(_id: string) =>{
+    let userObj = User.findOne({ _id }, {
+        password: 0, 
+    });
+
+    if(!userObj) throw newError(404, 'Korisnik nije pronadjen!');
+
+    return userObj;
+}

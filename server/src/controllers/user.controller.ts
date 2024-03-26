@@ -1,7 +1,8 @@
-import { UserDocument } from "../models/user.model";
-import { loginUser, logoutUser, refreshAccessToken, registerUser, sendPasswordMail, setPassword } from "../services/user.service";
+import User, { UserDocument } from "../models/user.model";
+import { getUser, loginUser, logoutUser, refreshAccessToken, registerUser, sendPasswordMail, setPassword } from "../services/user.service";
 import {Request, Response} from "express";
 import log from "../logger";
+import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 
 
 
@@ -108,6 +109,43 @@ export async function handleLogout(req: Request, res: Response) {
 
 	} catch (e: any) {
 		log.error(e.message);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleGetUser(req: Request, res: Response) {
+	try {
+		let { id } = req.params;
+
+		let resp = await getUser(id);
+
+		return res.status(200).send(resp);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleAddUnisToUser(req: Request, res: Response) {
+	try {
+		let { id } = req.params; // user ID
+		let { universities } = req.body;
+
+		let resp = await addToModelArray(User, id, 'universities', universities);
+
+		return res.status(200).send(resp);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleRemoveUniFromUser(req: Request, res: Response) {
+	try {
+		let { id } = req.params;
+		let { university } = req.body;
+
+		let resp = await removeFromModelArray(User, id, 'universities', university);
+		return res.status(200).send(resp);
+	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }

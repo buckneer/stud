@@ -1,5 +1,18 @@
 import { apiSlice } from "./apiSlice";
 import { User } from './types/types';
+
+interface AddUni {
+	user: string;
+	body: {
+		universities: string[];
+	}
+}
+
+interface DelUni {
+	user: string;
+	body: string;
+}
+
 const userApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		// TODO change this type if needed
@@ -23,6 +36,28 @@ const userApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			})
+		}),
+		getUser: builder.query <User, string> ({
+			query: (id) => ({
+				url: '/user/:id/'
+			}),
+			providesTags: (result, error) => (error) ? [] : ['User']
+		}),
+		addUniToUser: builder.mutation <unknown, AddUni> ({
+			query: ({ user, body }) => ({
+				url: `/user/${user}/uni/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'],
+		}),
+		removeUniFromUser: builder.mutation <unknown, DelUni> ({
+			query: ({ user, body }) => ({
+				url: `/user/${user}/uni/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'] // remove this later
 		})
 	})
 });
@@ -30,5 +65,6 @@ const userApiSlice = apiSlice.injectEndpoints({
 export const {
 	useRegisterMutation,
 	useSendPasswordMailMutation,
-	useSetNewPasswordMutation
+	useSetNewPasswordMutation,
+	useGetUserQuery
 } = userApiSlice
