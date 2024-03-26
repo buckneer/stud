@@ -6,6 +6,34 @@ interface UpdateSubject {
 	body: Subject;
 }
 
+interface AddSubProf {
+	subject: string;
+	body: {
+		professors: string[];
+	}
+}
+
+interface DelSubProf {
+	subject: string;
+	body: {
+		professor: string;
+	}
+}
+
+interface AddReq {
+	subject: string;
+	body: {
+		requiredSub: string[];
+	}
+}
+
+interface DelReq {
+	subject: string;
+	body: {
+		requiredSub: string;
+	}
+}
+
 const subjectApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addSubject: builder.mutation <unknown, Subject> ({
@@ -42,7 +70,38 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects'],
 		}),
-
+		addSubjectProfessors: builder.mutation <unknown, AddSubProf> ({
+			query: ({ subject, body }) => ({
+				url: `/subject/${subject}/professor/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects', 'Professor', 'Professors'],
+		}),
+		deleteSubjectProfessor: builder.mutation <unknown, DelSubProf> ({
+			query: ({ subject, body }) => ({
+				url: `/subject/${subject}/professor/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects', 'Professor', 'Professors'],
+		}),
+		addRequiredSubjects: builder.mutation <unknown, AddReq> ({
+			query: ({ subject, body }) => ({
+				url: `/subject/${subject}/required`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Subject', 'Subjects'],
+		}),
+		deleteRequiredSubject: builder.mutation <unknown, DelReq> ({
+			query: ({ subject, body }) => ({
+				url: `/subject/${subject}/required`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Subject', 'Subjects'],
+		}),
 	})
 });
 
@@ -51,5 +110,9 @@ export const {
 	useGetSubjectQuery,
 	useGetDepSubjectsQuery,
 	useGetUniSubjectsQuery,
-	useUpdateSubjectMutation
+	useUpdateSubjectMutation,
+	useAddSubjectProfessorsMutation,
+	useDeleteSubjectProfessorMutation,
+	useAddRequiredSubjectsMutation,
+	useDeleteRequiredSubjectMutation,
 } = subjectApiSlice;
