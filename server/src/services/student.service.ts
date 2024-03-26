@@ -23,7 +23,7 @@ export const addStudent = async (student: StudentDocument, university: string) =
     
     if(!saved) throw newError(500, 'Internal Server Error');
 
-    return newResponse('Novi Student je kreiran');
+    return newResponse('Novi Student je kreiran', 200, { id: saved._id });
 
 }
 

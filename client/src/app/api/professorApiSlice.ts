@@ -56,6 +56,7 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
+			invalidatesTags: (result, error) => error ? [] : ['Professors'],
 		}),
 		addProfessorToSubject: builder.mutation <unknown, AddProfSub> ({
 			query: ({ professor, body }) => ({
@@ -63,6 +64,7 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
+			invalidatesTags: (result, error) => error ? [] : ['Professor', 'Subject'],
 		})
 	})
 });
