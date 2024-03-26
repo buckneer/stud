@@ -7,6 +7,7 @@ import { RootState } from '../../app/store';
 import { loggedOut } from '../../app/slices/sessionSlice';
 import { useLogoutMutation } from '../../app/api/sessionApiSlice';
 import { CircleUserRound } from "lucide-react"
+// @ts-ignore
 import NavItem from "./NavItem";
 
 

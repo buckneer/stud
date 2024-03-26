@@ -6,7 +6,7 @@ import { handleLogin, handleLogout, handleRefresh, handleRegister, handleSendPas
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleGetDepartment, handleGetDepartments, handleUpdateDepartment } from "./controllers/department.controller";
-import { handleAddProfessorsToSubject, handleAddSubject, handleGetSubject, handleGetSubjects, handleUpdateSubject } from "./controllers/subject.controller";
+import { handleAddProfessorsToSubject, handleAddProfessorToManySubjects, handleAddSubject, handleGetSubject, handleGetSubjects, handleUpdateSubject } from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import { handleAddExam, handleGetExam, handleGetExams, handleUpdateExam } from "./controllers/exam.controller";
 import { handleAddPeriod, handleGetPeriod, handleGetPeriods, handleUpdatePeriod } from "./controllers/period.controller";
@@ -56,7 +56,7 @@ export default function (app: Express) {
     app.get('/professor/:professor', handleGetProfessor);
     app.get('/uni/:university/professor', handleGetProfessors); // <- add all university professors
     app.patch('/professor/:professor', handleUpdateProfessor);
-    app.patch('/professor/:id/subject', handleAddProfessorsToSubject);
+    app.patch('/professor/:id/subject', handleAddProfessorToManySubjects);
 
     // Departments
     app.post('/uni/:uni/department/', handleAddDepartment);
