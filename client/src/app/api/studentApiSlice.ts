@@ -11,12 +11,27 @@ interface UpdateStudent {
 	body: Student;
 }
 
+interface AddUni {
+	university: string;
+	body: {
+		students: string[];
+	}
+}
+
 const studentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addStudent: builder.mutation <unknown, UniUser>({
+		addStudent: builder.mutation <unknown, any>({
+			query: (body) => ({
+				url: `/student/`,
+				method: 'POST',
+				body
+			}),
+			invalidatesTags: (result, error) => error ? [] : ['UniStudents']
+		}),
+		addStudentToUni: builder.mutation <unknown, AddUni> ({
 			query: ({ university, body }) => ({
 				url: `/uni/${university}/student/`,
-				method: 'POST',
+				method: 'PATCH',
 				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['UniStudents']
@@ -47,13 +62,13 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Student', 'Students', 'UniStudents']
-
 		})
 	})
 });
 
 export const {
 	useAddStudentMutation,
+	useAddStudentToUniMutation,
 	useGetStudentQuery,
 	useDeleteStudentMutation,
 	useGetUniStudentsQuery

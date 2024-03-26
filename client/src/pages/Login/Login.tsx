@@ -7,13 +7,14 @@ import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { Helmet } from 'react-helmet';
 import { RootState } from '../../app/store';
 import { useSelector } from 'react-redux';
+import Loader from "../../components/Loader/Loader";
 
 
 const Login = () => {
 	const navigate = useNavigate();
 	const session = useSelector((state: RootState) => state.session);
 	const location = useLocation();
-	
+
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 
@@ -41,7 +42,7 @@ const Login = () => {
 			};
 
 			const result = await fetchLogin(body).unwrap();
-			
+
 			setTimeout(() => {
 				// @ts-ignore
 				(location?.state?.from) ? navigate(location.state.from) : navigate('/');
@@ -55,7 +56,7 @@ const Login = () => {
 	return (
 		<>
 			{
-				!session.refreshToken ? 
+				!session.refreshToken ?
 					<div>
 						<Helmet>
 							<title>Login | Stud</title>
@@ -64,16 +65,16 @@ const Login = () => {
 							<form onSubmit={handleLogin} className="bg-white rounded-2xl p-4 w-1/3 shadow-md">
 								{/* Header */}
 								<div id="FormHeader" className="w-full">
-			
+
 									<div className='flex flex-col justify-center items-center'>
 										<div className="text-3xl font-semibold p-2 uppercase text-blue-800">Login</div>
 										<div className="text-gray-400 p-2" >Prijavite se na Stud</div>
 									</div>
-			
+
 									<div id="FormHeader" className="w-full text-slate-100">
 										{
 											isLoginLoading ?
-												<div className="">Loader ide ovde...</div>
+												<Loader />
 												: null
 										}
 										{
@@ -129,13 +130,13 @@ const Login = () => {
 									<Link to="#" className='text-gray-400 hover:underline'>Zaboravljena lozinka?</Link>
 									<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isLoginLoading}>Login</button>
 								</div>
-			
+
 							</form>
-			
-			
-			
-			
-			
+
+
+
+
+
 						</div>
 					</div>
 					: <Navigate to={location?.state?.from || '/'} replace />

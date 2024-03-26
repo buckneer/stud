@@ -8,6 +8,7 @@ import { loggedOut } from '../../app/slices/sessionSlice';
 import { useLogoutMutation } from '../../app/api/sessionApiSlice';
 import { CircleUserRound } from "lucide-react"
 import NavItem from "./NavItem";
+import Loader from "../Loader/Loader";
 
 
 const Navbar = () => {
@@ -52,7 +53,8 @@ const Navbar = () => {
 	}, [path.pathname]);
 
 	return !hide ?
-		<div className='navbar bg-black text-white mx-7 mt-3 flex align-center justify-between '>
+		<div className='navbar bg-black text-white mx-7 mt-3 flex align-center justify-between z-[999]'>
+			{isLogoutLoading && (<Loader />)}
 			<div className='branding flex items-center flex-1'>
 				<h1 className='font-black'>STUD</h1>
 			</div>
