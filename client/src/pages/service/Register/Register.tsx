@@ -11,7 +11,7 @@ const Register = () => {
 	const roles = ['Student', 'Profesor', 'Stud služba'];
 	const engRoles = ['student', 'professor', 'service'];
 	const [selectedRole, setSelectedRole] = useState(0);
-	
+
 	const [
 		fetchRegister,
 		{
@@ -57,7 +57,7 @@ const Register = () => {
 
 
 	return (
-		<div className='flex-grow flex justify-center items-center'>
+		<div className='flex justify-center items-center'>
 			<Helmet>
 				<title>Registracija | Stud</title>
 			</Helmet>
@@ -68,27 +68,27 @@ const Register = () => {
 						<div className="text-gray-400 p-2" >Registracija novog korisnika</div>
 
 						<div id="FormHeader" className="w-full text-slate-100">
-							{ 
-								isRegisterLoading ? 
+							{
+								isRegisterLoading ?
 										<div className="">Loader ide ovde...</div>
 										: null
 							}
-							{ 
+							{
 								isRegisterSuccess ?
 									<div className="w-full flex justify-center">
-										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešan login!</div> 
+										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešan login!</div>
 									</div>
 										: null
 							}
-							{ 
-								isRegisterError ? 
+							{
+								isRegisterError ?
 								<div className="w-full flex justify-center">
-									<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom prijavljivanja!</div> 
+									<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom prijavljivanja!</div>
 								</div>
 										: null
 							}
 						</div>
-						
+
 					</div>
 					<div className='FormItem w-full flex flex-col justify-start p-2 items-start relative'>
                         <label htmlFor="UserEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">

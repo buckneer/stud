@@ -1,15 +1,12 @@
-
-
-
+import React from 'react';
 
 export interface ContainerProps  {
-    children: string | JSX.Element | JSX.Element[]
+    children: string | JSX.Element | JSX.Element[],
+    shrink?: boolean;
 }
 
-const Container = ({children} : ContainerProps) => {
-    return <div className='bg-slate-100 m-5 rounded-2xl flex-1 p-5 routes-container'> {children} </div>;
+const Container = ({children, shrink} : ContainerProps) => {
+    return <div className={`bg-slate-100 m-5 rounded-2xl flex-grow p-5 routes-container transition-all ${shrink ? 'max-h-20 overflow-hidden' : ''}`}> {children} </div>;
 }
-
-
 
 export default Container;

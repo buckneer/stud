@@ -20,19 +20,23 @@ import TokenRequired from './components/auth/TokenRequired';
 import { useSelector } from 'react-redux';
 import { RootState } from './app/store';
 import UniAdd from './pages/admin/UniAdd/UniAdd';
-import Container from './components/Container';
-import Navbar from './components/Navbar';
+
+import Navbar from './components/navbar';
+import Container from "./components/container";
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
-
+  const [shrink, setShrink] = useState(false);
+  const handleNavbarOpen = () => {
+    setShrink(prevState => !prevState);
+  }
   return (
     <BrowserRouter>
-      <div className='flex flex-col h-screen'>
+      <div className='flex flex-col content-wrapper h-screen'>
         {/* Prevents navbar from rendering if user is not logged in... */}
-        { session.refreshToken ? <Navbar /> : null }
-        
-        <Container>
+        { session.refreshToken ? <Navbar handleShrink={handleNavbarOpen} /> : null }
+
+        <Container shrink={shrink}>
           <Routes>
             <Route path='/login' element={<Login />} />
 
@@ -55,9 +59,9 @@ function App() {
               <Route element={<TokenRequired />}>
                 <Route path='/admin/uni/add' element={<UniAdd />}/>
               </Route>
-            
+
             </Route>
-            
+
 
           </Routes>
         </Container>
