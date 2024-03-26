@@ -41,6 +41,8 @@ const StudentAdd = () => {
 		skip: !uniData
 	});
 
+	console.log(departments);
+	
 	const handleStudentAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();

@@ -38,6 +38,16 @@ const ProfessorAdd = () => {
 		skip: !uni || !session.accessToken
 	});
 
+	// TODO: Napravi useGetUserByIdQuery i professorId da se nadje nzm odakle
+	// const {
+	// 	data: userData,
+	// 	isLoading: isGetUserByIdLoading,
+	// 	isSuccess: isGetUserByIdSuccess,
+	// 	isError: isGetUserByIdError
+	// } = useGetUserByIdQuery(uni!, {
+	// 	skip: !uni || !session.accessToken || !professorId = userId	
+	// });
+
 	const [
 		fetchAddProfessor,
 		{
@@ -123,6 +133,30 @@ const ProfessorAdd = () => {
 						<form onSubmit={handleAddProfessor}>
 							<div className='form-control'>
 								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
+								<label htmlFor="professorName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+									<input
+										type="text" id="professorName" placeholder="Ime profesora" value={"name"} disabled autoComplete='off'
+										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+									/>
+									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+										Ime Profesora
+									</span>
+								</label>
+							</div>
+							<div className='form-control'>
+								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
+								<label htmlFor="professorEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+									<input
+										type="text" id="professorEmail" placeholder="E-adresa profesora" value={"email"} disabled autoComplete='off'
+										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+									/>
+									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+										E-adresa Profesora
+									</span>
+								</label>
+							</div>
+							<div className='form-control'>
+								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
 								<label htmlFor="profesorId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 									<input
 										type="text" id="profesorId" placeholder="Zvanje profesora" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off' required
@@ -139,7 +173,7 @@ const ProfessorAdd = () => {
 								})} />
 							</div>
 							<div className='footer flex items-center justify-center flex-col'>
-								<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Profesora</button>
+								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Profesora</button>
 							</div>
 						</form>
 					</div>

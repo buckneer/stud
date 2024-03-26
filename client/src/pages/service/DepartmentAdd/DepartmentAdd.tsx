@@ -92,7 +92,7 @@ const DepartmentAdd = () => {
 								</label>
 							</div>
 							<div className='footer flex items-center justify-center flex-col'>
-								<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isDepartmentAddSuccess}>Kreiraj Odsek</button>
+								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isDepartmentAddSuccess}>Kreiraj Odsek</button>
 							</div>
 						</form>
 					</div>
