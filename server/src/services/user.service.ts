@@ -6,6 +6,8 @@ import Session from "../models/session.model";
 import { newError, newResponse, sendMessage } from "../utils";
 import { randomBytes } from 'crypto';
 import {getService, getServiceByUserId} from "./service.service";
+import Student from "../models/student.model";
+import mongoose, {Types} from "mongoose";
 
 export const registerUser = async (serviceId: string, user: UserDocument) => {
 	let userExists = await User.findOne({email: user.email});
@@ -16,8 +18,6 @@ export const registerUser = async (serviceId: string, user: UserDocument) => {
 
 
 	if(!serviceForUni) throw newError(401, 'Studentska služba nije pronađena');
-
-
 
 
 	const newUser = new User({...user, modelNum: randomBytes(4).toString('hex').toUpperCase()});
@@ -161,10 +161,56 @@ export const refreshAccessToken = async (refreshToken: string, userAgent: string
 
 export const getUser = async(_id: string) =>{
     let userObj = User.findOne({ _id }, {
-        password: 0, 
+        password: 0,
     });
 
     if(!userObj) throw newError(404, 'Korisnik nije pronadjen!');
 
     return userObj;
 }
+
+export const getPendingUsers = async (university: string, role: string) => {
+
+	// TODO test this with new users, but delete all users before that!
+	const roleToCollectionMap = {
+		'student': 'students',
+		'professor': 'professors',
+		'service': 'services'
+	};
+
+	// Determine the collection name based on the role
+	// @ts-ignore
+	const collectionName = roleToCollectionMap[role];
+	const usersByUni = await User.find({universities: university, roles: role});
+
+	const userIds = usersByUni.map(user => user._id)
+
+
+	return User.aggregate([
+		{
+			$match: {
+				_id: {$in: userIds} // Filter users based on the IDs found
+			}
+		},
+		{
+			$lookup: {
+				from: collectionName,
+				localField: '_id',
+				foreignField: 'user',
+				as: 'studentInfo'
+			}
+		},
+		{
+			$match: {
+				studentInfo: {$eq: []} // Filter users not present in 'students'
+			}
+		},
+		{
+			$project: {
+				studentInfo: 0
+			}
+		}
+	]);
+
+}
+

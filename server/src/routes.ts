@@ -2,7 +2,18 @@
 import { handleAddGradesToProfessor, handleAddProfessor, handleGetProfessor, handleGetProfessors, handleRemoveGradeFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent } from "./controllers/student.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni } from "./controllers/university.controller";
-import { handleAddUnisToUser, handleGetUser, handleLogin, handleLogout, handleRefresh, handleRegister, handleRemoveUniFromUser, handleSendPasswordMail, handleSetPassword } from "./controllers/user.controller";
+import {
+    handleAddUnisToUser,
+    handleGetPendingUsers,
+    handleGetUser,
+    handleLogin,
+    handleLogout,
+    handleRefresh,
+    handleRegister,
+    handleRemoveUniFromUser,
+    handleSendPasswordMail,
+    handleSetPassword
+} from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleGetDepartment, handleGetDepartments, handleUpdateDepartment } from "./controllers/department.controller";
@@ -32,6 +43,7 @@ export default function (app: Express) {
     app.patch('/user/:id/uni/', handleAddUnisToUser);
     app.delete('/user/:id/uni/', handleRemoveUniFromUser);
     app.get('/user/:id/', handleGetUser);
+    app.get('/uni/:uni/user/:role/pending', handleGetPendingUsers);
 
     // University
     app.post('/uni/', handleNewUni);

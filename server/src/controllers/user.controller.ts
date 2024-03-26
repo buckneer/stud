@@ -1,5 +1,14 @@
 import User, { UserDocument } from "../models/user.model";
-import { getUser, loginUser, logoutUser, refreshAccessToken, registerUser, sendPasswordMail, setPassword } from "../services/user.service";
+import {
+	getPendingUsers,
+	getUser,
+	loginUser,
+	logoutUser,
+	refreshAccessToken,
+	registerUser,
+	sendPasswordMail,
+	setPassword
+} from "../services/user.service";
 import {Request, Response} from "express";
 import log from "../logger";
 import {newError} from "../utils";
@@ -150,6 +159,16 @@ export async function handleRemoveUniFromUser(req: Request, res: Response) {
 
 		let resp = await removeFromModelArray(User, id, 'universities', university);
 		return res.status(200).send(resp);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleGetPendingUsers(req: Request, res: Response) {
+	try {
+		let { uni, role } = req.params;
+		let users = await getPendingUsers(uni, role);
+		return res.status(200).send(users);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
