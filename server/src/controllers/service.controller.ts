@@ -8,7 +8,7 @@ export async function handleAddService(req: Request, res: Response) {
             ...req.body
         }
 
-        let uni: string = req.params.university;
+        let uni: string = req.body.university;
 
         let resp: any = await addService(uni, service);
 
@@ -31,9 +31,9 @@ export async function handleUpdateService(req: Request, res: Response) {
 
 export async function handleGetServices(req: Request, res: Response) {
     try {
-        let { university } = req.params;
+        let { id } = req.params;
 
-        let resp: any = await getServices(university);
+        let resp: any = await getServices(id);
         
         return res.send(resp);
     } catch (e: any) {
