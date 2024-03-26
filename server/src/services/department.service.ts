@@ -2,13 +2,16 @@ import Department, { DepDocument } from "../models/department.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils";
 
-export const addDepartment = async (_id:string, data: DepDocument) => {
+export const addDepartment = async (_id:string, data: any) => {
     try {
         let uniObj = await University.findOne({ _id });
 
         if(!uniObj) throw newError(404, 'Greška prilikom kreiranja odseka!');
 
-        let newDep = new Department(data);
+        let newDep = new Department({
+            ...data,
+            university: _id
+        });
 
         let added = await newDep.save();
 

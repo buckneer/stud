@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 
 const ServiceAdd = () => {
 
 	const [user, setUser] = useState("");
-	const [university, setUniversity] = useState("");
+	const { uni: university } = useParams();
 
-
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+	const handleAddService = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -19,22 +19,66 @@ const ServiceAdd = () => {
 
 	useEffect(() => {
 		document.title = "Studentska sluzba | Stud";
-	},[]);
+	}, []);
 
 	return (
-		<form onSubmit={handleSubmit} className='flex flex-col space-y-5 mx-5 justify-center items-center'>
-			<input type="text" placeholder='Ime sluzbe' value={user} onChange={(e) => setUser(e.target.value)} required />
-			{/* Studentska sluzba: */}
-			{/* <input type="text" placeholder='Ime univerziteta' value={university} onChange={(e) => setUniversity(e.target.value)} required /> */}
-			<select value={university} onChange={(e) => setUniversity(e.target.value)} required>
-			<option value="0" className='font-semibold text-black'>Izaberite Univerzitet</option>
-				<option value={"university 1"}>PMF</option>
-				<option value={"university 2"}>FTN</option>
-				<option value={"university 3"}>ETF</option>
-				<option value={"university 4"}>FON</option>
-			</select>
-			<button type="submit" className='bg-black py-2 px-4 w-fit text-white rounded-sm font-semibold' >Dodaj studentsku sluzbu</button>
-		</form>
+		<>
+			<div className='flex-grow flex justify-center items-center'>
+				<div className='card'>
+					<div className='form-header'>
+						<div className="form-title">Nova stud sluzba</div>
+						<div className="form-desc" >Kreiranje nove sluzbe</div>
+
+						{/* {
+								isProfessorAddLoading ? <div className="">Loader ide ovde...</div> : null
+							}
+							{
+								isProfessorAddSuccess ?
+									<div className="w-full flex justify-center">
+										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspesno dodat profesor!</div>
+									</div>
+									: null
+							}
+							{
+								isProfessorAddError ?
+									<div className="w-full flex justify-center">
+										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom registracije profesora!</div>
+									</div>
+									: null
+							} */}
+					</div>
+					<form onSubmit={handleAddService}>
+						<div className='form-control'>
+							{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
+							<label htmlFor="serviceName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+								<input
+									type="text" id="serviceName" placeholder="Ime sluzbe" value={user} onChange={(e) => setUser(e.target.value)} autoComplete='off'
+									className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+								/>
+								<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+									Ime Studentske Sluzbe
+								</span>
+							</label>
+						</div>
+						<div className='form-control'>
+							{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
+							<label htmlFor="users" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
+								<input
+									type="text" id="users" placeholder="Korisnici" value={user} onChange={(e) => setUser(e.target.value)} autoComplete='off'
+									className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+								/>
+								<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
+									Korisnici [Primeni reactSelector]
+								</span>
+							</label>
+						</div>
+						<div className='footer flex items-center justify-center flex-col'>
+							<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Profesora</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</>
 	)
 }
 
