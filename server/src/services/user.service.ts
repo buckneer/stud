@@ -26,10 +26,7 @@ export const registerUser = async (serviceId: string, user: UserDocument) => {
 
 	if(!registered) throw newError(500, 'Internal Server Error');
 
-
-	return {
-		id: registered._id
-	};
+	return registered;
 
 }
 

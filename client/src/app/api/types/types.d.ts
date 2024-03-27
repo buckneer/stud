@@ -206,3 +206,65 @@ export interface DelSubDep {
 		subject: string;
 	}
 }
+
+// Professor API slice
+export interface ProfBody {
+	professor: string;
+	body: Professor;
+}
+
+export interface AddProfUni {
+	university: string;
+	body: {
+		professors: string[];
+	}
+}
+
+export interface DelProfUni {
+	university: string;
+	body: {
+		professor: string;
+	}
+}
+
+export interface AddProfSub {
+	professor: string;
+	body: {
+		subjects: string[];
+	}
+}
+
+export interface DelProfSub {
+	professor: string;
+	body: {
+		subject: string;
+	}
+}
+
+export interface AddProfGrade {
+	professor: string;
+	body: {
+		grades: string[];
+	}
+}
+
+export interface DelProfGrade {
+	professor: string;
+	body: {
+		grade: string;
+	}
+}
+
+export interface AddUniProf {
+	professor: string;
+	body: {
+		universities: string[];
+	}
+}
+
+export interface DelUniProf {
+	professor: string;
+	body: {
+		university: string;
+	}
+}

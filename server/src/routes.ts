@@ -1,7 +1,7 @@
 
-import { handleAddGradesToProfessor, handleAddProfessor, handleGetProfessor, handleGetProfessors, handleRemoveGradeFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
+import { handleAddGradesToProfessor, handleAddProfessor, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent } from "./controllers/student.controller";
-import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni } from "./controllers/university.controller";
+import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni, handleRemoveProfessorFromUni } from "./controllers/university.controller";
 import {
     handleAddUnisToUser,
     handleGetPendingUsers,
@@ -25,6 +25,8 @@ import { handleAddService, handleGetServices } from "./controllers/service.contr
 
 
 export default function (app: Express) {
+    app.get("/thanks", (request: Request, response: Response) => response.status(200).send({ message: 'Hvala Vam puno što koristite naše usluge! :)' }));
+
     app.get("/healthcheck", (request: Request, response: Response) => response.sendStatus(200));
     app.get('/protected', userGuard, (request: Request, response: Response) => response.sendStatus(200));
     app.get('/protected/user', userGuard, roleGuard('user'), (request: Request, response: Response) => response.sendStatus(200));
@@ -81,6 +83,10 @@ export default function (app: Express) {
     app.patch('/professor/:id/subject/', handleAddProfessorToManySubjects);
     app.patch('/professor/:id/grade/', handleAddGradesToProfessor);
     app.delete('/professor/:id/grade/', handleRemoveGradeFromProfessor);
+    app.patch('/professor/:id/uni', handleAddUniToProfessor);
+    app.delete('/professor/:id/uni/', handleRemoveUniFromProfessor);
+    app.patch('/professor/:id/subject/', handleAddSubjectsToProfessor);
+    app.delete('/professor/:id/subject/', handleRemoveProfessorFromUni);
 
     // Departments
     app.post('/uni/:uni/department/', handleAddDepartment);

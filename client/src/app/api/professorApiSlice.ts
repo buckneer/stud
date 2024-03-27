@@ -1,45 +1,6 @@
 import { apiSlice } from "./apiSlice";
-import { Professor } from "./types/types";
+import { Professor, ProfBody, AddProfUni, DelProfUni, AddProfSub, DelProfSub, AddProfGrade, DelProfGrade, AddUniProf, DelUniProf } from "./types/types";
 
-interface ProfBody {
-	professor: string;
-	body: Professor;
-}
-
-interface AddProfUni {
-	university: string;
-	body: {
-		professors: string[];
-	}
-}
-
-interface DelProfUni {
-	university: string;
-	body: {
-		professor: string;
-	}
-}
-
-interface AddProfSub {
-	professor: string;
-	body: {
-		subjects: string[];
-	}
-}
-
-interface DelProfSub {
-	professor: string;
-	body: {
-		subject: string;
-	}
-}
-
-interface AddProfGrade {
-	professor: string;
-	body: {
-		grade: string;
-	}
-}
 // TODO: add delete professor later...
 
 const professorApiSlice = apiSlice.injectEndpoints({
@@ -112,14 +73,30 @@ const professorApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => (error) ? [] : ['Professor', 'Grade', 'Grades'],
 		}),
-		deleteProfessorGrade: builder.mutation <unknown, unknown> ({
+		deleteProfessorGrade: builder.mutation <unknown, DelProfGrade> ({
 			query: ({ professor, body }) => ({
 				url: `/professor/${professor}/grade/`,
 				method: 'DELETE',
 				body
 			}),
 			invalidatesTags: (result, error) => (error) ? [] : ['Professor', 'Grade', 'Grades'],
-		})
+		}),
+		addProfessorUnis: builder.mutation <unknown, AddUniProf> ({
+			query: ({ professor, body }) => ({
+				url: `/professor/${professor}/uni/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Professor', 'Professors'],
+		}),
+		deleteProfessorUni: builder.mutation <unknown, DelUniProf> ({
+			query: ({ professor, body }) => ({
+				url: `/professor/${professor}/uni/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Professor', 'Professors'],
+		}),
 	})
 });
 
@@ -134,4 +111,7 @@ export const {
 	useDeleteProfessorFromSubjectMutation,
 	useAddProfessorGradeMutation,
 	useDeleteProfessorGradeMutation,
+	useAddProfessorUnisMutation,
+	useDeleteProfessorUniMutation,
+
 } = professorApiSlice;
