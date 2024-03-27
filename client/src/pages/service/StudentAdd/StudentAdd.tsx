@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useGetUniDepartmentsQuery } from './../../../app/api/departmentApiSlice';
+import { useAddDepStudentsMutation, useGetUniDepartmentsQuery } from './../../../app/api/departmentApiSlice';
 import { useAddStudentMutation, useAddStudentToUniMutation } from './../../../app/api/studentApiSlice';
 import { useGetUniQuery } from './../../../app/api/uniApiSlice';
 import { useLocation, useParams } from 'react-router-dom';
@@ -31,6 +31,15 @@ const StudentAdd = () => {
 			isError: isStudentAddUniError
 		}
 	] = useAddStudentToUniMutation();
+
+	const [
+		addDepStudents,
+		{
+			isLoading: isAddDepStudentsLoading,
+			isSuccess: isAddDepStudentSuccess,
+			isError: isAddDepStudentError
+		}
+	] = useAddDepStudentsMutation();
 
 	const {
 		data: uniData,
@@ -67,7 +76,7 @@ const StudentAdd = () => {
 			}
 
 			const result = await studentAdd(body).unwrap();
-			console.log(result);
+
 			const resultBody: any = {
 				university: uni,
 				body: {
@@ -75,9 +84,11 @@ const StudentAdd = () => {
 					students: [ result.id ]
 				}
 			}
-			console.log(resultBody);
 
 			await studentAddUni(resultBody);
+
+			// @ts-ignore
+			await addDepStudents({ department, body: { students: [ result.id ] } });
 		} catch (e: any) {
 			console.error(e);
 		}
