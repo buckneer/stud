@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRegisterMutation } from './../../../app/api/userApiSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 const Register = () => {
@@ -11,6 +11,8 @@ const Register = () => {
 	const roles = ['Student', 'Profesor', 'Stud služba'];
 	const engRoles = ['student', 'professor', 'service'];
 	const [selectedRole, setSelectedRole] = useState(0);
+
+	const { uni } = useParams();
 
 	const [
 		fetchRegister,
@@ -31,18 +33,15 @@ const Register = () => {
 			}
 
 			const result = await fetchRegister(body).unwrap();
-			console.log(result.id);
+			console.log(result);
 			setTimeout(() => {
-				// TODO get university id from service that is currently logged in
-				// !! use this variable for that
-				let uni = '65fafc2da919db458f7ed90d'
-
 				// TODO check if role is student
 				// Temporary var!!
 				let whatToAdd = engRoles[selectedRole];
+
 				navigate(`/uni/${uni}/${whatToAdd}/add`, {
 					state: {
-						userId: result.id
+						user: result
 					}
 				});
 			}, 1000)
