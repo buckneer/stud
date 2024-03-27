@@ -33,8 +33,8 @@ function UserItem({user, university, role}: UserItemProps) {
 				</div>
 			</div>
 			<div className="bg-slate-100 p-3">
-				<h1 className=' font-black'>Neki Korisnik</h1>
-				<p>miftarisimel@gmail.com</p>
+				<h1 className=' font-black'>{user.name}</h1>
+				<p>{user.email}</p>
 			</div>
 		</div>
 	);
