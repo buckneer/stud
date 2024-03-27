@@ -2,6 +2,7 @@ import React from 'react';
 import {User} from "../../app/api/types/types";
 import RandomBlob from "../RandomBlob/RandomBlob";
 import { useNavigate } from "react-router-dom";
+import {UserRoundX} from "lucide-react";
 
 
 interface UserItemProps {
@@ -23,8 +24,11 @@ function UserItem({user, university, role}: UserItemProps) {
 	}
 
 	return (
-		<div className="card overflow-hidden p-0  w-full cursor-pointer" onClick={() => handleRedirect()}>
-			<div className="flex justify-between p-5">
+		<div className="card overflow-hidden p-0 relative  w-full ">
+			<div className="absolute right-2 top-2 p-2 z-[999] hover:text-red-900 cursor-pointer">
+				<UserRoundX size={32} />
+			</div>
+			<div className="flex justify-between p-5 cursor-pointer" onClick={() => handleRedirect()}>
 				<div className="flex flex-col justify-center items-center font-black">
 					<div className="">
 						Nije
@@ -33,7 +37,7 @@ function UserItem({user, university, role}: UserItemProps) {
 						Registrovan
 					</div>
 				</div>
-				<div className="icon text-blue-300">
+				<div className="icon text-blue-300 mr-7">
 					<RandomBlob width={100} height={100} />
 				</div>
 			</div>

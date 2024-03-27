@@ -6,7 +6,7 @@ import {
   GraduationCap,
   LayoutList,
   LogOut,
-  Settings,
+  Settings, Sidebar,
   User,
   UserCircle
 } from "lucide-react";
@@ -15,6 +15,7 @@ import {useGetPendingQuery} from "../../app/api/userApiSlice";
 import Loader from "../../components/Loader/Loader";
 import UserItem from "../../components/UserItem/UserItem";
 import {Helmet} from "react-helmet";
+import SidebarItem from "../../components/SidebarItem/SidebarItem";
 
 const university: string = "65fafc2da919db458f7ed90d";
 const role: string = "student";
@@ -57,38 +58,17 @@ export default function Home() {
           <div className="flex flex-col justify-between h-full">
             <div className="pt-5 w-full flex flex-col gap-2 divide-y-2">
               <div className="">
-                <div className="w-full rounded-2xl p-2 hover:bg-white transition-all cursor-pointer flex gap-2">
-                  <GraduationCap />
-                  <h1>Studenti</h1>
-                </div>
-                <div className="w-full rounded-2xl p-2 hover:bg-white transition-all cursor-pointer flex gap-2">
-                  <User />
-                  <h1>Profesori</h1>
-                </div>
-                <div className="w-full rounded-2xl p-2 hover:bg-white transition-all cursor-pointer flex gap-2">
-                  <FolderArchive />
-                  <h1>Stud. Služba</h1>
-                </div>
+                <SidebarItem name="Studenti" Icon={GraduationCap} />
+                <SidebarItem name="Profesori" Icon={User} />
+                <SidebarItem name="STUD Služba" Icon={FolderArchive} />
               </div>
               <div className="pt-1">
-                <div className="w-full rounded-2xl p-2 hover:bg-white transition-all cursor-pointer flex gap-2">
-                  <LayoutList />
-                  <h1>Ispiti</h1>
-                </div>
-                <div className="w-full rounded-2xl p-2 hover:bg-white transition-all cursor-pointer flex gap-2">
-                  <Book />
-                  <h1>Predmeti</h1>
-                </div>
-                <div className="w-full rounded-2xl p-2 hover:bg-white transition-all cursor-pointer flex gap-2">
-                  <CalendarCheck />
-                  <h1>Ispitni Rokovi</h1>
-                </div>
+                <SidebarItem name="Ispitni Rokovi" Icon={CalendarCheck} />
+                <SidebarItem name="Ispiti" Icon={LayoutList} />
+                <SidebarItem name="Predmeti" Icon={Book} />
               </div>
             </div>
-            <div className="w-full rounded-2xl p-2 hover:bg-white transition-all cursor-pointer flex gap-2">
-              <LogOut />
-              <h1>Odjavi se</h1>
-            </div>
+            <SidebarItem name="Odjavi se" Icon={LogOut} />
           </div>
 
         </div>
