@@ -108,3 +108,27 @@ export async function handleRemoveProfessorFromDepartment(req: Request, res: Res
         return res.status(e.status || 500).send(e || 'Internal Server Error');   
     }
 }
+
+export async function handleAddSubjectsToDepartment(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { subjects } = req.body;
+
+        let resp = await addToModelArray(Department, id, 'subjects', subjects);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+    }
+}
+
+export async function handleRemoveSubjectFromDepartment(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { subject } = req.body;
+
+        let resp = await removeFromModelArray(Department, id, 'subjects', subject);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+    }
+}
