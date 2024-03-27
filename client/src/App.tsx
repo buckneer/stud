@@ -40,7 +40,7 @@ function App() {
             <Route element={<TokenRequired />}>
               <Route path='/' element={<Home />} />
               {/* TODO: check if user is in uni :uni service here... */}
-              <Route path='/register' element={<Register/>} />
+              <Route path='/uni/:uni/register' element={<Register/>} />
               <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
               <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
               <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
