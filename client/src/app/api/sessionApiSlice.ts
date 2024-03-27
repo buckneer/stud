@@ -20,6 +20,7 @@ const sessionApiSlice = apiSlice.injectEndpoints({
 					}, 1000);
 				} catch (e: any) {
 					dispatch(loggedOut());
+					dispatch(apiSlice.util.resetApiState());
 				}
 			},
 		}),
