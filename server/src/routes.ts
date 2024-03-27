@@ -43,12 +43,12 @@ export default function (app: Express) {
     app.patch('/user/:id/uni/', handleAddUnisToUser);
     app.delete('/user/:id/uni/', handleRemoveUniFromUser);
     app.get('/user/:id/', handleGetUser);
-    app.get('/uni/:uni/user/:role/pending', handleGetPendingUsers);
+    app.get('/uni/:uni/user/:role/pending/', handleGetPendingUsers);
 
     // University
     app.post('/uni/', handleNewUni);
     app.get('/uni/', handleGetAllUnis);
-    app.get('/uni/:id', handleGetUni);
+    app.get('/uni/:id/', handleGetUni);
     app.patch('/uni/', handleAddStudentsUni);
     app.patch('/uni/'); // <-- TREBA DA SE SREDI!
     app.patch('/uni/:id/professor/', handleAddProfessorsToUni);
@@ -76,7 +76,7 @@ export default function (app: Express) {
     // Professor
     app.post('/professor/', handleAddProfessor);
     app.get('/professor/:professor/', handleGetProfessor);
-    app.get('/uni/:university/professor', handleGetProfessors); // <- add all university professors
+    app.get('/uni/:university/professor/', handleGetProfessors); // <- add all university professors
     app.patch('/professor/:professor/', handleUpdateProfessor);
     app.patch('/professor/:id/subject/', handleAddProfessorToManySubjects);
     app.patch('/professor/:id/grade/', handleAddGradesToProfessor);
@@ -84,8 +84,8 @@ export default function (app: Express) {
 
     // Departments
     app.post('/uni/:uni/department/', handleAddDepartment);
-    app.patch('/department/:department', handleUpdateDepartment);
-    app.get('/department/:department', handleGetDepartment);
+    app.patch('/department/:department/', handleUpdateDepartment);
+    app.get('/department/:department/', handleGetDepartment);
     app.get('/uni/:university/department/', handleGetDepartments);
 
     // Subject
@@ -101,8 +101,8 @@ export default function (app: Express) {
 
     // Grade
     app.post('/grades/', handleAddGrade);
-    app.patch('/grades/:id', handleUpdateGrade);
-    app.get('/grades/:id', handleGetGrade);
+    app.patch('/grades/:id/', handleUpdateGrade);
+    app.get('/grades/:id/', handleGetGrade);
     app.get('/grades/', handleGetGrades);
 
     // Exam
