@@ -99,3 +99,9 @@ export interface Exam {
 	period?: string;
 	ended?: boolean;
 }
+
+export interface Service {
+	_id?: string;
+	user?: string;
+	university?: string;
+}

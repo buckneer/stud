@@ -6,6 +6,34 @@ interface UpdateUni {
 	body: Uni;
 }
 
+interface AddUniDep {
+	university: string;
+	body: {
+		departments: string[];
+	}
+}
+
+interface DelDep {
+	university: string;
+	body: {
+		department: string;
+	};
+}
+
+interface AddUniSer {
+	university: string;
+	body: {
+		services: string[];
+	}
+}
+
+interface DelUniSer {
+	university: string;
+	body: {
+		service: string;
+	}
+}
+
 const uniApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addUni: builder.mutation <unknown, Uni>({
@@ -46,6 +74,38 @@ const uniApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Uni', 'Unis'] 
 		}),
+		addUniDepartment: builder.mutation <unknown, AddUniDep> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/department`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['University', 'Department', 'Departments']
+		}),
+		deleteUniDepartment: builder.mutation <unknown, DelDep> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/department`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['University', 'Department', 'Departments']
+		}),
+		addUniService: builder.mutation <unknown, AddUniSer> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/service/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Uni', 'Service', 'Services'],
+		}),
+		deleteUniService: builder.mutation <unknown, DelUniSer> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/service`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Uni', 'Service', 'Services'],
+		})
 	})
 });
 
@@ -54,5 +114,9 @@ export const {
 	useGetUniQuery,
 	useGetAllUnisQuery,
 	useUniAddStudentsMutation,
-	useUpdateUniMutation
+	useUpdateUniMutation,
+	useAddUniDepartmentMutation,
+	useDeleteUniDepartmentMutation,
+	useAddUniServiceMutation,
+	useDeleteUniServiceMutation,
 } = uniApiSlice;

@@ -20,7 +20,7 @@ export const userGuard = async (req: Request, res: Response, next: NextFunction)
             if(err) return res.status(401).send(newError(401, 'Token je istekao'));
             // console.log(user as UsetToken);
             req.user = user as UserToken;
-            
+
             next();
         })
     } catch (e: any) {
@@ -42,24 +42,24 @@ export const roleGuard = (role: string) => {
                 // checks only university
                 // Every service can access every department if on same uni.
                 if(!req.params.university) throw newError(401, 'Id univerziteta je obavezan');
-                
+
                 let service = await getServiceByUserId(req.user.id);
-                
+
                 let uni = service.university?.toString();
-                
-                
+
+
                 if(uni !== req.params.university) { throw newError(403, 'Ne možete da pristupite ovom univerzitetu') }
                 console.log("YOU PASSED ROUTE GUARD");
                 next();
-            } 
+            }
             // if (req.user.role == 'professor') {
             //     // TODO check what professor has access to
             // }
-            
+
             // if (req.user.role = 'student') {
             //     // TODO same for the student
             // }
-            
+
             // next();
         } catch (e: any) {
             console.error(e);
