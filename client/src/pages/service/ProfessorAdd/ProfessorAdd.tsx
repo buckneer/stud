@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Select, { ActionMeta, MultiValue } from 'react-select';
+import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
 import { useAddProfessorMutation, useAddProfessorToSubjectMutation, useAddProfessorToUniMutation } from '../../../app/api/professorApiSlice';
 import { useGetUserQuery } from "../../../app/api/userApiSlice";
+import { useGetPendingQuery } from '../../../app/api/userApiSlice';
 import { useLocation, useParams } from 'react-router-dom';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
+import Loader from '../../../components/Loader/Loader';
+import { CircleX } from "lucide-react";
 
 type Option = {
 	value?: string;
@@ -15,16 +18,17 @@ type Option = {
 const ProfessorAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
 	const { uni } = useParams();
+	const { uni: university } = useParams();
 	const location = useLocation();
 
 	const [user, setUser] = useState('');
 	// title, user, subjects, grades, univerisites
 
 	const [title, setTitle] = useState('');
+	const [professor, setProfessor] = useState("");
 	const [subjects, setSubjects] = useState<string[]>([]);
 
-	const handleChange = (newSelections: MultiValue<Option>, actionMeta: ActionMeta<Option>) => {
-		console.log(newSelections);
+	const handleChange2 = (newSelections: MultiValue<Option>, actionMeta: ActionMeta<Option>) => {
 		let vals = newSelections.map(item => item.value!);
 
 		setSubjects([...vals]);
@@ -46,6 +50,16 @@ const ProfessorAdd = () => {
 		isError: isGetUserByIdError
 	} = useGetUserQuery(user!, {
 		skip: !uni || !session.accessToken || !user
+	});
+
+	const {
+		data: usersData,
+		isLoading: isUsersLoading,
+		isSuccess: isUsersSuccess,
+		isError: isUsersError
+		// @ts-ignore
+	} = useGetPendingQuery({university, role: "professor"},{
+		skip: !university || !session.accessToken
 	});
 
 	const [
@@ -101,9 +115,10 @@ const ProfessorAdd = () => {
 
 	let content: any;
 
-	if (isSubjectsLoading) {
-		content = <>Loading...</>
-	} else if (isSubjectsSuccess) {
+	if (isSubjectsLoading || isUsersLoading) {
+		content = <Loader />;
+	} else if (isSubjectsSuccess && isUsersSuccess) {
+
 		content =
 			<>
 				<div className='flex-grow flex justify-center items-center'>
@@ -133,12 +148,13 @@ const ProfessorAdd = () => {
 						<form onSubmit={handleAddProfessor}>
 							{
 								!user ? 
+									<div className='form-control'>
+										<Select onChange={(e: any) => setUser(e?.value)} isClearable isSearchable  placeholder="Izaberite korisnika" className='w-full outline-none' options={usersData!.map((item) => {
+											return { value: item._id, label: item.name };
+										})} />
+									</div> :
 									<>
-										Popravi me
-										{/* Pravi select za profesore posto nema id od registrovanog */}
-									</> :
-									<>
-										<div className='form-control'>
+										<div className='form-control relative'>
 											{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
 											<label htmlFor="professorName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 												<input
@@ -148,6 +164,9 @@ const ProfessorAdd = () => {
 												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
 													Ime Profesora
 												</span>
+												<button className='absolute right-5' onClick={() => setUser("")}>
+													<CircleX />
+												</button>
 											</label>
 										</div>
 										<div className='form-control'>
@@ -164,7 +183,6 @@ const ProfessorAdd = () => {
 										</div>
 									</>
 							}
-
 							<div className='form-control'>
 								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
 								<label htmlFor="profesorId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
@@ -178,7 +196,7 @@ const ProfessorAdd = () => {
 								</label>
 							</div>
 							<div className='form-control'>
-								<Select onChange={handleChange} className='w-full outline-none' isMulti options={subjectsData.map((item) => {
+								<Select onChange={handleChange2} placeholder="Izaberite predmete" className='w-full outline-none' isMulti options={subjectsData.map((item) => {
 									return { value: item._id, label: item.name };
 								})} />
 							</div>
@@ -193,7 +211,7 @@ const ProfessorAdd = () => {
 
 	useEffect(() => {
 		document.title = 'Dodaj profesora | Stud'
-		if (location.state?.userId) {
+		if (location.state?.userId) { // FIXME: userId -> user._id
 			setUser(location.state.userId);
 		}
 	}, []);
