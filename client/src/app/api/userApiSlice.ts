@@ -48,7 +48,7 @@ const userApiSlice = apiSlice.injectEndpoints({
 		}),
 		getUser: builder.query <User, string> ({
 			query: (id) => ({
-				url: '/user/:id/'
+				url: `/user/${id}/`
 			}),
 			providesTags: (result, error) => (error) ? [] : ['User']
 		}),
@@ -82,5 +82,7 @@ export const {
 	useSendPasswordMailMutation,
 	useSetNewPasswordMutation,
 	useGetUserQuery,
+	useAddUniToUserMutation,
+	useRemoveUniFromUserMutation,
 	useGetPendingQuery,
 } = userApiSlice
