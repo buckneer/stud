@@ -67,10 +67,12 @@ FetchBaseQueryError
             result = await baseQuery(args, api, extraOptions);
           } else { 
             api.dispatch(loggedOut());
+            api.dispatch(apiSlice.util.resetApiState());
           }
 
         } else {
           api.dispatch(loggedOut());
+          api.dispatch(apiSlice.util.resetApiState());
         }
       } finally {
         release();
