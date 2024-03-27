@@ -16,7 +16,7 @@ const UniSchema = new Schema({
     email: {type: String, required: false},
     students: [{type: Schema.ObjectId, ref: 'User'}],
     professors: [{type: Schema.ObjectId, ref: 'User'}],
-    service: [{type: Schema.ObjectId, ref: 'User'}],
+    services: [{type: Schema.ObjectId, ref: 'User'}],
     departments: [{type: String}],
     parentUni: {type: String}
 })

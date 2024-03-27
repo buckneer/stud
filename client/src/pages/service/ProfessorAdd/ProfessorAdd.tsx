@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
 import { useAddProfessorMutation, useAddProfessorToSubjectMutation, useAddProfessorToUniMutation } from '../../../app/api/professorApiSlice';
 import { useGetUserQuery } from "../../../app/api/userApiSlice";
-import { useGetPendingQuery } from '../../../app/api/userApiSlice';
+import { useLazyGetPendingQuery } from '../../../app/api/userApiSlice';
 import { useLocation, useParams } from 'react-router-dom';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import { RootState } from '../../../app/store';
@@ -45,22 +45,22 @@ const ProfessorAdd = () => {
 
 	const {
 		data: userData,
-		isLoading: isGetUserByIdLoading,
-		isSuccess: isGetUserByIdSuccess,
-		isError: isGetUserByIdError
+		isLoading: isUserLoading,
+		isSuccess: isUserSuccess,
+		isError: isUserError
 	} = useGetUserQuery(user!, {
 		skip: !uni || !session.accessToken || !user
 	});
 
-	const {
-		data: usersData,
-		isLoading: isUsersLoading,
-		isSuccess: isUsersSuccess,
-		isError: isUsersError
-		// @ts-ignore
-	} = useGetPendingQuery({university, role: "professor"},{
-		skip: !university || !session.accessToken
-	});
+	const [
+		fetchGetUsers,
+		{
+			data: usersData,
+			isLoading: isUsersLoading,
+			isSuccess: isUsersSuccess,
+			isError: isUsersError
+
+		}] = useLazyGetPendingQuery();
 
 	const [
 		fetchAddProfessor,
@@ -113,11 +113,20 @@ const ProfessorAdd = () => {
 		}
 	}
 
+	const handleRemoveUser = () => {
+		if(location?.state?.user) {
+			// @ts-ignore
+			fetchGetUsers({ university, role: 'professor' })
+			window.history.replaceState({}, '')
+		}
+		setUser('');
+	}
+
 	let content: any;
 
-	if (isSubjectsLoading || isUsersLoading) {
+	if (isSubjectsLoading || isUsersLoading || isUserLoading) {
 		content = <Loader />;
-	} else if (isSubjectsSuccess && isUsersSuccess) {
+	} else if (isSubjectsSuccess && (isUsersSuccess || location?.state?.for === 'professor')) {
 
 		content =
 			<>
@@ -128,19 +137,19 @@ const ProfessorAdd = () => {
 							<div className="form-desc" >Kreiranje novog profesora</div>
 
 							{
-								isProfessorAddLoading ? <div className="">Loader ide ovde...</div> : null
+								isProfessorAddLoading || isAddProfToUniLoading || isAddProfToSubLoading ? <Loader /> : null
 							}
 							{
-								isProfessorAddSuccess ?
+								isProfessorAddSuccess || isAddProfToUniSuccess || isProfToSubSuccess ?
 									<div className="w-full flex justify-center">
-										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspesno dodat profesor!</div>
+										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešno dodat profesor!</div>
 									</div>
 									: null
 							}
 							{
-								isProfessorAddError ?
+								isProfessorAddError || isAddProfToUniError || isProfToSubError ?
 									<div className="w-full flex justify-center">
-										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom registracije profesora!</div>
+										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greška prilikom registracije profesora!</div>
 									</div>
 									: null
 							}
@@ -164,7 +173,7 @@ const ProfessorAdd = () => {
 												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
 													Ime Profesora
 												</span>
-												<button className='absolute right-5' onClick={() => setUser("")}>
+												<button className='absolute right-5' onClick={handleRemoveUser}>
 													<CircleX />
 												</button>
 											</label>
@@ -208,17 +217,20 @@ const ProfessorAdd = () => {
 				</div>
 			</>
 	}
-
+	
 	useEffect(() => {
 		document.title = 'Dodaj profesora | Stud'
-		if (location.state?.userId) { // FIXME: userId -> user._id
-			setUser(location.state.userId);
+		if (location?.state?.user && location?.state?.for === 'professor') {
+			setUser(location.state.user._id);
+		} else {
+			// @ts-ignore
+			fetchGetUsers({ university, role: 'professor' })
 		}
 	}, []);
 
 	return (
 		<>
-			{content}
+			{ content }
 		</>
 	)
 }

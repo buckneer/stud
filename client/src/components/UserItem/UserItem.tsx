@@ -14,7 +14,12 @@ function UserItem({user, university, role}: UserItemProps) {
 
 	const navigate = useNavigate();
 	const handleRedirect = () => {
-		navigate(`/uni/${university}/${role}/add`, )
+		navigate(`/uni/${university}/${role}/add`, {
+			state: {
+				user,
+				for: role
+			}
+		});
 	}
 
 	return (
