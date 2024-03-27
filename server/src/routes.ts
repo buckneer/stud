@@ -16,7 +16,7 @@ import {
 } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
-import { handleAddDepartment, handleAddStudentsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveStudentFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
+import { handleAddDepartment, handleAddProfessorToDepartment, handleAddStudentsToDepartment, handleAddSubjectsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveProfessorFromDepartment, handleRemoveStudentFromDepartment, handleRemoveSubjectFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
 import { handleAddProfessorsToSubject, handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleGetSubject, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import { handleAddExam, handleAddGradesToExam, handleAddStudentsToExam, handleGetExam, handleGetExams, handleRemoveGradeFromExam, handleRemoveStudentFromExam, handleUpdateExam } from "./controllers/exam.controller";
@@ -88,7 +88,11 @@ export default function (app: Express) {
     app.get('/department/:department/', handleGetDepartment);
     app.get('/uni/:university/department/', handleGetDepartments);
     app.patch('/department/:id/student/', handleAddStudentsToDepartment);
-    app.delete('/department/:id/student', handleRemoveStudentFromDepartment);
+    app.delete('/department/:id/student/', handleRemoveStudentFromDepartment);
+    app.patch('/department/:id/professor/', handleAddProfessorToDepartment);
+    app.delete('/department/:id/professor/', handleRemoveProfessorFromDepartment);
+    app.patch('/department/:id/subject/', handleAddSubjectsToDepartment);
+    app.delete('/department/:id/subject', handleRemoveSubjectFromDepartment);
 
     // Subject
     app.post('/subject/', handleAddSubject);
