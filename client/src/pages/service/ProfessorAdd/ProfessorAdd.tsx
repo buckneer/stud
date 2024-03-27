@@ -134,7 +134,8 @@ const ProfessorAdd = () => {
 							{
 								!user ? 
 									<>
-										Pravi select
+										Popravi me
+										{/* Pravi select za profesore posto nema id od registrovanog */}
 									</> :
 									<>
 										<div className='form-control'>
