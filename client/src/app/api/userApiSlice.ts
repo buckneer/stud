@@ -85,4 +85,5 @@ export const {
 	useAddUniToUserMutation,
 	useRemoveUniFromUserMutation,
 	useGetPendingQuery,
+	useLazyGetPendingQuery,
 } = userApiSlice

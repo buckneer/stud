@@ -8,13 +8,14 @@ import { CircleX } from "lucide-react";
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import { useGetUserQuery } from "../../../app/api/userApiSlice";
-import { useGetPendingQuery } from '../../../app/api/userApiSlice';
+import { useLazyGetPendingQuery } from '../../../app/api/userApiSlice';
 import Loader from '../../../components/Loader/Loader';
 
 
 
 const StudentAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
+	const location = useLocation();
 	const { uni: university } = useParams();
 
 	const [userId, setUserId] = useState('');
@@ -22,12 +23,11 @@ const StudentAdd = () => {
 	const [department, setDepartment] = useState("");
 	const [currentSemester, setCurrentSemester] = useState("");
 	const [degree, setDegree] = useState("");
-	const location = useLocation();
 
 	const degreeOptions = [
-		{ value: "OAS", label: "Osnovne" },
-		{ value: "MAS", label: "Master" },
-		{ value: "DAS", label: "Doktorske" }
+		{ value: "OAS", label: "Osnovne akademske studije" },
+		{ value: "MAS", label: "Master akademske studije" },
+		{ value: "DAS", label: "Doktorske akademske studije" }
 	]
 
 	const [
@@ -77,22 +77,22 @@ const StudentAdd = () => {
 
 	const {
 		data: userData,
-		isLoading: isGetUserByIdLoading,
-		isSuccess: isGetUserByIdSuccess,
-		isError: isGetUserByIdError
+		isLoading: isUserLoading,
+		isSuccess: isUserSuccess,
+		isError: isUserError
 	} = useGetUserQuery(userId!, {
 		skip: !university || !session.accessToken || !userId
 	});
 
-	const {
-		data: usersData,
-		isLoading: isUsersLoading,
-		isSuccess: isUsersSuccess,
-		isError: isUsersError
-		// @ts-ignore
-	} = useGetPendingQuery({university, role: "professor"},{
-		skip: !university || !session.accessToken
-	});
+	const [
+		fetchGetUsers,
+		{
+			data: usersData,
+			isLoading: isUsersLoading,
+			isSuccess: isUsersSuccess,
+			isError: isUsersError
+		}
+	] = useLazyGetPendingQuery();
 
 	const handleStudentAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -127,43 +127,52 @@ const StudentAdd = () => {
 		}
 	}
 
+	const handleRemoveUser = () => {
+		if(location?.state?.user) {
+			// @ts-ignore
+			fetchGetUsers({ university, role: 'student' })
+			window.history.replaceState({}, '')
+		}
+		setUserId('');
+	}
+
 	let content: any;
 
-	if (isUniLoading || isDepLoading) {
+	if (isUniLoading || isDepLoading || isUsersLoading || isUserLoading) {
 		content =
 			<>
 				<Loader />
 			</>
 	}
-	else if (isDepSuccess) {
+	else if (isDepSuccess && (isUsersSuccess || location?.state?.for === 'student')) {
 		content =
 			<div className='flex-grow flex justify-center items-center'>
 				<div className='card'>
 					<div className='form-header'>
 						<div className="form-title">Novi Student</div>
-						<div className="form-desc" >Kreiranje novog studenta</div>
+						<div className="form-desc" >Kreiranje novog STUDenta</div>
 
 						{
-							isStudentAddLoading ? <div className="">Loader ide ovde...</div> : null
+							isStudentAddLoading || isStudentAddUniLoading || isAddDepStudentsLoading ? <Loader /> : null
 						}
 						{
-							isStudentAddSuccess ?
+							isStudentAddSuccess && isAddDepStudentSuccess && isStudentAddUniSuccess ?
 								<div className="w-full flex justify-center">
-									<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešan login!</div>
+									<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešno kreiran novi student!</div>
 								</div>
 								: null
 						}
 						{
-							isStudentAddError ?
+							isStudentAddError || isStudentAddUniError || isAddDepStudentError ?
 								<div className="w-full flex justify-center">
-									<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom prijavljivanja!</div>
+									<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greška prilikom kreiranja studenta!</div>
 								</div>
 								: null
 						}
 					</div>
 					<form onSubmit={handleStudentAdd}>
 						{
-							!userId ?
+							!userId && usersData ?
 									<div className='form-control'>
 										<Select onChange={(e: any) => setUserId(e?.value)} isClearable isSearchable placeholder="Izaberite korisnika" className='w-full outline-none' options={usersData!.map((item) => {
 											return { value: item._id, label: item.name };
@@ -174,13 +183,13 @@ const StudentAdd = () => {
 											{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
 											<label htmlFor="professorName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 												<input
-													type="text" id="professorName" placeholder="Ime profesora" value={userData?.name} disabled autoComplete='off'
+													type="text" id="professorName" placeholder="Ime STUDenta" value={userData?.name} disabled autoComplete='off'
 													className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
 												/>
 												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-													Ime Profesora
+													Ime STUDenta
 												</span>
-												<button className='absolute right-5' onClick={() => setUserId("")}>
+												<button type="button" className='absolute right-5' onClick={handleRemoveUser}>
 													<CircleX />
 												</button>
 											</label>
@@ -189,11 +198,11 @@ const StudentAdd = () => {
 											{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
 											<label htmlFor="professorEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 												<input
-													type="text" id="professorEmail" placeholder="E-adresa profesora" value={userData?.email} disabled autoComplete='off'
+													type="text" id="professorEmail" placeholder="E-adresa STUDenta" value={userData?.email} disabled autoComplete='off'
 													className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
 												/>
 												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-													E-adresa Profesora
+													E-adresa STUDenta
 												</span>
 											</label>
 										</div>
@@ -240,13 +249,14 @@ const StudentAdd = () => {
 
 	useEffect(() => {
 		document.title = 'Dodaj studenta | Stud';
-		if (location.state) {
-			if (location.state.userId) {
-				setUserId(location.state.userId);
-			} else {
-				// TODO Show a dropdown to select
-			}
+		
+		if (location?.state?.user && location?.state?.for === 'student') {
+			setUserId(location.state.user._id);
+		} else {
+			// @ts-ignore
+			fetchGetUsers({ university, role: 'student'});
 		}
+
 	}, []);
 
 	return (
