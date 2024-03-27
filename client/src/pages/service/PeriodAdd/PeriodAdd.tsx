@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import Select, { ActionMeta, MultiValue } from 'react-select';
+import Select from 'react-select';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useGetUniDepartmentsQuery } from "../../../app/api/departmentApiSlice";
 import { useAddPeriodMutation } from "../../../app/api/periodApiSlice";
 import Loader from '../../../components/Loader/Loader';
 
@@ -17,26 +16,15 @@ const PeriodAdd = () => {
 		label?: string
 	}
 
+	const periodOptions = [
+		{ value: "1", label: "Januar" },
+		{ value: "2", label: "Februar" },
+	];
+
+	const [periodName, setperiodName] = useState("");
 	const [periodStart, setPeriodStart] = useState("");
 	const [periodEnd, setPeriodEnd] = useState("");
 	// const [exams, setExams] = useState("");
-	const [departments, setDepartments] = useState<string[]>([]);
-
-	const handleChange = (newSelections: MultiValue<Option>, actionMeta: ActionMeta<Option>) => {
-		console.log(newSelections);
-		let vals = newSelections.map(item => item.value!);
-
-		setDepartments([...vals]);
-	}
-
-	const {
-		data: departmentsData,
-		isLoading: isdepartmentLoading,
-		isSuccess: isdepartmentSuccess,
-		isError: isdepartmentError
-	} = useGetUniDepartmentsQuery(uni!, {
-		skip: !uni || !session.accessToken
-	});
 
 	const [
 		addPeriod,
@@ -73,9 +61,9 @@ const PeriodAdd = () => {
 
 	let content: any;
 
-	if (isdepartmentLoading) {
+	if (false) {
 		content = <Loader />
-	} else if (isdepartmentSuccess) {
+	} else if (true) {
 		content =
 			<>
 				<div className='flex-grow flex justify-center items-center'>
@@ -103,16 +91,7 @@ const PeriodAdd = () => {
 						</div>
 						<form onSubmit={handleAddPeriod}>
 							<div className='form-control mb-5'>
-								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
-								<label htmlFor="periodName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-									<input
-										type="text" id="periodName" placeholder="Ime profesora" value={"periodName state? FIX ME #askJovan"} autoComplete='off'
-										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-									/>
-									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Ime ispitnog roka
-									</span>
-								</label>
+								<Select onChange={(e: any) => setperiodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' isClearable isSearchable options={periodOptions} />
 							</div>
 							<div className='form-control mb-5'>
 								<label htmlFor="periodStart" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
@@ -135,12 +114,6 @@ const PeriodAdd = () => {
 										Zavrsetak ispitnog roka
 									</span>
 								</label>
-							</div>
-							<div className='form-control'>
-								{/* @ts-ignore */}
-								<Select onChange={handleChange} placeholder="Izaberite odsek" className='w-full outline-none' isMulti options={departmentsData.map((item) => {
-									return { value: item._id, label: item.name };
-								})} />
 							</div>
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Ispitni Rok</button>
