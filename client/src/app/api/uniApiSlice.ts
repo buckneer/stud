@@ -1,38 +1,6 @@
 import { apiSlice } from "./apiSlice";
-import { Student, Uni } from "./types/types";
+import { Student, Uni, UpdateUni, AddUniDep, AddUniSer, DelDep, DelUniSer } from "./types/types";
 
-interface UpdateUni {
-	id: string;
-	body: Uni;
-}
-
-interface AddUniDep {
-	university: string;
-	body: {
-		departments: string[];
-	}
-}
-
-interface DelDep {
-	university: string;
-	body: {
-		department: string;
-	};
-}
-
-interface AddUniSer {
-	university: string;
-	body: {
-		services: string[];
-	}
-}
-
-interface DelUniSer {
-	university: string;
-	body: {
-		service: string;
-	}
-}
 
 const uniApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({

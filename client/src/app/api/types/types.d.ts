@@ -105,3 +105,104 @@ export interface Service {
 	user?: string;
 	university?: string;
 }
+
+// Uni API slice
+export interface UpdateUni {
+	id: string;
+	body: Uni;
+}
+
+export interface AddUniDep {
+	university: string;
+	body: {
+		departments: string[];
+	}
+}
+
+export interface DelDep {
+	university: string;
+	body: {
+		department: string;
+	};
+}
+
+export interface AddUniSer {
+	university: string;
+	body: {
+		services: string[];
+	}
+}
+
+export interface DelUniSer {
+	university: string;
+	body: {
+		service: string;
+	}
+}
+
+// Department API slice
+export interface UniDep {
+	university: string;
+	body: Department
+}
+
+export interface UpdateDep {
+	id: string;
+	body: Department;
+}
+
+export interface AddUniDep {
+	university: string;
+	body: {
+		departments: string[];
+	}
+}
+
+export interface DelDep {
+	university: string;
+	body: {
+		department: string;
+	};
+}
+
+export interface AddStDep {
+	department: string;
+	body: {
+		students: string[];
+	}
+}
+
+export interface DelStDep {
+	department: string;
+	body: {
+		student: string;
+	}
+}
+
+export interface AddProfDep {
+	department: string;
+	body: {
+		professors: string[];
+	}
+}
+
+export interface DelProfDep {
+	department: string;
+	body: {
+		professor: string;
+	}
+}
+
+export interface AddSubDep {
+	department: string;
+	body: {
+		subjects: string[];
+	}
+}
+
+export interface DelSubDep {
+	department: string;
+	body: {
+		subject: string;
+	}
+}

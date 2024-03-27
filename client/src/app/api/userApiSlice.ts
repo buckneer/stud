@@ -15,6 +15,11 @@ interface DelUni {
 	}
 }
 
+interface GetPending {
+	university: string;
+	role: string;
+}
+
 const userApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		// TODO change this type if needed
@@ -62,7 +67,13 @@ const userApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'] // remove this later
-		})
+		}),
+		getPending: builder.query <User[], GetPending>({
+			query: ({ university, role}) => ({
+				url: `/uni/${university}/user/${role}/pending/`
+			}),
+			providesTags: (result, error) => (error) ? [] : ['Users'],
+		}),
 	})
 });
 
@@ -70,5 +81,6 @@ export const {
 	useRegisterMutation,
 	useSendPasswordMailMutation,
 	useSetNewPasswordMutation,
-	useGetUserQuery
+	useGetUserQuery,
+	useGetPendingQuery,
 } = userApiSlice

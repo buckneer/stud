@@ -1,43 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { Department } from "./types/types";
-
-interface UniDep {
-	university: string;
-	body: Department
-}
-
-interface UpdateDep {
-	id: string;
-	body: Department;
-}
-
-interface AddUniDep {
-	university: string;
-	body: {
-		departments: string[];
-	}
-}
-
-interface DelDep {
-	university: string;
-	body: {
-		department: string;
-	};
-}
-
-interface AddStDep {
-	department: string;
-	body: {
-		students: string[];
-	}
-}
-
-interface DelStDep {
-	department: string;
-	body: {
-		student: string;
-	}
-}
+import { Department, UniDep, UpdateDep, AddUniDep, DelDep, AddStDep, DelStDep, AddProfDep, DelProfDep, AddSubDep, DelSubDep } from "./types/types";
 
 const departmentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -93,7 +55,7 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => (error) ? [] : ['University', 'Department', 'Departments']
 		}),
-		deleteDepStudents: builder.mutation <unknown, DelStDep> ({
+		deleteDepStudent: builder.mutation <unknown, DelStDep> ({
 			query: ({ department, body }) => ({
 				url: `/department/${department}/student/`,
 				method: 'DELETE',
@@ -101,6 +63,38 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => (error) ? [] : ['University', 'Department', 'Departments']
 		}),
+		addDepProfessors: builder.mutation <unknown, AddProfDep> ({
+			query: ({ department, body }) => ({
+				url: `/department/${department}/professor/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Department', 'Departments', 'Professor', 'Professors'],
+		}),
+		deleteDepProfessor: builder.mutation <unknown, DelProfDep> ({
+			query: ({ department, body }) => ({
+				url: `/department/${department}/professor/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Department', 'Departments', 'Professor', 'Professors'],
+		}),
+		addDepSubjects: builder.mutation <unknown, AddSubDep> ({
+			query: ({ department, body }) => ({
+				url: `/department/${department}/subject/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Department', 'Departments', 'Subject', 'Subjects'],
+		}),
+		deleteDepSubjects: builder.mutation <unknown, DelSubDep> ({
+			query: ({ department, body }) => ({
+				url: `/department/${department}/subject/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Department', 'Departments', 'Subject', 'Subjects'],
+		})
 	})
 });
 
@@ -112,5 +106,9 @@ export const {
 	useAddUniDepartmentMutation,
 	useDeleteUniDepartmentMutation,
 	useAddDepStudentsMutation,
-	useDeleteDepStudentsMutation,
+	useDeleteDepStudentMutation,
+	useAddDepProfessorsMutation,
+	useDeleteDepProfessorMutation,
+	useAddDepSubjectsMutation,
+	useDeleteDepSubjectsMutation
 } = departmentApiSlice;
