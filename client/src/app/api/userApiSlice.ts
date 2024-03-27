@@ -10,19 +10,23 @@ interface AddUni {
 
 interface DelUni {
 	user: string;
-	body: string;
+	body: {
+		university: string;
+	}
 }
 
 const userApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		// TODO change this type if needed
-		register: builder.mutation <{id: string}, User>({
+		register: builder.mutation <{ id: string }, User>({
 			query: (body) => ({
 				url: '/register/',
 				method: 'POST',
 				body
-			})
-	}	),
+			}),
+			// @ts-ignore
+			providesTags: (result, error) => (error) ? [] : ['User'],
+		}),
 		sendPasswordMail: builder.mutation <unknown, User>({
 			query: (body) => ({
 				url: '/password/',
