@@ -108,9 +108,9 @@ export async function handleRemoveGradeFromProfessor(req: Request, res: Response
 export async function handleAddUniToProfessor(req: Request, res: Response) {
     try {
         let { id } = req.params;
-        let { unis } = req.body;
+        let { universities } = req.body;
 
-        let resp = await addToModelArray(Professor, id, 'universities', unis);
+        let resp = await addToModelArray(Professor, id, 'universities', universities);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -120,9 +120,9 @@ export async function handleAddUniToProfessor(req: Request, res: Response) {
 export async function handleRemoveUniFromProfessor(req: Request, res: Response) {
     try {
         let { id } = req.params;
-        let { uni } = req.body;
+        let { university } = req.body;
 
-        let resp = await removeFromModelArray(Professor, id, 'universities', uni);
+        let resp = await removeFromModelArray(Professor, id, 'universities', university);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

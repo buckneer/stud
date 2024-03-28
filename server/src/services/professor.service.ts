@@ -39,9 +39,9 @@ export const getProfessor = async (professor: string) => {
 export const getProfessors = async (university: string = '') => {
     try {
         let query = university ? { universities: university } : {};
-        let professorsObj = await Professor.find(query);
-
-        return professorsObj || {};
+        let professorsObj = await Professor.find(query).populate('user');
+        console.log(professorsObj);
+        return professorsObj;
 
     } catch (e: any) {
         throw e;

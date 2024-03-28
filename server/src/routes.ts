@@ -84,7 +84,7 @@ export default function (app: Express) {
     app.patch('/professor/:id/subject/', handleAddProfessorToManySubjects);
     app.patch('/professor/:id/grade/', handleAddGradesToProfessor);
     app.delete('/professor/:id/grade/', handleRemoveGradeFromProfessor);
-    app.patch('/professor/:id/uni', handleAddUniToProfessor);
+    app.patch('/professor/:id/uni/', handleAddUniToProfessor);
     app.delete('/professor/:id/uni/', handleRemoveUniFromProfessor);
     app.patch('/professor/:id/subject/', handleAddSubjectsToProfessor);
     app.delete('/professor/:id/subject/', handleRemoveProfessorFromUni);

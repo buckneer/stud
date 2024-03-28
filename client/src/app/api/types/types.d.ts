@@ -16,18 +16,18 @@ export interface User {
 
 export interface Student {
 	_id?: string;
-	user?: string;
+	user?: string | User;
 	studentId?: string;
 	modelNum?: string;
 	subjects?: string[];
-	completedSubjects?: string[];
+	completedSubjects?: string[] | Subject[];
 	department?: string;
 	degree?: string;
 	status?: string;
 	dateOfEnrollment?: string;
 	currentSemester?: string;
-	grades?: string[];
-	universities?: string[];
+	grades?: string[] | Grade[];
+	universities?: string[] | Uni[];
 }
 
 export interface Professor {
@@ -36,17 +36,17 @@ export interface Professor {
 	user?: string;
 	subjects?: string[];
 	grades?: string[];
-	universities?: string[];
+	universities?: string[] | Uni[];
 }
 
 export interface Uni {
   _id?: string;
   name?: string;
 	email?: string;
-	students?: string[];
-	professors?: string[];
-	service?: string[];
-	departments?: string[];
+	students?: string[] | Student[];
+	professors?: string[] | Professor[];
+	services?: string[] | Service[];
+	departments?: string[] | Department[];
 	parentUni?: string;
 };
 
@@ -54,19 +54,19 @@ export interface Department {
 	_id?: string;
 	name?: string;
 	university?: string;
-	students?: string[];
-	professors?: string[];
+	students?: string[] | Student[];
+	professors?: string[] | Professor[];
 }
 
 export interface Subject {
 	_id?: string;
 	name?: string;
 	code?: string;
-	professors?: string[];
+	professors?: string[] | Professor[];
 	department?: string;
 	university?: string;
 	espb?: number;
-	requiredSub?: string[];
+	requiredSub?: string[] | Subject[];
 }
 
 export interface Grade {
@@ -85,17 +85,17 @@ export interface Period {
 	_id?: string;
 	start?: string;
 	end?: string;
-	exams?: string[];
+	exams?: string[] | Exam[];
 	university?: string;
 }
 
 export interface Exam {
 	_id?: string;
 	date?: string;
-	students?: string[];
+	students?: string[] | Student[];
 	subject?: string;
 	professor?: string //! Can be removed
-	grades?: string[];
+	grades?: string[] | Grade[];
 	period?: string;
 	ended?: boolean;
 }
