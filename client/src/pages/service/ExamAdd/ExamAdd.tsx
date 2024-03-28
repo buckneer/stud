@@ -91,7 +91,7 @@ const ExamAdd = () => {
 				<div className='flex-grow flex justify-center items-center'>
 					<div className='card'>
 						<div className='form-header'>
-							<div className="form-title">Dodavanje Predmeta</div>
+							<div className="form-title">Dodavanje Ispita</div>
 							<div className="form-desc" >Dodavanje predmeta roku</div>
 							{
 								isExamAddLoading ? <Loader /> : null
