@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
-import { useAddProfessorMutation, useAddProfessorToSubjectMutation, useAddProfessorToUniMutation } from '../../../app/api/professorApiSlice';
+import { useAddProfessorMutation, useAddProfessorToSubjectMutation, useAddProfessorToUniMutation, useAddProfessorUnisMutation } from '../../../app/api/professorApiSlice';
 import { useGetUserQuery } from "../../../app/api/userApiSlice";
 import { useLazyGetPendingQuery } from '../../../app/api/userApiSlice';
 import { useLocation, useParams } from 'react-router-dom';
@@ -41,7 +41,7 @@ const ProfessorAdd = () => {
 		isSuccess: isSubjectsSuccess,
 		isError: isSubjectsError
 	} = useGetUniSubjectsQuery(uni!, {
-		skip: !uni || !session.accessToken
+		skip: !university || !session.accessToken
 	});
 
 	const {
@@ -50,7 +50,7 @@ const ProfessorAdd = () => {
 		isSuccess: isUserSuccess,
 		isError: isUserError
 	} = useGetUserQuery(user!, {
-		skip: !uni || !session.accessToken || !user
+		skip: !university || !session.accessToken || !user
 	});
 
 	const [
@@ -90,6 +90,15 @@ const ProfessorAdd = () => {
 		}
 	] = useAddProfessorToSubjectMutation();
 
+	const [
+		addUniToProf,
+		{
+			isLoading: isAddUniToProfLoading,
+			isSuccess: isAddUniToProfSuccess,
+			isError: isAddUniToProfError
+		}
+	] = useAddProfessorUnisMutation();
+
 	const handleAddProfessor = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -102,13 +111,17 @@ const ProfessorAdd = () => {
 			// @ts-ignore
 			const resultBody: any = { professors: [result.id] };
 
-			await addProfToUni({ university: uni!, body: resultBody });
+			// @ts-ignore
+			await addProfToUni({ university, body: resultBody });
 
 			const subjectBody: any = { subjects: subjects! };
 
 			// @ts-ignore
 			await addProfToSub({ professor: result.id, body: subjectBody });
 
+			const uniBody: any = { universities: [ university ] }
+			// @ts-ignore
+			await addUniToProf({ professor: result.id, body: uniBody });
 		} catch (e: any) {
 			console.error(e);
 		}
