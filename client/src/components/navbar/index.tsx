@@ -61,7 +61,7 @@ const Navbar = () => {
 			<div className='menu flex-1 text-center flex gap-2 justify-center align-center'>
 				<NavItem to='/' title="Početna" Icon={Home} />
 				<NavItem to='/login' title='Raspored Ispita' Icon={Table} />
-			    <NavItem to='/register' title='Ispitni rokovi' Icon={ListChecks} />
+			    <NavItem to={`/uni/${"66057fc6f97b2ad52a249310"}/register`} title='Ispitni rokovi' Icon={ListChecks} />
 			</div>
 
 			<div className='user flex flex-1  text-end justify-end items-center'>
