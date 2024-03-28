@@ -178,6 +178,7 @@ export async function handleGetPendingUsers(req: Request, res: Response) {
 export async function handleUserDelete(req: Request, res: Response) {
 	try {
 		let { user } = req.body;
+		console.log(req.body);
 		let resp = await deleteUserById(user);
 
 		return res.status(200).send(resp);
