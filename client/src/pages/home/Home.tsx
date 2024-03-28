@@ -10,8 +10,7 @@ import {
   User,
   UserCircle
 } from "lucide-react";
-import RandomBlob from "../../components/RandomBlob/RandomBlob";
-import {useDeleteUserMutation, useGetPendingQuery} from "../../app/api/userApiSlice";
+import { useGetPendingQuery} from "../../app/api/userApiSlice";
 import Loader from "../../components/Loader/Loader";
 import UserItem from "../../components/UserItem/UserItem";
 import {Helmet} from "react-helmet";

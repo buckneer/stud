@@ -5,6 +5,7 @@ import { useGetUniQuery } from './../../../app/api/uniApiSlice';
 import { useGetProfessorsQuery } from './../../../app/api/professorApiSlice';
 import { useAddSubjectMutation } from '../../../app/api/subjectApiSlice';
 import InputField from '../../../components/InputField/InputField';
+import MutationState from '../../../components/MutationState/MutationState';
 
 
 const SubjectAdd = () => {
@@ -17,11 +18,11 @@ const SubjectAdd = () => {
 	const [ professors, setProfessors ] = useState([]);
 
 	const [
-		fetchAddSubject,
+		addSubject,
 		{
-			isLoading: isFetchAddSubjectLoading,
-			isSuccess: isFetchAddSubjectSuccess,
-			isError: isFetchAddSubjectError
+			isLoading: isAddSubjectLoading,
+			isSuccess: isAddSubjectSuccess,
+			isError: isAddSubjectError
 		}
 	] = useAddSubjectMutation();
 
@@ -62,7 +63,7 @@ const SubjectAdd = () => {
 		// 		name, code, department, professors, university: uni
 		// 	}
 
-		// 	const result = await fetchAddSubject(body).unwrap();
+		// 	const result = await addSubject(body).unwrap();
 		// } catch (e: any) {
 		// 	console.error(e);
 		// }
@@ -79,24 +80,13 @@ const SubjectAdd = () => {
 				<div className='form-header'>
 					<div className="form-title">Novi Predmet</div>
 					<div className="form-desc" >Kreiranje novog predmeta</div>
-
-					{ 
-						isFetchAddSubjectLoading ? <div className="">Loader ide ovde...</div>: null
-					}
-					{ 
-						isFetchAddSubjectSuccess ?
-							<div className="w-full flex justify-center">
-								<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešan login!</div> 
-							</div>
-						: null
-					}
-					{ 
-						isFetchAddSubjectError ? 
-							<div className="w-full flex justify-center">
-								<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom prijavljivanja!</div> 
-							</div>
-						: null
-					}
+						<MutationState
+							isLoading={isAddSubjectLoading}
+							isSuccess={isAddSubjectSuccess}
+							successMessage='Uspešno dodavanje predmeta!'
+							isError={isAddSubjectError}
+							errorMessage='Greška prilikom dodavanja predmeta'
+						/> 
 				</div>
 				<form className='flex flex-col' onSubmit={handleSubjectAdd}>
 					{/* <input type="text" placeholder="Ime Predmeta" value={name} onChange={(e) => setName(e.target.value)} required /> */}

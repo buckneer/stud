@@ -42,6 +42,4 @@ app.use(errorHandler)
 app.listen(PORT, () => {
 	log.info(`Server running on port: ${PORT}`);
 	connectDB();
-})
-
-
+});

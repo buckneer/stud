@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useRegisterMutation } from './../../../app/api/userApiSlice';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import MutationState from '../../../components/MutationState/MutationState';
 
 const Register = () => {
 	const [email, setEmail] = useState('');
@@ -68,27 +69,14 @@ const Register = () => {
 						<div className="text-gray-400 p-2" >Registracija novog korisnika</div>
 
 						<div id="FormHeader" className="w-full text-slate-100">
-							{
-								isRegisterLoading ?
-									<div className="">Loader ide ovde...</div>
-									: null
-							}
-							{
-								isRegisterSuccess ?
-									<div className="w-full flex justify-center">
-										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešan login!</div>
-									</div>
-									: null
-							}
-							{
-								isRegisterError ?
-									<div className="w-full flex justify-center">
-										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom prijavljivanja!</div>
-									</div>
-									: null
-							}
+							<MutationState
+								isLoading={isRegisterLoading}
+								isSuccess={isRegisterLoading}
+								successMessage='Uspešna registracija korisnika!'
+								isError={isRegisterError}
+								errorMessage='Greška prilikom registracije!'
+							/>
 						</div>
-
 					</div>
 					<div className='FormItem w-full flex flex-col justify-start p-2 items-start relative'>
 						<label htmlFor="UserEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">

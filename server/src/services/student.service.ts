@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import { randomBytes } from 'crypto';
 import { newError, newResponse } from "../utils";
 import University from "../models/university.model";
+import Department from '../models/department.model';
 
 export const addStudent = async (student: StudentDocument, university: string) => {
 
@@ -29,9 +30,11 @@ export const addStudent = async (student: StudentDocument, university: string) =
 
 export const getStudents = async (university: string = '') => {
     let query = university ?  { universities: university } : {};
-
+    // TODO: we dont have university in students
     // TODO omit password and code from the results
-    let students = Student.find(query).populate('user');
+    let department = await Department.find({ university });
+    
+    let students = await Student.find({ department }).populate('user');
 
     return students;
 }

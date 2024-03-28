@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { useGetUserQuery } from "../../../app/api/userApiSlice";
 import { useLazyGetPendingQuery } from '../../../app/api/userApiSlice';
 import Loader from '../../../components/Loader/Loader';
+import MutationState from '../../../components/MutationState/MutationState';
 
 
 
@@ -151,24 +152,13 @@ const StudentAdd = () => {
 					<div className='form-header'>
 						<div className="form-title">Novi Student</div>
 						<div className="form-desc" >Kreiranje novog STUDenta</div>
-
-						{
-							isStudentAddLoading || isStudentAddUniLoading || isAddDepStudentsLoading ? <Loader /> : null
-						}
-						{
-							isStudentAddSuccess && isAddDepStudentSuccess && isStudentAddUniSuccess ?
-								<div className="w-full flex justify-center">
-									<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešno kreiran novi student!</div>
-								</div>
-								: null
-						}
-						{
-							isStudentAddError || isStudentAddUniError || isAddDepStudentError ?
-								<div className="w-full flex justify-center">
-									<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greška prilikom kreiranja studenta!</div>
-								</div>
-								: null
-						}
+							<MutationState 
+								isLoading={isStudentAddLoading || isStudentAddUniLoading || isAddDepStudentsLoading}
+								isSuccess={isStudentAddSuccess && isAddDepStudentSuccess && isStudentAddUniSuccess}
+								successMessage='Uspešno kreiran novi student!'
+								isError={isStudentAddError || isStudentAddUniError || isAddDepStudentError}
+								errorMessage='Greška prilikom kreiranja studenta!'
+							/>
 					</div>
 					<form onSubmit={handleStudentAdd}>
 						{

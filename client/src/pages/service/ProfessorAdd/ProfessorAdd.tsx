@@ -9,6 +9,7 @@ import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import Loader from '../../../components/Loader/Loader';
 import { CircleX } from "lucide-react";
+import MutationState from '../../../components/MutationState/MutationState';
 
 type Option = {
 	value?: string;
@@ -135,24 +136,13 @@ const ProfessorAdd = () => {
 						<div className='form-header'>
 							<div className="form-title">Novi Profesor</div>
 							<div className="form-desc" >Kreiranje novog profesora</div>
-
-							{
-								isProfessorAddLoading || isAddProfToUniLoading || isAddProfToSubLoading ? <Loader /> : null
-							}
-							{
-								isProfessorAddSuccess || isAddProfToUniSuccess || isProfToSubSuccess ?
-									<div className="w-full flex justify-center">
-										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešno dodat profesor!</div>
-									</div>
-									: null
-							}
-							{
-								isProfessorAddError || isAddProfToUniError || isProfToSubError ?
-									<div className="w-full flex justify-center">
-										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greška prilikom registracije profesora!</div>
-									</div>
-									: null
-							}
+								<MutationState 
+									isLoading={isProfessorAddLoading || isAddProfToUniLoading || isAddProfToSubLoading}
+									isSuccess={isProfessorAddSuccess && isAddProfToUniSuccess && isProfToSubSuccess}
+									successMessage='Uspešno dodat profesor!'
+									isError={isProfessorAddError || isAddProfToUniError || isProfToSubError}
+									errorMessage='Greška prilikom registracije profesora!'
+								/>
 						</div>
 						<form onSubmit={handleAddProfessor}>
 							{
