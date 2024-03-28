@@ -74,6 +74,13 @@ const userApiSlice = apiSlice.injectEndpoints({
 			}),
 			providesTags: (result, error) => (error) ? [] : ['Users'],
 		}),
+		deleteUser: builder.mutation <unknown, { body: { user: string; } }> ({
+			query: (body) => ({
+				url: `/user`,
+				method: 'DELETE',
+				body
+			}),
+		}),
 	})
 });
 
@@ -86,4 +93,5 @@ export const {
 	useRemoveUniFromUserMutation,
 	useGetPendingQuery,
 	useLazyGetPendingQuery,
+	useDeleteUserMutation
 } = userApiSlice
