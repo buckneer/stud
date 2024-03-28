@@ -4,6 +4,7 @@ import RandomBlob from "../RandomBlob/RandomBlob";
 import { useNavigate } from "react-router-dom";
 import {UserRoundX} from "lucide-react";
 import { useDeleteUserMutation } from '../../app/api/userApiSlice';
+import MutationState from '../MutationState/MutationState';
 
 interface UserItemProps {
 	user: User,
@@ -36,7 +37,7 @@ function UserItem({user, university, role}: UserItemProps) {
     try {
 			console.log(`User '${user._id}' je spreman za brisanje!`);
 			// TODO: add confirmation modal, then update the line below :D (or dont, IDGAF)
-			const result = await deleteUser({ body: { user: user._id! }}).unwrap();
+			const result = await deleteUser(user._id!).unwrap();
     } catch (e: any) {
       console.error(e);
     }
@@ -44,6 +45,9 @@ function UserItem({user, university, role}: UserItemProps) {
 
 	return (
 		<div className="card overflow-hidden p-0 relative  w-full ">
+			<MutationState 
+				isLoading={isDeleteUserLoading}
+			/>
 			<div className="absolute right-2 top-2 p-2 z-[999] hover:text-red-900 cursor-pointer">
 				<UserRoundX size={32} onClick={handleDeleteUser} />
 			</div>
