@@ -29,9 +29,9 @@ export default function (app: Express) {
 
     app.get("/healthcheck", (request: Request, response: Response) => response.sendStatus(200));
     app.get('/protected', userGuard, (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/user', userGuard, roleGuard('user'), (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/admin', userGuard, roleGuard('admin'), (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/service', userGuard, roleGuard('service'), (request: Request, response: Response) => response.sendStatus(200));
+    app.get('/protected/user', userGuard, roleGuard(['student']), (request: Request, response: Response) => response.sendStatus(200));
+    app.get('/protected/admin', userGuard, roleGuard(['professor']), (request: Request, response: Response) => response.sendStatus(200));
+    app.get('/protected/service', userGuard, roleGuard(['service']), (request: Request, response: Response) => response.sendStatus(200));
 
     // Session
     app.post('/login/', handleLogin);
