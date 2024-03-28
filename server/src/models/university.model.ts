@@ -1,12 +1,11 @@
-import { Schema, Document, model } from "mongoose";
-import { UserDocument } from "./user.model";
+import {Schema, Document, model, Types} from "mongoose";
 
 export interface UniDocument extends Document {
     name?: string;
     email?: string;
-    students?: UserDocument[];
-    professors?: UserDocument[];
-    services?: UserDocument[];
+    students?: Types.ObjectId[];
+    professors?: Types.ObjectId[];
+    services?: Types.ObjectId[];
     departments?: string[];
     parentUni?: string;
 }

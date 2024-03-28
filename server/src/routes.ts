@@ -12,7 +12,7 @@ import {
     handleRegister,
     handleRemoveUniFromUser,
     handleSendPasswordMail,
-    handleSetPassword
+    handleSetPassword, handleUserDelete
 } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
@@ -46,6 +46,7 @@ export default function (app: Express) {
     app.delete('/user/:id/uni/', handleRemoveUniFromUser);
     app.get('/user/:id/', handleGetUser);
     app.get('/uni/:uni/user/:role/pending/', handleGetPendingUsers);
+    app.delete('/user', handleUserDelete);
 
     // University
     app.post('/uni/', handleNewUni);

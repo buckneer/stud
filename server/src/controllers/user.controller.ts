@@ -1,5 +1,6 @@
 import User, { UserDocument } from "../models/user.model";
 import {
+	deleteUserById,
 	getPendingUsers,
 	getUser,
 	loginUser,
@@ -169,6 +170,17 @@ export async function handleGetPendingUsers(req: Request, res: Response) {
 		let { uni, role } = req.params;
 		let users = await getPendingUsers(uni, role);
 		return res.status(200).send(users);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleUserDelete(req: Request, res: Response) {
+	try {
+		let { user } = req.body;
+		let resp = await deleteUserById(user);
+
+		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}

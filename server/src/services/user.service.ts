@@ -8,6 +8,8 @@ import { randomBytes } from 'crypto';
 import {getService, getServiceByUserId} from "./service.service";
 import Student from "../models/student.model";
 import mongoose, {Types} from "mongoose";
+import Professor from "../models/professor.model";
+import Service from "../models/service.model";
 
 export const registerUser = async (serviceId: string, user: UserDocument) => {
 	let userExists = await User.findOne({email: user.email});
@@ -211,3 +213,19 @@ export const getPendingUsers = async (university: string, role: string) => {
 
 }
 
+export const deleteUserById = async (_id: string) => {
+	await User.findOneAndDelete({_id});
+	await Student.deleteMany({user: _id});
+	await Professor.deleteMany({user: _id});
+	await Service.deleteMany({user: _id});
+	await Session.updateMany({userId: _id}, {active: false});
+
+
+	return newResponse("Korisnik je uspešno obrisan ");
+
+	// Use this when you need to remove only id from collection
+	// await MODEL.updateMany(
+	// 	{ user: _id },
+	// 	{ $pull: { students: _id } }
+	// );
+}

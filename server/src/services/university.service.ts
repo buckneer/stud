@@ -1,6 +1,7 @@
 import { newError, newResponse } from '../utils';
 import { UserDocument } from './../models/user.model';
 import University, { UniDocument } from "../models/university.model";
+import {Types} from "mongoose";
 
 
 
@@ -48,10 +49,11 @@ export const addStudents = async (uniId: string, studentsToAdd: any) => {
     }
 }
 
-export const addProfessors = async (uniId: string, professorsToAdd: UserDocument[]) => {
+export const addProfessors = async (uniId: string, professorsToAdd: any[]) => {
     try {
         const uni = await University.findOne({_id: uniId});
         if (!uni) throw newError(404, 'Ne postoji fakultet sa tim ID-em');
+
         let all= [];
         all = uni.professors ? uni.professors.concat(professorsToAdd) : professorsToAdd;
 
@@ -63,7 +65,7 @@ export const addProfessors = async (uniId: string, professorsToAdd: UserDocument
     }
 }
 
-export const addServices = async (uniId: string, servicesToAdd: UserDocument[]) => {
+export const addServices = async (uniId: string, servicesToAdd: any[]) => {
     try {
         const uni = await University.findOne({_id: uniId});
         if (!uni) throw newError(404, 'Ne postoji fakultet sa tim ID-em');
@@ -81,7 +83,7 @@ export const addServices = async (uniId: string, servicesToAdd: UserDocument[]) 
 
 export const deleteUniversity = (uniId: string) => {
     try {
-        
+    //     TODO Should add to bulk remove every student/service/professor on university
     } catch(e: any) {
         throw e;
     }
@@ -89,7 +91,7 @@ export const deleteUniversity = (uniId: string) => {
 
 export const editUniversity = (uniId: string, university: UniDocument) => {
     try {
-        
+    //     TODO finish edit university
     } catch(e: any) {
         throw e;
     }
