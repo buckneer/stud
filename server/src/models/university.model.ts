@@ -6,7 +6,7 @@ export interface UniDocument extends Document {
     students?: Types.ObjectId[];
     professors?: Types.ObjectId[];
     services?: Types.ObjectId[];
-    departments?: string[];
+    departments?: Types.ObjectId[];
     parentUni?: string;
 }
 
@@ -16,7 +16,7 @@ const UniSchema = new Schema({
     students: [{type: Schema.ObjectId, ref: 'User'}],
     professors: [{type: Schema.ObjectId, ref: 'User'}],
     services: [{type: Schema.ObjectId, ref: 'User'}],
-    departments: [{type: String}],
+    departments: [{type: Types.ObjectId}],
     parentUni: {type: String}
 })
 

@@ -5,6 +5,7 @@ import { useAddDepartmentMutation } from '../../../app/api/departmentApiSlice';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
+import { useAddUniDepartmentMutation } from '../../../app/api/uniApiSlice';
 
 const DepartmentAdd = () => {
 	
@@ -33,6 +34,15 @@ const DepartmentAdd = () => {
 		}
 	] = useAddDepartmentMutation();
 
+	const [
+		AddUniDepartment,
+		{
+			isLoading: isUniDepartmentAddLoading,
+			isSuccess: isUniDepartmentAddSuccess,
+			isError: isUniDepartmentAddError
+		}
+	] = useAddUniDepartmentMutation();
+
 	const handleAddDepartment = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -40,8 +50,15 @@ const DepartmentAdd = () => {
 		try {
 			const body = {
 				name
-			}
+			};
 			const result = await AddDepartment({ university: uni!, body }).unwrap();
+			
+			// @ts-ignore 
+			const resultBody: any = { departments: [result._id]};
+			
+			// @ts-ignore
+			await AddUniDepartment({university: uni!, body: resultBody});
+
 		} catch (e: any) {
 			console.log(e);
 		}
