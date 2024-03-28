@@ -22,6 +22,7 @@ import { RootState } from './app/store';
 import UniAdd from './pages/admin/UniAdd/UniAdd';
 import Container from './components/container';
 import Navbar from './components/navbar';
+import SetPassword from './pages/service/SetPassword/SetPassword';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -34,6 +35,8 @@ function App() {
 
         <Container>
           <Routes>
+            <Route path="/password/:code" element={<SetPassword />} />
+            <Route path="/password" element={<SetPassword />} />
             <Route path='/login' element={<Login />} />
 
             {/* User has to be logged in to access these */}
@@ -49,7 +52,6 @@ function App() {
               <Route path='/uni/:uni/department/:dep/exam/add' element={<ExamAdd/>} />
               <Route path='/uni/:uni/department/:dep/grade/add' element={<GradeAdd/>} />
               <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
-
               {/* User has to have admin privileges */}
               {/* TODO: CHANGE THIS TO AdminRequired! */}
               <Route element={<TokenRequired />}>
