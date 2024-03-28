@@ -42,15 +42,13 @@ export async function handleRegister(req: Request, res: Response) {
 
 export async function handleSetPassword(req: Request, res: Response) {
 	try {
-		let userId = req.body.userId;
-		let code = req.body.code;
-		let password = req.body.password;
+		let { email, code, password } = req.body;
 
-		if(!userId) return res.status(400).send({message: 'UserId je obavezan'});
+		if(!email) return res.status(400).send({message: 'E-adresa je obavezna'});
 		if(!code) return res.status(400).send({message: 'Kod je obavezan'});
 		if(!password) return res.status(400).send({message: 'Lozinka je obavezna'});
 
-		let resp = await setPassword(userId, password, code);
+		let resp = await setPassword(email, password, code);
 
 		return res.status(200).send(resp);
 	} catch(e: any) {

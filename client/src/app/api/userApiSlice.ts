@@ -32,14 +32,14 @@ const userApiSlice = apiSlice.injectEndpoints({
 			// @ts-ignore
 			providesTags: (result, error) => (error) ? [] : ['User'],
 		}),
-		sendPasswordMail: builder.mutation <unknown, User>({
+		sendPasswordMail: builder.mutation <unknown, User> ({
 			query: (body) => ({
 				url: '/password/',
 				method: 'POST',
 				body
 			})  
 		}),
-		setNewPassword: builder.mutation <unknown, User>({
+		setNewPassword: builder.mutation <unknown, User> ({
 			query: (body) => ({
 				url: '/password/',
 				method: 'PATCH',

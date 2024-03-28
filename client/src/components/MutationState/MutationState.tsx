@@ -6,7 +6,7 @@ interface States {
   isSuccess?: boolean;
   successMessage?: string;
   isError?: boolean;
-  errorMessage?: string;
+  errorMessage?: string | any;
   error?: any;
 }
 
