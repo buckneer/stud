@@ -11,7 +11,7 @@ import {
   UserCircle
 } from "lucide-react";
 import RandomBlob from "../../components/RandomBlob/RandomBlob";
-import {useGetPendingQuery} from "../../app/api/userApiSlice";
+import {useDeleteUserMutation, useGetPendingQuery} from "../../app/api/userApiSlice";
 import Loader from "../../components/Loader/Loader";
 import UserItem from "../../components/UserItem/UserItem";
 import {Helmet} from "react-helmet";
@@ -26,7 +26,8 @@ export default function Home() {
     isLoading,
     isSuccess,
     isError
-  } = useGetPendingQuery({university, role})
+  } = useGetPendingQuery({university, role});
+
 
   return (
     <div className="bg-white">

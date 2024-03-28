@@ -74,12 +74,13 @@ const userApiSlice = apiSlice.injectEndpoints({
 			}),
 			providesTags: (result, error) => (error) ? [] : ['Users'],
 		}),
-		deleteUser: builder.mutation <unknown, { body: { user: string; } }> ({
+		deleteUser: builder.mutation <unknown, { body: { user: string; }}> ({
 			query: (body) => ({
 				url: `/user`,
 				method: 'DELETE',
 				body
 			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'],
 		}),
 	})
 });
