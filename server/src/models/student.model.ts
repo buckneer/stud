@@ -13,6 +13,7 @@ export interface StudentDocument extends Document {
     dateOfEnrollment?: string;
     currentSemester?: string;
     grades?: Types.ObjectId[];
+    exams?: Types.ObjectId[];
     // university?: Types.ObjectId
 }
 
