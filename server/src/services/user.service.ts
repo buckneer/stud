@@ -61,7 +61,7 @@ export const setPassword = async (email: string, password: string, code: string)
 
 	return {
 		status: 200,
-		message: 'Lozinka je sacuvana'
+		message: 'Lozinka je sačuvana!'
 	}
 }
 
