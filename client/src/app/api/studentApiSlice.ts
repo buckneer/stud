@@ -25,6 +25,20 @@ interface DelUni {
 	}
 }
 
+interface AddStExam {
+	student: string;
+	body: {
+		exams: string[];
+	}
+}
+
+interface DelStExam {
+	student: string;
+	body: {
+		exam: string;
+	}
+}
+
 const studentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addStudent: builder.mutation <unknown, any>({
@@ -78,6 +92,22 @@ const studentApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => error ? [] : ['Student', 'Students', 'UniStudents']
 		}),
+		addStudentExams: builder.mutation <unknown, unknown> ({
+			query: ({ student, body }) => ({
+				url: `/student/${student}/exam/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Exam', 'Exams', 'Student', 'Students'],
+		}),
+		removeStudentExam: builder.mutation <unknown, unknown> ({
+			query: ({ student, body }) => ({
+				url: `/student/${student}/exam/`,
+				method: 'DELETE',
+				body
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Exam', 'Exams', 'Student', 'Students'],
+		})
 		// addCompleted: builder.mutation <unknown, unknown> ({
 		// 	query: ({  }) => ({
 

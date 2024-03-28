@@ -52,7 +52,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 		}),
 		getDepSubjects: builder.query <Subject[], string> ({
 			query: (department) => ({
-				url: `/dep/${department}/subject/`
+				url: `/department/${department}/subject/`
 			}),
 			providesTags: (result, error) => error ? [] : ['Subjects'],
 		}),

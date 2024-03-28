@@ -106,3 +106,27 @@ export async function handleAddSubjectsToCompleted(req: Request, res: Response) 
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
+
+export async function handleAddExamsToStudent(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { exams } = req.body;
+
+        let resp = await addToModelArray(Student, id, 'exams', exams);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function removeExamFromStudent(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { exam } = req.body;
+
+        let resp = removeFromModelArray(Student, id, 'exams', exam);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}

@@ -1,6 +1,6 @@
 
 import { handleAddGradesToProfessor, handleAddProfessor, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
-import { handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent } from "./controllers/student.controller";
+import { handleAddExamsToStudent, handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent } from "./controllers/student.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni, handleRemoveProfessorFromUni } from "./controllers/university.controller";
 import {
     handleAddUnisToUser,
@@ -69,6 +69,8 @@ export default function (app: Express) {
     app.get('/student/:id/', handleGetStudent);
     app.delete('/student/:id/', handleDeleteStudent);
     app.patch('/student/:id/', handleUpdateStudent);
+    app.patch('/student/:id/exam/', handleAddExamsToStudent);
+    app.delete('/student/:id/exam/', removeExamFromStudent);
 
     // added here...:
     app.patch('/subject/student/:id/', handleAddStudentToSubjects);
