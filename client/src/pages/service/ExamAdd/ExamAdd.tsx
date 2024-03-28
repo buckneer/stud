@@ -2,23 +2,29 @@ import React, { useState, useEffect } from 'react'
 import Loader from '../../../components/Loader/Loader';
 import { useAddExamMutation } from '../../../app/api/examApiSlice';
 import { useGetProfessorsQuery } from '../../../app/api/professorApiSlice';
-import Select from 'react-select';
+import Select, { GroupBase } from 'react-select';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useGetUniDepartmentsQuery } from '../../../app/api/departmentApiSlice';
-import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
+import { useGetDepSubjectsQuery } from '../../../app/api/subjectApiSlice';
+
+interface SelectProps {
+	value: string;
+	label: string;
+}
 
 const ExamAdd = () => {
-
+	
 	const session = useSelector((state: RootState) => state.session);
 	const { uni } = useParams();
 	
 	const [date, setDate] = useState("");
-	const [students, setStudents] = useState("");
-	const [subject, setSubject] = useState("");
-	const [proffesor, setProffesor] = useState("");
-	const [period, setPeriod] = useState("");
+	const [department, setDepartment] = useState<SelectProps>();
+	const [subject, setSubject] = useState<SelectProps>();
+	const [professor, setProfessor] = useState<SelectProps>();
+	// const [students, setStudents] = useState<SelectProps>("");
+	// const [period, setPeriod] = useState("");
 	// const [grades, setGrades] = useState("");
 	// const [ended, setEnded] = useState(Boolean);
 
@@ -32,25 +38,29 @@ const ExamAdd = () => {
 	});
 
 	const {
+		data: subjectsData,
+		isLoading: isSubjectsLoading,
+		isSuccess: isSubjectsSuccess,
+		isError: isSubjectsError
+		// @ts-ignore
+	} = useGetDepSubjectsQuery(department?.value, {
+		skip: !uni || !session.accessToken || !department?.value
+	});
+
+	console.log(subjectsData);
+	const {
 		data: professorsData,
 		isLoading: isProfessorsLoading,
 		isSuccess: isProfessorsSuccess,
 		isError: isProfessorError
 	} = useGetProfessorsQuery(uni!, {
-		skip: !uni || !session.accessToken
+		skip: !uni || !session.accessToken || !subject
 	});
 
-	const {
-		data: subjectsData,
-		isLoading: isSubjectsLoading,
-		isSuccess: isSubjectsSuccess,
-		isError: isSubjectsError
-	} = useGetUniSubjectsQuery(uni!, {
-		skip: !uni || !session.accessToken
-	});
+
 
 	const [
-		AddExa,
+		AddExam,
 		{
 			isLoading: isExamAddLoading,
 			isSuccess: isExamAddSuccess,
@@ -75,7 +85,7 @@ const ExamAdd = () => {
 
 	if (isDepLoading || isProfessorsLoading || isSubjectsLoading) {
 		content = <Loader />
-	} else if (isDepSuccess && isProfessorsSuccess && isSubjectsSuccess) {
+	} else if (isDepSuccess) {
 		content =
 			<>
 				<div className='flex-grow flex justify-center items-center'>
@@ -126,20 +136,33 @@ const ExamAdd = () => {
 								</label>
 							</div>
 							<div className='form-control mb-5'>
-								<Select onChange={(e: any) => setStudents(e?.value)} placeholder="Izaberite odsek" className='w-full outline-none' isClearable isSearchable options={departmentsData!	.map((item) => {
+								<Select value={department} onChange={(e: any) => setDepartment({value: e?.value, label: e?.label})} placeholder="Izaberite odsek" className='w-full outline-none' isClearable isSearchable options={departmentsData.map((item:any) => {
 									return { value: item._id, label: item.name};
 								})} />
 							</div>
-							<div className='form-control mb-5'>
-								<Select onChange={(e: any) => setProffesor(e?.value)} placeholder="Izaberite profesora" className='w-full outline-none' isClearable isSearchable options={professorsData.map((item: any) => {
-									return { value: item._id, label: item.user};
-								})} />
-							</div>
-							<div className='form-control mb-5'>
-								<Select onChange={(e: any) => setSubject(e?.value)} placeholder="Izaberite predmet" className='w-full outline-none' isClearable isSearchable options={subjectsData.map((item) => {
-									return { value: item._id, label: item.name};
-								})} />
-							</div>
+							{
+								(department?.value) && isSubjectsSuccess && 
+								<>
+									<div className='form-control mb-5'>
+										<Select	value={subject} onChange={(e: any) => setSubject({value: e?.value, label: e?.label})} placeholder="Izaberite predmet" className='w-full outline-none' isClearable isSearchable options={subjectsData.map((item: any) => {
+											return { value: item._id, label: item.name};
+										})} />
+									</div>
+								</>
+							}
+							{	
+
+								department?.value && isProfessorsSuccess && subject?.value &&
+								<>
+									<div className='form-control mb-5'>
+										<Select value={professor} onChange={(e: any) => setProfessor({value: e?.value, label: e?.label})} placeholder="Izaberite profesora" className='w-full outline-none' isClearable isSearchable options={professorsData.map((item: any) => {
+											return { value: item._id, label: item.user.name};
+										})} />
+									</div>
+								</>
+							}
+							
+							
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Ispitni Rok</button>
 							</div>
@@ -154,7 +177,7 @@ const ExamAdd = () => {
 		// 	<label htmlFor="dateOfExam">Datum ispita: </label>
 		// 	<input id='dateOfExam' type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
 		// 	<input type="text" placeholder='Ime predmeta' value={subject} onChange={(e) => setSubject(e.target.value)} required />
-		// 	<input type="text" placeholder='Ime profesora' value={proffesor} onChange={(e) => setProffesor(e.target.value)} required />
+		// 	<input type="text" placeholder='Ime profesora' value={proffesor} onChange={(e) => setProfessor(e.target.value)} required />
 		// 	<label htmlFor="timeOfExam">Vreme ispita: </label>
 		// 	<input id='timeOfExam' type="time" value={period} onChange={(e) => setPeriod(e.target.value)} required />
 		// 	<button type="submit" className='bg-black py-2 px-4 w-fit text-white rounded-sm font-semibold' >Dodaj ispit</button>
