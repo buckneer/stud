@@ -45,10 +45,10 @@ function UserItem({user, university, role}: UserItemProps) {
 
 	return (
 		<div className="card overflow-hidden p-0 relative  w-full ">
-			<MutationState 
+			<MutationState
 				isLoading={isDeleteUserLoading}
 			/>
-			<div className="absolute right-2 top-2 p-2 z-[999] hover:text-red-900 cursor-pointer">
+			<div className="absolute right-2 top-2 p-2 z-[998] hover:text-red-900 cursor-pointer">
 				<UserRoundX size={32} onClick={handleDeleteUser} />
 			</div>
 			<div className="flex justify-between p-5 cursor-pointer" onClick={() => handleRedirect()}>
