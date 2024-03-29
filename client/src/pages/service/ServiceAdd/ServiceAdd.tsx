@@ -4,10 +4,11 @@ import Select from 'react-select';
 import { useLazyGetPendingQuery, useGetUserQuery } from '../../../app/api/userApiSlice';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
-import { CircleX } from 'lucide-react';
 import Loader from '../../../components/Loader/Loader';
 import { useAddServiceMutation } from '../../../app/api/serviceApiSlice';
 import { useAddUniServiceMutation } from '../../../app/api/uniApiSlice';
+import MutationState from '../../../components/MutationState/MutationState';
+import InputField from '../../../components/InputField/InputField';
 
 const ServiceAdd = () => {
 
@@ -25,6 +26,16 @@ const ServiceAdd = () => {
 	} = useGetUserQuery(user, {
 		skip: !university || !session.accessToken || !user
 	});
+
+	const [
+		fetchGetUsers,
+		{
+			data: usersData,
+			isLoading: isUsersLoading,
+			isSuccess: isUsersSuccess,
+			isError: isUsersError
+		}
+	] = useLazyGetPendingQuery();
 
 	const [
 		addService,
@@ -52,16 +63,6 @@ const ServiceAdd = () => {
 	// 		isError: isAddUserServiceError
 	// 	}
 	// ] = ...();
-
-	const [
-		fetchGetUsers,
-		{
-			data: usersData,
-			isLoading: isUsersLoading,
-			isSuccess: isUsersSuccess,
-			isError: isUsersError
-		}
-	] = useLazyGetPendingQuery();
 
 	const handleAddService = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -96,10 +97,6 @@ const ServiceAdd = () => {
 		setUser('');
 	}
 
-	const options = [
-		{ value: "id1", label: {} }
-	]
-
 	let content: any;
 
 	if(isUsersLoading || isUserLoading){
@@ -112,67 +109,29 @@ const ServiceAdd = () => {
 					<div className='form-header'>
 						<div className="form-title">Nova stud sluzba</div>
 						<div className="form-desc" >Kreiranje nove sluzbe</div>
-
-						{
-							isAddServiceLoading || isAddUniServiceLoading ? <Loader/> : null
-						}
-						{
-							isAddServiceSuccess && isAddUniServiceSuccess ? 
-								<div className="w-full flex justify-center">
-									<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspešno kreiran novi nalog STUD službe!</div>
-								</div>
-								: null
-						}
-						{ 
-							isAddServiceError || isAddUniServiceError ?
-								<div className="w-full flex justify-center">
-									<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greška prilikom kreiranja STUD službe!</div>
-								</div>
-								: null
-						}
+						<MutationState
+							isLoading={isAddServiceLoading || isAddUniServiceLoading }
+							isSuccess={isAddServiceSuccess && isAddUniServiceSuccess }
+							successMessage='Uspešno kreiran novi nalog STUD službe!'
+							isError={isAddServiceError || isAddUniServiceError }
+							errorMessage='Greška prilikom kreiranja STUD službe!'
+						/>
 					</div>
 					<form onSubmit={handleAddService}>
 						<div className='form-control'>
 							{ 
 								!user && usersData ?
 									<div className="form-control">
-										<Select onChange={(e: any) => setUser(e?.value)} isClearable isSearchable  placeholder="Izaberite korisnika za Sluzbu" className='w-full outline-none' options={usersData!.map((item) => {
+										<Select onChange={(e: any) => setUser(e?.value)} required isClearable isSearchable  placeholder="Izaberite korisnika za Sluzbu" className='w-full outline-none' options={usersData!.map((item) => {
 											return { value: item._id, label: item.name };
 										})} />
 									</div> :
 									<>
-										<div className='form-control relative'>
-											{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
-											<label htmlFor="serviceName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-												<input
-													type="text" id="serviceName" placeholder="Ime STUDenta" value={userData?.name} disabled autoComplete='off'
-													className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-												/>
-												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-													Ime STUD službe
-												</span>
-												<button type="button" className='absolute right-5' onClick={handleRemoveUser}>
-													<CircleX />
-												</button>
-											</label>
-										</div>
-										<div className='form-control'>
-											{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
-											<label htmlFor="serviceEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-												<input
-													type="text" id="serviceEmail" placeholder="E-adresa STUDenta" value={userData?.email} disabled autoComplete='off'
-													className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-												/>
-												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-													E-adresa STUD službe
-												</span>
-											</label>
-										</div>
+										<InputField id="serviceName" name="Ime STUD službe" type="text" inputVal={userData?.name} disabled button buttonAction={handleRemoveUser} />
+										<InputField id="serviceEmail" name="E-adresa STUD službe" type="text" inputVal={userData?.email} disabled />
 									</>
 							}
-							
 						</div>
-
 						<div className='footer flex items-center justify-center flex-col'>
 							<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Sluzbu</button>
 						</div>
