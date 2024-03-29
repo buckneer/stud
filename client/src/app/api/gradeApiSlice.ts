@@ -32,8 +32,15 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 				url: `/grades/${id}/`,
 				method: 'PATCH',
 				body
-			})
-		})
+			}),
+			invalidatesTags: (result, error) => (error) ? [] : ['Grade', 'Grades'],
+		}),
+		getGradesByRole: builder.query <Grade[], { role: string; id: string }> ({
+			query: ({ role, id }) => ({
+				url: `/${role}/${id}/grade/`
+			}),
+			providesTags: (result, error) => (error) ? [] : ['Grades'],
+		}),
 	})
 });
 
@@ -41,5 +48,6 @@ export const {
 	useAddGradeMutation,
 	useGetGradeQuery,
 	useGetGradesQuery,
-	useUpdateGradeMutation
+	useUpdateGradeMutation,
+	useGetGradesByRoleQuery,
 } = gradeApiSlice;

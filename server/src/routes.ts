@@ -1,5 +1,5 @@
 
-import { handleAddGradesToProfessor, handleAddProfessor, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
+import { handleAddGradesToProfessor, handleAddProfessor, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessorGrades, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
 
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni, handleRemoveProfessorFromUni } from "./controllers/university.controller";
 import {
@@ -22,12 +22,13 @@ import { handleAddProfessorsToSubject, handleAddProfessorToManySubjects, handleA
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import { handleAddExam, handleAddGradesToExam, handleAddStudentsToExam, handleGetExam, handleGetExams, handleRemoveGradeFromExam, handleRemoveStudentFromExam, handleUpdateExam } from "./controllers/exam.controller";
 import { handleAddExamToPeriod, handleAddPeriod, handleGetPeriod, handleGetPeriods, handleRemoveExamFromPeriod, handleUpdatePeriod } from "./controllers/period.controller";
-import { handleAddService, handleGetServices } from "./controllers/service.controller";
+import { handleAddService, handleGetServiceGrades, handleGetServices } from "./controllers/service.controller";
 import {
     handleAddExamsToStudent,
     handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted,
     handleDeleteStudent,
     handleGetStudent,
+    handleGetStudentGrades,
     handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent
 } from "./controllers/student.controller";
 
@@ -55,7 +56,9 @@ export default function (app: Express) {
     app.get('/user/:id/', handleGetUser);
     app.get('/uni/:uni/user/:role/pending/', handleGetPendingUsers);
     app.delete('/user', handleUserDelete);
-
+    app.get('/user/:id/uni/role/:role/', handleGetUserUnisByRole);
+    
+    
     // University
     app.post('/uni/', handleNewUni);
     app.get('/uni/', handleGetAllUnis);
@@ -68,8 +71,7 @@ export default function (app: Express) {
     app.delete('/uni/:id/department/', handleRemoveDepartmentFromUni);
     app.patch('/uni/:id/service/', handleAddServicesToUni);
     app.delete('/uni/:id/service/', handleRemoveServiceFromUni);
-    app.get('/user/:id/uni/role/:role/', handleGetUserUnisByRole);
-
+    
     // Student
     app.post('/student/', /* userGuard, roleGuard('service'), */ handleAddStudent);
     // app.post('/uni/:university/student', handleAddStudent);
@@ -79,7 +81,8 @@ export default function (app: Express) {
     app.patch('/student/:id/', handleUpdateStudent);
     app.patch('/student/:id/exam/', handleAddExamsToStudent);
     app.delete('/student/:id/exam/', removeExamFromStudent);
-
+    app.get('/student/:id/grade/', handleGetStudentGrades);
+    
     // added here...:
     app.patch('/subject/student/:id/', handleAddStudentToSubjects);
     app.delete('/subject/student/:id/', handleRemoveStudentFromSubject);
@@ -98,6 +101,7 @@ export default function (app: Express) {
     app.delete('/professor/:id/uni/', handleRemoveUniFromProfessor);
     app.patch('/professor/:id/subject/', handleAddSubjectsToProfessor);
     app.delete('/professor/:id/subject/', handleRemoveProfessorFromUni);
+    app.get('/professor/:id/grade/', handleGetProfessorGrades);
 
     // Departments
     app.post('/uni/:uni/department/', handleAddDepartment);
@@ -150,4 +154,5 @@ export default function (app: Express) {
     app.post('/service/', handleAddService);
     app.get('/uni/:id/service/', handleGetServices); // uni services...
     app.delete('/service/:id/'); // <-- IMPLEMENT THIS...
+    app.get('/service/:id/grade/', handleGetServiceGrades);
 }

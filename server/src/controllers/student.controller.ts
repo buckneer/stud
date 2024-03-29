@@ -1,9 +1,10 @@
-import Student, { StudentDocument } from './../models/student.model';
+import Student from './../models/student.model';
 import { Request, Response } from "express";
 import log from "../logger";
 import { addStudent, deleteStudent, getStudent, getStudents } from "../services/student.service";
 import { newResponse } from "../utils";
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
+import { getGradesByRole } from '../services/grade.service';
 
 export async function handleAddStudent(req: Request, res: Response) {
     try {
@@ -125,6 +126,17 @@ export async function removeExamFromStudent(req: Request, res: Response) {
         let { exam } = req.body;
 
         let resp = removeFromModelArray(Student, id, 'exams', exam);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetStudentGrades(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+
+        let resp = await getGradesByRole(id, Student);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

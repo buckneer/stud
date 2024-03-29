@@ -2,6 +2,7 @@ import Professor, { ProfessorDocument } from '../models/professor.model';
 import { Request, Response } from "express";
 import { addProfessor, updateProfessor, getProfessor, getProfessors } from '../services/professor.service';
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
+import { getGradesByRole } from '../services/grade.service';
 
 export async function handleAddProfessor(req: Request, res: Response) {
     try {       
@@ -123,6 +124,17 @@ export async function handleRemoveUniFromProfessor(req: Request, res: Response) 
         let { university } = req.body;
 
         let resp = await removeFromModelArray(Professor, id, 'universities', university);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetProfessorGrades(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+
+        let resp = await getGradesByRole(id, Professor);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
