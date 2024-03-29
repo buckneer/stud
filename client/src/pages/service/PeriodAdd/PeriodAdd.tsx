@@ -5,23 +5,26 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useAddPeriodMutation } from "../../../app/api/periodApiSlice";
 import Loader from '../../../components/Loader/Loader';
-
+import MutationState from '../../../components/MutationState/MutationState';
+import InputField from '../../../components/InputField/InputField';
 
 const PeriodAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
 	const { uni } = useParams();
 
-	type Option = {
-		value?: string;
-		label?: string
-	}
-
 	const periodOptions = [
-		{ value: "1", label: "Januar" },
-		{ value: "2", label: "Februar" },
+		{ value: "0", label: "Odaberite sami [vanredni]" },
+		{ value: "1", label: "Januarsko-februarski rok" },
+		{ value: "2", label: "Aprilski rok" },
+		{ value: "3", label: "Junski rok" },
+		{ value: "4", label: "Julski rok" },
+		{ value: "5", label: "Avgustovsko-septembarski rok" },
+		{ value: "6", label: "Oktobar I" },
+		{ value: "7", label: "Oktobar II" },
 	];
 
 	const [periodName, setperiodName] = useState("");
+	const [irregularPeriodName, setIrregularPeriodName] = useState("");
 	const [periodStart, setPeriodStart] = useState("");
 	const [periodEnd, setPeriodEnd] = useState("");
 	// const [exams, setExams] = useState("");
@@ -49,9 +52,6 @@ const PeriodAdd = () => {
 		// }
 
 		// await addPeriod({university: uni!, body})
-
-		// Link: http://localhost:3000/uni/65fafc2da919db458f7ed90d/department/65fcbc3cd45f1d327ffc4aee/period/add
-
 	};
 
 
@@ -71,50 +71,26 @@ const PeriodAdd = () => {
 						<div className='form-header'>
 							<div className="form-title">Novi Ispitni rok</div>
 							<div className="form-desc" >Kreiranje novog ispitnog roka</div>
-							{
-								isaddPeriodAddLoading ? <div className="">Loader ide ovde...</div> : null
-							}
-							{
-								isaddPeriodAddSuccess ?
-									<div className="w-full flex justify-center">
-										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspesno dodat profesor!</div>
-									</div>
-									: null
-							}
-							{
-								isaddPeriodAddError ?
-									<div className="w-full flex justify-center">
-										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom registracije profesora!</div>
-									</div>
-									: null
-							}
+							<MutationState
+								isLoading={isaddPeriodAddLoading}
+								isSuccess={isaddPeriodAddSuccess}
+								successMessage='Uspesno dodat profesor!'
+								isError={isaddPeriodAddError}
+								errorMessage='Greska prilikom registracije profesora!'
+							/>
 						</div>
 						<form onSubmit={handleAddPeriod}>
-							<div className='form-control mb-5'>
-								<Select onChange={(e: any) => setperiodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' isClearable isSearchable options={periodOptions} />
+							<div className='form-control'>
+								<Select onChange={(e: any) => setperiodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' required isClearable isSearchable options={periodOptions} />
 							</div>
-							<div className='form-control mb-5'>
-								<label htmlFor="periodStart" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-									<input
-										type="date" id="periodStart" placeholder="Pocetak roka" value={periodStart} onChange={(e) => setPeriodStart(e.target.value)} autoComplete='off'
-										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-									/>
-									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Pocetak ispitnog roka
-									</span>
-								</label>
-							</div>
-							<div className='form-control mb-5'>
-								<label htmlFor="periodEnd" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-									<input
-										type="date" id="periodEnd" placeholder="Kraj roka" value={periodEnd} onChange={(e) => setPeriodEnd(e.target.value)} autoComplete='off'
-										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-									/>
-									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Zavrsetak ispitnog roka
-									</span>
-								</label>
-							</div>
+							{
+								periodName === "0" &&
+								<>
+									<InputField id='periodNameVandredni' type='text' name='Unesite vandredni rok' inputVal={irregularPeriodName} setVal={(e) => setIrregularPeriodName(e.target.value)} />
+								</>
+							}
+							<InputField id='periodStart' type='date' name='Pocetak ispitnog roka' inputVal={periodStart} setVal={(e) => setPeriodStart(e.target.value)} />
+							<InputField id='periodEnd' type='date' name='Zavrsetak ispitnog roka' inputVal={periodEnd} setVal={(e) => setPeriodEnd(e.target.value)} />
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Ispitni Rok</button>
 							</div>
@@ -124,7 +100,6 @@ const PeriodAdd = () => {
 
 			</>
 	}
-
 	return (
 		<>
 			{content}

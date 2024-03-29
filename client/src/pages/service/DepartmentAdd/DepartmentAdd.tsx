@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
 import { useAddDepartmentMutation } from '../../../app/api/departmentApiSlice';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import { useAddUniDepartmentMutation } from '../../../app/api/uniApiSlice';
+import MutationState from '../../../components/MutationState/MutationState';
 
 const DepartmentAdd = () => {
-	
+
 	const session = useSelector((state: RootState) => state.session);
 	const { uni } = useParams();
 
@@ -52,19 +52,18 @@ const DepartmentAdd = () => {
 				name
 			};
 			const result = await AddDepartment({ university: uni!, body }).unwrap();
-			
+
 			// @ts-ignore 
-			const resultBody: any = { departments: [result._id]};
-			
+			const resultBody: any = { departments: [result._id] };
+
 			// @ts-ignore
-			await AddUniDepartment({university: uni!, body: resultBody});
+			await AddUniDepartment({ university: uni!, body: resultBody });
 
 		} catch (e: any) {
 			console.log(e);
 		}
-
-		// Link: http://localhost:3000/uni/660189a5cef5fd1671d87ded/department/add
 	};
+
 	let content: any;
 
 	if (isDepartmentLoading) {
@@ -77,24 +76,14 @@ const DepartmentAdd = () => {
 						<div className='form-header'>
 							<div className="form-title">Novi Odsek</div>
 							<div className="form-desc" >Kreiranje novog Odseka</div>
-
-							{
-								isDepartmentAddLoading ? <div className="">Loader ide ovde...</div> : null
-							}
-							{
-								isDepartmentAddSuccess ?
-									<div className="w-full flex justify-center">
-										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspesno dodat odsek!</div>
-									</div>
-									: null
-							}
-							{
-								isDepartmentAddError ?
-									<div className="w-full flex justify-center">
-										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom registracije odseka!</div>
-									</div>
-									: null
-							}
+							<MutationState
+								isLoading={isDepartmentAddLoading || isUniDepartmentAddLoading}
+								isSuccess={isDepartmentAddSuccess && isUniDepartmentAddSuccess}
+								isError={isDepartmentAddError || isUniDepartmentAddError}
+								// @ts-ignore
+								errorMessage={isDepartmentAddError?.data?.message || isUniDepartmentAddError?.data?.message || 'Greska prilikom registracije odseka!'}
+								successMessage='Uspesno dodat odsek!'
+							/>
 						</div>
 						<form onSubmit={handleAddDepartment} >
 							<div className='form-control'>

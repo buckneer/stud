@@ -27,7 +27,7 @@ const SubjectAdd = () => {
 		isSuccess: isUniSuccess,
 		isError: isUniError
 	} = useGetUniQuery(uni!, {
-		skip: !uni  || !session.accessToken
+		skip: !uni || !session.accessToken
 	});
 
 	const {
@@ -59,15 +59,14 @@ const SubjectAdd = () => {
 	const handleSubjectAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-
-		console.log(name);
-
+		
 		// try {
 		// 	const body = {
 		// 		name, code, department, professors, university: uni
-		// 	}
+		// }
 
-		// 	const result = await addSubject(body).unwrap();
+		// const result = await addSubject(body).unwrap();
+		
 		// } catch (e: any) {
 		// 	console.error(e);
 		// }
@@ -93,29 +92,20 @@ const SubjectAdd = () => {
 						/>
 					</div>
 					<form className='flex flex-col' onSubmit={handleSubjectAdd}>
+						<InputField id='subjectName' type='text' name='Ime Predmeta' inputVal={name} setVal={(e) => setName(e.target.value)} />
+						<InputField id='code' type='text' name='Kod Predmeta' inputVal={code} setVal={(e) => setCode(e.target.value)} />
 						<div className='form-control'>
-							<InputField id='subjectName' type='text' name='Ime Predmeta' inputVal={name} setVal={(e) => setName(e.target.value)} />
-						</div>
-						<div className='form-control'>
-							<InputField id='code' type='text' name='Kod Predmeta' inputVal={code} setVal={(e) => setCode(e.target.value)} />
-						</div>
-						
-						<div className='form-control'>
-							<Select onChange={(e: any) => setDepartment(e?.value)} isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
+							<Select onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
 								return { value: item._id, label: item.name };
 							})} />
 						</div>
 						<div className='form-control'>
-							<Select onChange={(e: any) => setProfessors(e?.value)} isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
+							<Select onChange={(e: any) => setProfessors(e?.value)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
 								return { value: item._id, label: item.user.name };
 							})} />
 						</div>
-						<div className='form-control'>
-							<InputField id='espb' type='number' name='Broj Espb' inputVal={espb} setVal={(e) => setEspb(e.target.value)} />
-						</div>
-						<div className='form-control'>
-							<InputField id='semestar' type='number' name='Semestar' inputVal={currentSemester} setVal={(e) => setCurrentSemester(e.target.value)} />
-						</div>
+						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb} setVal={(e) => setEspb(e.target.value)} />
+						<InputField id='semestar' type='number' name='Semestar' inputVal={currentSemester} setVal={(e) => setCurrentSemester(e.target.value)} />
 						<div className='footer flex items-center justify-center flex-col'>
 							<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isAddSubjectSuccess}>Kreiraj Studenta</button>
 						</div>
@@ -124,7 +114,6 @@ const SubjectAdd = () => {
 
 			</div>
 	}
-
 	return (
 		<>
 			{content}

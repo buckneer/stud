@@ -8,8 +8,8 @@ import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import Loader from '../../../components/Loader/Loader';
-import { CircleX } from "lucide-react";
 import MutationState from '../../../components/MutationState/MutationState';
+import InputField from '../../../components/InputField/InputField';
 
 type Option = {
 	value?: string;
@@ -119,7 +119,7 @@ const ProfessorAdd = () => {
 			// @ts-ignore
 			await addProfToSub({ professor: result.id, body: subjectBody });
 
-			const uniBody: any = { universities: [ university ] }
+			const uniBody: any = { universities: [university] }
 			// @ts-ignore
 			await addUniToProf({ professor: result.id, body: uniBody });
 		} catch (e: any) {
@@ -128,7 +128,7 @@ const ProfessorAdd = () => {
 	}
 
 	const handleRemoveUser = () => {
-		if(location?.state?.user) {
+		if (location?.state?.user) {
 			// @ts-ignore
 			fetchGetUsers({ university, role: 'professor' })
 			window.history.replaceState({}, '')
@@ -138,7 +138,7 @@ const ProfessorAdd = () => {
 
 	let content: any;
 
-	if (isSubjectsLoading || isUsersLoading || isUserLoading) {
+	if (isSubjectsLoading || isUsersLoading || isUserLoading || isAddUniToProfLoading) {
 		content = <Loader />;
 	} else if (isSubjectsSuccess && (isUsersSuccess || location?.state?.for === 'professor')) {
 
@@ -149,66 +149,30 @@ const ProfessorAdd = () => {
 						<div className='form-header'>
 							<div className="form-title">Novi Profesor</div>
 							<div className="form-desc" >Kreiranje novog profesora</div>
-								<MutationState 
-									isLoading={isProfessorAddLoading || isAddProfToUniLoading || isAddProfToSubLoading}
-									isSuccess={isProfessorAddSuccess && isAddProfToUniSuccess && isProfToSubSuccess}
-									successMessage='Uspešno dodat profesor!'
-									isError={isProfessorAddError || isAddProfToUniError || isProfToSubError}
-									errorMessage='Greška prilikom registracije profesora!'
-								/>
+							<MutationState
+								isLoading={isProfessorAddLoading || isAddProfToUniLoading || isAddProfToSubLoading}
+								isSuccess={isProfessorAddSuccess && isAddProfToUniSuccess && isProfToSubSuccess && isAddUniToProfSuccess}
+								successMessage='Uspešno dodat profesor!'
+								isError={isProfessorAddError || isAddProfToUniError || isProfToSubError || isAddUniToProfError}
+								errorMessage='Greška prilikom registracije profesora!'
+							/>
 						</div>
 						<form onSubmit={handleAddProfessor}>
 							{
-								!user ? 
+								!user ?
 									<div className='form-control'>
-										<Select onChange={(e: any) => setUser(e?.value)} isClearable isSearchable  placeholder="Izaberite korisnika" className='w-full outline-none' options={usersData!.map((item) => {
+										<Select onChange={(e: any) => setUser(e?.value)} required isClearable isSearchable placeholder="Izaberite korisnika" className='w-full outline-none' options={usersData!.map((item) => {
 											return { value: item._id, label: item.name };
 										})} />
 									</div> :
 									<>
-										<div className='form-control relative'>
-											{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
-											<label htmlFor="professorName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-												<input
-													type="text" id="professorName" placeholder="Ime profesora" value={userData?.name} disabled autoComplete='off'
-													className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-												/>
-												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-													Ime Profesora
-												</span>
-												<button className='absolute right-5' onClick={handleRemoveUser}>
-													<CircleX />
-												</button>
-											</label>
-										</div>
-										<div className='form-control'>
-											{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
-											<label htmlFor="professorEmail" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-												<input
-													type="text" id="professorEmail" placeholder="E-adresa profesora" value={userData?.email} disabled autoComplete='off'
-													className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-												/>
-												<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-													E-adresa Profesora
-												</span>
-											</label>
-										</div>
+										<InputField id="professorName" name="Ime Profesora" type="text" inputVal={userData?.name} disabled button buttonAction={handleRemoveUser} />
+										<InputField id="professorEmail" name="E-adresa Profesora" type="text" inputVal={userData?.email} disabled />
 									</>
 							}
+							<InputField id="profesorId" name="Zvanje profesora" type="text" inputVal={title} setVal={(e) => setTitle(e.target.value)} />
 							<div className='form-control'>
-								{/* Mora state da se napravi za userId, ako ne postoji, da mora da selektuje userID (nije jos implementiran get req) */}
-								<label htmlFor="profesorId" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-									<input
-										type="text" id="profesorId" placeholder="Zvanje profesora" value={title} onChange={(e) => setTitle(e.target.value)} autoComplete='off' required
-										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-									/>
-									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Zvanje profesora
-									</span>
-								</label>
-							</div>
-							<div className='form-control'>
-								<Select onChange={handleChange2} placeholder="Izaberite predmete" className='w-full outline-none' isMulti options={subjectsData.map((item) => {
+								<Select onChange={handleChange2} placeholder="Izaberite predmete" className='w-full outline-none' required isMulti options={subjectsData.map((item) => {
 									return { value: item._id, label: item.name };
 								})} />
 							</div>
@@ -220,7 +184,7 @@ const ProfessorAdd = () => {
 				</div>
 			</>
 	}
-	
+
 	useEffect(() => {
 		document.title = 'Dodaj profesora | Stud'
 		if (location?.state?.user && location?.state?.for === 'professor') {
@@ -233,7 +197,7 @@ const ProfessorAdd = () => {
 
 	return (
 		<>
-			{ content }
+			{content}
 		</>
 	)
 }
