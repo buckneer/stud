@@ -84,6 +84,12 @@ const userApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'],
 		}),
+		getUserUnisRole: builder.query <unknown, { user: string, role: string }> ({
+			query: ({ user, role }) => ({
+				url: `/user/${user}/uni/role/${role}/`
+			}),
+			providesTags: (result, error) => (error) ? [] : ['UserUni'],
+		})
 	})
 });
 
@@ -96,5 +102,6 @@ export const {
 	useRemoveUniFromUserMutation,
 	useGetPendingQuery,
 	useLazyGetPendingQuery,
-	useDeleteUserMutation
+	useDeleteUserMutation,
+	useGetUserUnisRoleQuery
 } = userApiSlice

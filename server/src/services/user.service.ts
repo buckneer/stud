@@ -235,6 +235,29 @@ export const getPendingUsers = async (university: string, role: string) => {
 
 }
 
+export const getUserUnisByRole = async (_id: string, role: string) => {
+	const user = await User.findOne({ _id });
+
+	// change err msg
+	if(!user) throw newError(404, 'Ne postoji korisnik sa tim ID-em!');
+
+	const roleToCollectionMap = {
+		'student': 'students',
+		'professor': 'professors',
+		'service': 'services'
+	};
+	
+	// @ts-ignore
+	const collectionName = roleToCollectionMap[role];
+	
+	if(!collectionName) throw newError(400, 'Pogrešan role!');
+	
+	return Service.find({ user: _id }).populate({
+		path: 'university',
+		select: '_id name'
+	});
+}
+
 export const deleteUserById = async (_id: string) => {
 	await User.findOneAndDelete({ _id });
 	await Student.deleteMany({ user: _id });

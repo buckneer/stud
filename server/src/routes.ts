@@ -6,6 +6,7 @@ import {
     handleAddUnisToUser,
     handleGetPendingUsers,
     handleGetUser,
+    handleGetUserUnisByRole,
     handleLogin,
     handleLogout,
     handleRefresh,
@@ -67,7 +68,7 @@ export default function (app: Express) {
     app.delete('/uni/:id/department/', handleRemoveDepartmentFromUni);
     app.patch('/uni/:id/service/', handleAddServicesToUni);
     app.delete('/uni/:id/service/', handleRemoveServiceFromUni);
-
+    app.get('/user/:id/uni/role/:role/', handleGetUserUnisByRole);
 
     // Student
     app.post('/student/', /* userGuard, roleGuard('service'), */ handleAddStudent);
