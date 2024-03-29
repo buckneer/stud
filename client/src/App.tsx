@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from './app/store';
 import UniAdd from './pages/admin/UniAdd/UniAdd';
 import Container from './components/container';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 import SetPassword from './pages/SetPassword/SetPassword';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import NotFound from "./pages/NotFound/NotFound";
@@ -32,7 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className='flex flex-col h-screen'>
-        {/* Prevents navbar from rendering if user is not logged in... */}
+        {/* Prevents Navbar from rendering if user is not logged in... */}
         { session.refreshToken ? <Navbar /> : null }
 
         <Container>
