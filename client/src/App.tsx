@@ -33,7 +33,8 @@ function App() {
     <BrowserRouter>
       <div className='flex flex-col h-screen'>
         {/* Prevents Navbar from rendering if user is not logged in... */}
-        { session.refreshToken ? <Navbar /> : null }
+        {/*{ session.refreshToken ? <Navbar /> : null }*/}
+        <Navbar />
 
         <Container>
           <Routes>
