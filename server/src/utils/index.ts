@@ -29,9 +29,9 @@ export const sendMessage = async (message: MailMessage) => {
         to: message.to, // list of receivers
         subject: message.subject, // Subject line
         text: message.text, // plain text body
-        
+
     });
-    
+
     console.log("Message sent: %s", info.messageId);
 }
 
@@ -42,7 +42,7 @@ export const newError = (status?: number, message?: string, options?: any) => {
         status: status || 500,
         message: message || 'Internal Server Error',
         ...options
-    } 
+    }
 }
 
 export const newResponse = (message: string, status: number = 200, options?: any) => {
@@ -50,7 +50,7 @@ export const newResponse = (message: string, status: number = 200, options?: any
         status,
         message,
         ...options
-    } 
+    }
     :
     {
         status,
@@ -58,3 +58,21 @@ export const newResponse = (message: string, status: number = 200, options?: any
         ...options
     }
 }
+
+export function hasThirtyMinutesPassed(time: string): boolean {
+    // Parse the date string into a Date object
+    const dbDate: Date = new Date(time);
+
+    // Get the current date and time
+    const currentDate: Date = new Date();
+
+    // Calculate the difference in milliseconds
+    const difference: number = currentDate.getTime() - dbDate.getTime();
+
+    // Convert the difference from milliseconds to minutes
+    const differenceInMinutes: number = difference / (1000 * 60);
+
+    // Return true if 30 minutes have passed, false otherwise
+    return differenceInMinutes >= 30;
+}
+

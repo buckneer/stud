@@ -3,12 +3,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import Session from "../models/session.model";
-import { newError, newResponse, sendMessage } from "../utils";
+import {hasThirtyMinutesPassed, newError, newResponse, sendMessage} from "../utils";
 import { randomBytes } from 'crypto';
 import { getServiceByUserId } from "./service.service";
 import Student from "../models/student.model";
 import Professor from "../models/professor.model";
 import Service from "../models/service.model";
+import Reset from "../models/reset.model";
 
 export const registerUser = async (serviceId: string, user: UserDocument) => {
 	let userExists = await User.findOne({ email: user.email });
@@ -38,12 +39,22 @@ export const sendPasswordMail = async (email: string) => {
 
 		if (!user) throw newError(404, 'Korisnik nije pronadjen!');
 
-		user.code = code;
-		await user.save();
+		let reset = {
+			code,
+			user: user._id,
+			active: true
+		}
+
+		let newReset = new Reset({...reset});
+
+		await newReset.save();
+
+		// user.code = code;
+		// await user.save();
 
 		// UNCOMMENT THIS AFTER TESTING...
 		// sendMessage({ to: email, subject: 'Nova lozinka', text: `Kod za kreiranje nove lozinke je: ${code} ` })
-		
+
 		return newResponse(`Poruka je poslata, kod: ${code}`);
 	} catch (e: any) {
 		throw e;
@@ -51,13 +62,26 @@ export const sendPasswordMail = async (email: string) => {
 }
 
 export const setPassword = async (email: string, password: string, code: string) => {
-	let user = await User.findOne({ email, code });
-	if (!user) throw newError(404, 'Korisnik ne postoji i/ili je kod neispravan!');
-	
+	// TODO test this tomorrow for time (30m currently)
+	let user = await User.findOne({ email });
+	if (!user) throw newError(404, 'Korisnik ne postoji');
+
+	let resetObj = await Reset.findOne({user: user._id, code});
+	if(!resetObj) throw newError(404, "Korisnik ne postoji");
+
+	if(resetObj.active != true) throw newError(401, "Kod je istekao");
+
+	let expired = hasThirtyMinutesPassed(resetObj.createdAt);
+	if(expired) {
+		throw newError(401, "Kod je istekao");
+	}
+	resetObj.active = false;
+
 	user.password = await bcrypt.hash(password, 10);
 	user.confirmed = true;
 
 	await user.save();
+	await resetObj.save();
 
 	return {
 		status: 200,
