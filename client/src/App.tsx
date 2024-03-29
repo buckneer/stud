@@ -24,6 +24,7 @@ import Container from './components/container';
 import Navbar from './components/navbar';
 import SetPassword from './pages/SetPassword/SetPassword';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -67,7 +68,7 @@ function App() {
 
             </Route>
 
-
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>
       </div>
