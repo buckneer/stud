@@ -1,4 +1,5 @@
-import { ServiceDocument } from "../models/service.model";
+import Service, { ServiceDocument } from "../models/service.model";
+import { getGradesByRole } from "../services/grade.service";
 import { addService, getServices, updateService } from "../services/service.service";
 import { Request, Response } from "express";
 
@@ -36,6 +37,17 @@ export async function handleGetServices(req: Request, res: Response) {
         let resp: any = await getServices(id);
         
         return res.send(resp);
+    } catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetServiceGrades(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+
+        let resp = await getGradesByRole(id, Service);
+        return res.status(200).send(resp);
     } catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }

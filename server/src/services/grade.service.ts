@@ -4,7 +4,7 @@ import { newError, newResponse } from "../utils";
 import Professor from "../models/professor.model";
 import Service from "../models/service.model";
 import Student from "../models/student.model";
-
+import { Model } from 'mongoose';
 
 export const addGrade = async (data: GradeDocument) => {
     // let subject = await Subject.findOne({_id: data.subject});
@@ -54,4 +54,29 @@ export const updateGrade = async (_id: string, data: any) => {
     if(!updated) throw newError(500, 'Internal Server Error');
 
     return newResponse('Uspešno ažuriranje ocene');
+}
+
+export const getGradesByRole = async (_id: string, ModelParam: Model<any>, confirmed: boolean = true) => {
+    const collectionObj = {
+        students: 'student',
+        professors: 'professor',
+        services: 'service'
+    };
+
+    let userRole = await ModelParam.find({ _id });
+
+    if(!userRole) throw newError(404, 'Greška prilikom pristupanja ocenama!');
+    
+    // @ts-ignore
+    const role = collectionObj[ModelParam.collection.name];
+
+    if(!role) throw newError(404, 'Greška prilikom pristupanja ocenama!');
+
+    return Grade.find({
+        [role]: _id,
+        confirmed
+    }).populate({
+        path: 'professor subject service student',
+        select: '_id name'
+    });
 }

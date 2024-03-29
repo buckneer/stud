@@ -57,3 +57,4 @@ export async function handleUpdateGrade(req: Request, res: Response) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
+

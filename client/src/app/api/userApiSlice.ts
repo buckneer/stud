@@ -89,7 +89,7 @@ const userApiSlice = apiSlice.injectEndpoints({
 				url: `/user/${user}/uni/role/${role}/`
 			}),
 			providesTags: (result, error) => (error) ? [] : ['UserUni'],
-		})
+		}),
 	})
 });
 
