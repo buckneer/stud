@@ -3,6 +3,7 @@ import {
 	deleteUserById,
 	getPendingUsers,
 	getUser,
+	getUserUnisByRole,
 	loginUser,
 	logoutUser,
 	refreshAccessToken,
@@ -179,6 +180,17 @@ export async function handleUserDelete(req: Request, res: Response) {
 		console.log(req.body);
 		let resp = await deleteUserById(user);
 
+		return res.status(200).send(resp);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleGetUserUnisByRole(req: Request, res: Response) {
+	try {
+		const { id, role } = req.params;
+
+		let resp = await getUserUnisByRole(id, role);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');

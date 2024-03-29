@@ -1,13 +1,14 @@
 // import ReactCodeInput from 'react-code-input';
 import React, { useEffect, useState } from 'react'
 import InputField from '../../components/InputField/InputField';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CodeInput from '../../components/CodeInput/CodeInput';
 import { useSetNewPasswordMutation } from '../../app/api/userApiSlice';
 import MutationState from '../../components/MutationState/MutationState';
 
 const SetPassword = () => {
-  const { code } = useParams();
+  const { code } = useParams(); 
+  const navigate = useNavigate();
 
   const [ insertCode, setInsertCode ] = useState(false);
   const [ password, setPassword ] = useState('');
@@ -42,6 +43,11 @@ const SetPassword = () => {
       }
 
       const result = await setNewPassword(body).unwrap();
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
+
     } catch (e: any) {
       console.error(e);
     }
