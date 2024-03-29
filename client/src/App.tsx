@@ -39,16 +39,16 @@ function App() {
             {/*  GROUP 1 */}
             <Route path="/password/:code" element={<SetPassword />} />
             <Route path="/password" element={<SetPassword />} />
-            
+
             {/* GROUP 2 */}
             <Route path='/reset/password/' element={<ResetPassword />} />
             <Route path='/reset/password/:email' element={<ResetPassword />} />
-            
+
             <Route path='/login' element={<Login />} />
 
             {/* User has to be logged in to access these */}
             <Route element={<TokenRequired />}>
-              <Route path='/' element={<Home />} />
+              <Route path='/uni/:uni/' element={<Home />} />
               {/* TODO: check if user is in uni :uni service here... */}
               <Route path='/uni/:uni/register' element={<Register/>} />
               <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />

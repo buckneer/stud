@@ -36,10 +36,13 @@ const Login = () => {
 			};
 
 			const result = await login(body).unwrap();
-
+			let tempUni = "66057fc6f97b2ad52a249310"
 			setTimeout(() => {
 				// @ts-ignore
-				(location?.state?.from) ? navigate(location.state.from) : navigate('/');
+				// TODO get university where this user is service. (FROM service model)
+				// console.log("Login result", result.user.universities);
+
+				(location?.state?.from) ? navigate(location.state.from) : navigate(`/uni/${tempUni}`);
 			}, 1000);
 
 		} catch (error: any) {
@@ -62,7 +65,7 @@ const Login = () => {
 									<div className="form-header">
 										<div className="form-title">Prijava</div>
 										<div className="form-desc" >Prijavite se na Stud</div>
-										<MutationState 
+										<MutationState
 											isLoading={isLoginLoading}
 											isSuccess={isLoginSuccess}
 											isError={isLoginError}

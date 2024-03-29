@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
   Book,
   CalendarCheck,
@@ -15,18 +15,23 @@ import Loader from "../../components/Loader/Loader";
 import UserItem from "../../components/UserItem/UserItem";
 import {Helmet} from "react-helmet";
 import SidebarItem from "../../components/SidebarItem/SidebarItem";
+import {useParams} from "react-router-dom";
+import UserContent from "../../components/UserContent/UserContent";
 
 const university: string = "65fafc2da919db458f7ed90d";
 const role: string = "student";
 export default function Home() {
 
-  const {
-    data,
-    isLoading,
-    isSuccess,
-    isError
-  } = useGetPendingQuery({university, role});
 
+  const { uni } = useParams();
+  const [selectedData, setSelectedData] = useState(0);
+  const titles = ["Studenti", "Profesori", "STUD Sluzba"];
+  const engRoles = ["student", "professor", "service"];
+
+
+  const handleDataChange = (changeTo: number) => {
+    setSelectedData(changeTo);
+  }
 
   return (
     <div className="bg-white">
@@ -34,22 +39,7 @@ export default function Home() {
         <title>Početna | Stud</title>
       </Helmet>
       <div className="flex h-full">
-        <div className="lists-container flex-1 h-full overflow-y-scroll py-5">
-          <div className="list-header flex justify-between p-5 ">
-            <h1 className="font-black text-3xl">Studenti</h1>
-            <div className="search-container">
-              <input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
-            </div>
-          </div>
-          <div className="lists grid grid-cols-3 gap-10 mx-5 overflow-y-auto">
-            {isLoading && <Loader />}
-            {isSuccess && (
-                data.map(user => (
-                    <UserItem user={user} university={university} role={role}/>
-                ))
-            )}
-          </div>
-        </div>
+        <UserContent title={titles[selectedData]} university={uni!} role={engRoles[selectedData]} />
         <div className='sidebar flex flex-col items-center divide-y-2 bg-slate-100 px-5 py-10'>
           <div className="flex flex-col items-center gap-5 px-5 py-2">
             <UserCircle size={100} />
@@ -58,9 +48,9 @@ export default function Home() {
           <div className="flex flex-col justify-between h-full">
             <div className="pt-5 w-full flex flex-col gap-2 divide-y-2">
               <div className="">
-                <SidebarItem name="Studenti" Icon={GraduationCap} />
-                <SidebarItem name="Profesori" Icon={User} />
-                <SidebarItem name="STUD Služba" Icon={FolderArchive} />
+                <SidebarItem name="Studenti" Icon={GraduationCap} active={selectedData == 0} to={0} changeData={handleDataChange} />
+                <SidebarItem name="Profesori" Icon={User} active={selectedData == 1}  to={1} changeData={handleDataChange} />
+                <SidebarItem name="STUD Služba" Icon={FolderArchive} active={selectedData == 2}  to={2} changeData={handleDataChange}/>
               </div>
               <div className="pt-1">
                 <SidebarItem name="Ispitni Rokovi" Icon={CalendarCheck} />

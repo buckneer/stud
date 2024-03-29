@@ -1,6 +1,6 @@
 
 import { handleAddGradesToProfessor, handleAddProfessor, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
-import { handleAddExamsToStudent, handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted, handleDeleteStudent, handleGetStudent, handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent } from "./controllers/student.controller";
+
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni, handleRemoveProfessorFromUni } from "./controllers/university.controller";
 import {
     handleAddUnisToUser,
@@ -22,6 +22,13 @@ import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } fr
 import { handleAddExam, handleAddGradesToExam, handleAddStudentsToExam, handleGetExam, handleGetExams, handleRemoveGradeFromExam, handleRemoveStudentFromExam, handleUpdateExam } from "./controllers/exam.controller";
 import { handleAddExamToPeriod, handleAddPeriod, handleGetPeriod, handleGetPeriods, handleRemoveExamFromPeriod, handleUpdatePeriod } from "./controllers/period.controller";
 import { handleAddService, handleGetServices } from "./controllers/service.controller";
+import {
+    handleAddExamsToStudent,
+    handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted,
+    handleDeleteStudent,
+    handleGetStudent,
+    handleGetStudents, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent
+} from "./controllers/student.controller";
 
 
 export default function (app: Express) {
