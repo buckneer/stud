@@ -23,14 +23,16 @@ interface GetPending {
 const userApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		// TODO change this type if needed
-		register: builder.mutation <{ id: string }, User>({
+		register: builder.mutation <{ id: string }, User> ({
 			query: (body) => ({
 				url: '/register/',
 				method: 'POST',
 				body
 			}),
 			// @ts-ignore
-			providesTags: (result, error) => (error) ? [] : ['User'],
+			invalidatesTags: (result, error) => (result) 
+			? ['User'] // TODO: add university here...
+			: [],
 		}),
 		sendPasswordMail: builder.mutation <unknown, User> ({
 			query: (body) => ({
@@ -50,7 +52,9 @@ const userApiSlice = apiSlice.injectEndpoints({
 			query: (id) => ({
 				url: `/user/${id}/`
 			}),
-			providesTags: (result, error) => (error) ? [] : ['User']
+			providesTags: (result, error, id) => (result) 
+				? [{ type: 'User' as const, id }]
+				: []
 		}),
 		addUniToUser: builder.mutation <unknown, AddUni> ({
 			query: ({ user, body }) => ({
@@ -58,7 +62,10 @@ const userApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'],
+			invalidatesTags: (result, error, arg) => (result && !error) 
+				? [{ type: 'User' as const, id: arg.user }, 
+					...arg.body.universities.map((uni: string) => ({ type: 'Uni', id: uni }))] 
+				: [],
 		}),
 		removeUniFromUser: builder.mutation <unknown, DelUni> ({
 			query: ({ user, body }) => ({
@@ -66,13 +73,18 @@ const userApiSlice = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				body
 			}),
-			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'] // remove this later
+			invalidatesTags: (result, error, arg) => (result && !error) 
+				? [{ type: 'User' as const, id: arg.user }] 
+				: [] // remove this later
 		}),
 		getPending: builder.query <User[], GetPending>({
 			query: ({ university, role}) => ({
 				url: `/uni/${university}/user/${role}/pending/`
 			}),
-			providesTags: (result, error) => (error) ? [] : ['Users'],
+			providesTags: (result, error, arg) => (result) 
+				? [...result.map((item: User) => ({ type: 'User' as const, id: item._id })), 
+					{ type: 'Uni', id: arg.university }] 
+				: [],
 		}),
 		deleteUser: builder.mutation <unknown, string> ({
 			query: (id) => ({
@@ -82,13 +94,18 @@ const userApiSlice = apiSlice.injectEndpoints({
 					user: id
 				}
 			}),
-			invalidatesTags: (result, error) => (error) ? [] : ['User', 'Users'],
+			invalidatesTags: (result, error, id) => (result) 
+			? [{ type: 'User' as const, id }]
+			: []
 		}),
-		getUserUnisRole: builder.query <unknown, { user: string, role: string }> ({
+		getUserUnisRole: builder.query <any[], { user: string, role: string }> ({
 			query: ({ user, role }) => ({
 				url: `/user/${user}/uni/role/${role}/`
 			}),
-			providesTags: (result, error) => (error) ? [] : ['UserUni'],
+			providesTags: (result, error, arg) => (result) 
+				? [ ...result.map((uni: string) => ({ type: 'Uni' as const, id: uni })),
+					 { type: 'Role' as const, id: arg.role } ]  // <- maybe delete this one...
+				: [],
 		}),
 	})
 });

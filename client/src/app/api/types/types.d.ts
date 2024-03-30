@@ -19,9 +19,9 @@ export interface Student {
 	user?: string | User;
 	studentId?: string;
 	modelNum?: string;
-	subjects?: string[];
+	subjects?: string[] | Subject[];
 	completedSubjects?: string[] | Subject[];
-	department?: string;
+	department?: string | Department;
 	degree?: string;
 	status?: string;
 	dateOfEnrollment?: string;
@@ -33,9 +33,9 @@ export interface Student {
 export interface Professor {
 	_id?: string;
 	title?: string;
-	user?: string;
-	subjects?: string[];
-	grades?: string[];
+	user?: string | User;
+	subjects?: string[] | Subject[];
+	grades?: string[] | Grade[];
 	universities?: string[] | Uni[];
 }
 
@@ -53,7 +53,7 @@ export interface Uni {
 export interface Department {
 	_id?: string;
 	name?: string;
-	university?: string;
+	university?: string | University;
 	students?: string[] | Student[];
 	professors?: string[] | Professor[];
 }
@@ -71,14 +71,14 @@ export interface Subject {
 
 export interface Grade {
 	_id?: string;
-	subject?: string; 
-	professor?: string;
+	subject?: string | Subject; 
+	professor?: string | Professor;
 	profesorGrade?: number;
-	service?: string; 
+	service?: string | Service; 
 	serviceGrade?: number;
 	confirmed?: boolean;
-	student: string;
-	period?: string; 
+	student: string | Student;
+	period?: string | Period; 
 }
 
 export interface Period {
@@ -86,24 +86,25 @@ export interface Period {
 	start?: string;
 	end?: string;
 	exams?: string[] | Exam[];
-	university?: string;
+	university?: string | University;
 }
 
 export interface Exam {
 	_id?: string;
 	date?: string;
 	students?: string[] | Student[];
-	subject?: string;
-	professor?: string //! Can be removed
+	subject?: string | Subject;
+	professor?: string | Professor //! Can be removed
 	grades?: string[] | Grade[];
-	period?: string;
+	period?: string | Period;
 	ended?: boolean;
+	university?: string | University;
 }
 
 export interface Service {
 	_id?: string;
-	user?: string;
-	university?: string;
+	user?: string | User;
+	university?: string | University;
 }
 
 // Uni API slice
