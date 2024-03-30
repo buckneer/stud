@@ -96,13 +96,13 @@ const uniApiSlice = apiSlice.injectEndpoints({
 					{ type: 'Role' as const, id: arg.body.service }] 
 				: [],
 		}),
-		getUniUsersByRole: builder.query <unknown[], { university: string, role: string }> ({
+		getRolesInUni: builder.query <any[], { role: string, university: string | undefined }> ({
 			query: ({ university, role }) => ({
-					url: `/uni/${university}/role/${role}`
+				url: `/uni/${university}/${role}`,
 			}),
 			providesTags: (result, error, arg) => (result) 
 				? [{ type: 'Uni' as const, id: arg.university }, 
-				{ type: 'Role' as const, id: arg.role }]
+				...result.map((elem: any) => ({ type: `${arg.role[0].toUpperCase()}${arg.role.slice(1)}` as const, id: elem._id }))]
 				: []
 		}),
 	})
@@ -117,4 +117,5 @@ export const {
 	useDeleteUniDepartmentMutation,
 	useAddUniServiceMutation,
 	useDeleteUniServiceMutation,
+	useGetRolesInUniQuery
 } = uniApiSlice;
