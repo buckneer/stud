@@ -8,6 +8,7 @@ export interface ExamDocument extends Document {
     grades?: Types.ObjectId[];
     period?: Types.ObjectId;
     ended?: boolean;
+    university?: boolean;
 }
 
 
@@ -18,7 +19,8 @@ const ExamSchema = new Schema({
     professor: {type: Schema.ObjectId, ref: 'Professor'},
     grades: [{type: Schema.ObjectId, ref: 'Grade'}],
     period: {type: Schema.ObjectId, ref: 'Period'},
-    ended: {type: Boolean, default: false}
+    university: {type: Schema.ObjectId, ref: 'University'},
+    ended: {type: Boolean, default: false},
 });
 
 const Exam = model<ExamDocument>('Exam', ExamSchema);

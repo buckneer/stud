@@ -22,25 +22,31 @@ interface DelPeriod {
 
 const periodApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addPeriod: builder.mutation <unknown, Period> ({
+		addPeriod: builder.mutation <{ id: string }, Period> ({
 			query: (body) => ({
 				url: '/period/',
 				method: 'POST',
 				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Period', 'Periods'],
+			invalidatesTags: (result, error) => (result) 
+				? ['Period'] 
+				: [],
 		}),
 		getPeriod: builder.query <Period, string> ({
 			query: (id) => ({
 				url: `/period/${id}/`
 			}),
-			providesTags: (result, error) => error ? [] : ['Period'],
+			providesTags: (result, error, id) => (result) 
+				? [{ type: 'Period' as const, id }] 
+				: [],
 		}),
 		getPeriods: builder.query <Period[], void> ({
 			query: () => ({
 				url: '/period/'
 			}),
-			providesTags: (result, error) => error ? [] : ['Periods'],
+			providesTags: (result, error) => (result) 
+				? [...result.map((period: Period) => ({ type: 'Period' as const, id: period._id }))] 
+				: [],
 		}),
 		updatePeriod: builder.mutation <unknown, UpdatePeriod> ({
 			query: ({ id, body }) => ({
@@ -48,7 +54,9 @@ const periodApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Period', 'Periods'],
+			invalidatesTags: (result, error, arg) => (result) 
+			? [{ type: 'Period' as const, id: arg.id }] 
+			: [],
 		}),
 		addPeriodExams: builder.mutation <unknown, PeriodExam> ({
 			query: ({ period, body }) => ({
@@ -56,7 +64,10 @@ const periodApiSlice = apiSlice.injectEndpoints({
 					method: 'PATCH',
 					body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Period', 'Periods', 'Exam', 'Exams'],
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Period' as const, id: arg.period }, 
+					...arg.body.exams.map((exam: string) => ({ type: 'Exam' as const, id: exam}))] 
+				: [],
 		}),
 		deletePeriodExam: builder.mutation <unknown, DelPeriod> ({
 			query: ({ period, body }) => ({
@@ -64,7 +75,9 @@ const periodApiSlice = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				body
 			}),
-			invalidatesTags: (result, error) => (error) ? [] :  ['Period', 'Periods', 'Exam', 'Exams'],
+			invalidatesTags: (result, error, arg) => (result) 
+			? [{ type: 'Period' as const, id: arg.period }, { type: 'Exam' as const, id: arg.body.exam }] 
+			: [],
 		})
 	})
 });

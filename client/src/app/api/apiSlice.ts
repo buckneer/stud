@@ -7,16 +7,10 @@ const url = 'http://localhost:1337';
 const mutex: Mutex = new Mutex();
 
 const tags: string[] = [ 
-	'Uni', 'Unis', 
-  'UniStudents', 'Student', 'Students', 
-  'Professor', 'Professors', 
-  'Department', 'Departments',
-  'Subject', 'Subjects',
-  'Service', 'Services',
-  'Grade', 'Grades',
-  'Exam', 'Exams',
-  'Period', 'Periods',
-  'User', 'Users'
+	'Uni', 'Student', 'Professor',
+  'Department', 'Subject', 'Service', 
+  'Grade', 'Exam', 'Period', 
+  'User', 'Role'
 ];
 
 const baseQuery = fetchBaseQuery({ 

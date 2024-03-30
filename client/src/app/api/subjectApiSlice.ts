@@ -42,25 +42,36 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects'],
+			invalidatesTags: (result, error, body) => (result) 
+				? ['Subject', { type: 'Department' as const, id: body.department }] 
+				: [],
 		}),
 		getSubject: builder.query <Subject, string> ({
 			query: (id) => ({
 				url: `/subject/${id}`
 			}),
-			providesTags: (result, error) => error ? [] : ['Subject'],
+			providesTags: (result, error, id) => (result) 
+				? [{ type: 'Subject' as const, id },
+					{ type: 'Department' as const, id: result.department }] 
+				: [],
 		}),
 		getDepSubjects: builder.query <Subject[], string> ({
 			query: (department) => ({
 				url: `/department/${department}/subject/`
 			}),
-			providesTags: (result, error) => error ? [] : ['Subjects'],
+			providesTags: (result, error, id) => (result) 
+				? [ ...result.map((subject: Subject) => ({ type: 'Subject' as const, id: subject._id })),
+				 { type: 'Department' as const, id }] 
+				: [],
 		}),
 		getUniSubjects: builder.query <Subject[], string> ({
 			query: (uni) => ({
 				url: `/uni/${uni}/subject/`
 			}),
-			providesTags: (result, error) => error ? [] : ['Subjects'],
+			providesTags: (result, error, uni) => (result) 
+			? [...result.map((subject: Subject) => ({ type: 'Subject' as const, id: subject._id })),
+				{ type: 'Uni' as const, id: uni }]
+			: [],
 		}),
 		updateSubject: builder.mutation <unknown, UpdateSubject> ({
 			query: ({ id, body }) => ({
@@ -68,7 +79,9 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects'],
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Subject' as const, id: arg.id }]
+				: [],
 		}),
 		addSubjectProfessors: builder.mutation <unknown, AddSubProf> ({
 			query: ({ subject, body }) => ({
@@ -76,7 +89,10 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects', 'Professor', 'Professors'],
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Subject' as const, id: arg.subject }, 
+				...arg.body.professors.map((prof: string) => ({ type: 'Professor' as const, id: prof }))] 
+				: [],
 		}),
 		deleteSubjectProfessor: builder.mutation <unknown, DelSubProf> ({
 			query: ({ subject, body }) => ({
@@ -84,7 +100,10 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Subject', 'Subjects', 'Professor', 'Professors'],
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Subject' as const, id: arg.subject }, 
+				{ type: 'Professor' as const, id: arg.body.professor }] 
+				: [],
 		}),
 		addRequiredSubjects: builder.mutation <unknown, AddReq> ({
 			query: ({ subject, body }) => ({
@@ -92,7 +111,9 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error) => (error) ? [] : ['Subject', 'Subjects'],
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Subject' as const, id: arg.subject }]
+				: [],
 		}),
 		deleteRequiredSubject: builder.mutation <unknown, DelReq> ({
 			query: ({ subject, body }) => ({
@@ -100,7 +121,9 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				body
 			}),
-			invalidatesTags: (result, error) => (error) ? [] : ['Subject', 'Subjects'],
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Subject' as const, id: arg.subject }] 
+				: [],
 		}),
 	})
 });

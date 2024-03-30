@@ -26,7 +26,7 @@ export const addUniversity = async (university: UniDocument) => {
     try {
         const newUni = new University({...university});
         const saved = await newUni.save();
-        return newResponse('Novi fakultet napravljen');
+        return saved;
     } catch(e: any) {
         throw e;
     }

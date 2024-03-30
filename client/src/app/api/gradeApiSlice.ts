@@ -11,21 +11,28 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 		addGrade: builder.mutation <unknown, Grade> ({
 			query: (body) => ({
 				url: '/grades/',
-				method: 'POST'
+				method: 'POST',
+				body
 			}),
-			invalidatesTags: (result, error) => error ? [] : ['Grade', 'Grades']
+			invalidatesTags: (result, error) => (result) 
+				? ['Grade'] 
+				: []
 		}),
 		getGrade: builder.query <Grade, string> ({
 			query: (id) => ({
 				url: `/grades/${id}/`
 			}),
-			providesTags: (result, error) => error ? [] : ['Grade']
+			providesTags: (result, error, id) => (result) 
+				? [{ type: 'Grade' as const, id }] 
+				: []
 		}),
 		getGrades: builder.query <Grade[], void> ({
 			query: () => ({
 				url: '/grades/'
 			}),
-			providesTags: (result, error) => error ? [] : ['Grades']
+			providesTags: (result, error) => (result) 
+				? ['Grades'] 
+				: []
 		}),
 		updateGrade: builder.mutation <unknown, UpdateGrade> ({
 			query: ({ id, body }) => ({
@@ -33,13 +40,18 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error) => (error) ? [] : ['Grade', 'Grades'],
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Grade' as const, id: arg.id }]
+				: [],
 		}),
 		getGradesByRole: builder.query <Grade[], { role: string; id: string }> ({
 			query: ({ role, id }) => ({
 				url: `/${role}/${id}/grade/`
 			}),
-			providesTags: (result, error) => (error) ? [] : ['Grades'],
+			providesTags: (result, error, arg) => (result) 
+				? [...result.map((grade: Grade) => ({ type: 'Grade' as const, id: grade._id })),
+					{ type: 'Role' as const, id: arg.role }] // remove this perhaps
+				: [],
 		}),
 	})
 });

@@ -14,7 +14,7 @@ export const addPeriod = async (data: PeriodDocument) => {
 	
 	if(!saved) return newError(500, 'Internal Server Error');
 
-	return newResponse('Ispitni rok je sačuvan');
+	return newResponse('Ispitni rok je sačuvan', 200, { id: saved._id });
 
 }
 
