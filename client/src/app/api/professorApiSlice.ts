@@ -13,7 +13,7 @@ const professorApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error, body) => (result) 
 				// @ts-ignore
-				? ['Professor', ...body.universities.map((uni: string) => ({ type: 'Uni' as const, id: uni }))] 
+				? ['Professor'/*, ...body.universities.map((uni: string) => ({ type: 'Uni' as const, id: uni }))*/] 
 				: [],
 		}),
 		getProfessor: builder.query <Professor, string> ({

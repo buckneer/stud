@@ -43,7 +43,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error, body) => (result) 
-				? ['Subject', { type: 'Department' as const, id: body.department }] 
+				? ['Subject'] 
 				: [],
 		}),
 		getSubject: builder.query <Subject, string> ({

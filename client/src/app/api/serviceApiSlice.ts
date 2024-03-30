@@ -10,7 +10,7 @@ const serviceApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error, body) => (result) 
-				? [{ type: 'Uni' as const, id: body.university }, 'Service'] 
+				? ['Service', /*{ type: 'Uni' as const, id: body.university },*/] 
 				: [],
 		}),
 		deleteService: builder.mutation <unknown, string> ({
