@@ -132,3 +132,15 @@ export async function handleRemoveRequiredFromSubject(req: Request, res: Respons
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
+
+export async function handleGetSubjectRole(req: Request, res: Response) {
+    try {
+        let { id, role } = req.params;
+
+        if(!role) {
+            return res.status(400).send({ message: 'Rola je neophodna!++++++++++++++++++++++++++++++++++++++++' })
+        }
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}

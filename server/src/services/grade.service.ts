@@ -5,6 +5,7 @@ import Professor from "../models/professor.model";
 import Service from "../models/service.model";
 import Student from "../models/student.model";
 import { Model } from 'mongoose';
+import Exam from "../models/exam.model";
 
 export const addGrade = async (data: GradeDocument) => {
     // let subject = await Subject.findOne({_id: data.subject});

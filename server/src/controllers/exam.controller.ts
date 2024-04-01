@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addExam, getExam, getExams, updateExam } from "../services/exam.service";
+import { addExam, getExam, getExams, getGradesByExam, updateExam } from "../services/exam.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Exam from "../models/exam.model";
 
@@ -100,5 +100,31 @@ export async function handleRemoveGradeFromExam(req: Request, res: Response) {
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+    }
+}
+
+export async function handleGetUniExams(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { active }: any = req.query;
+
+        if(!active || active === '0') {
+            active = false;
+        }
+
+        
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+    }
+}
+
+export async function handleGetGradesByExam(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+
+        let resp = await getGradesByExam(id);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

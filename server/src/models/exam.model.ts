@@ -8,7 +8,7 @@ export interface ExamDocument extends Document {
     grades?: Types.ObjectId[];
     period?: Types.ObjectId;
     ended?: boolean;
-    university?: boolean;
+    university?: Types.ObjectId;
 }
 
 
