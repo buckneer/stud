@@ -15,12 +15,12 @@ import React from "react";
 
 
 export interface SidebarProps {
-	selectedData: number,
-	handleDataChange: (data: number) => void;
 	children: string | JSX.Element | JSX.Element[],
+	uniId?: string,
+	role?: string
 }
 
-function Sidebar({selectedData, handleDataChange, children} : SidebarProps) {
+function Sidebar({children} : SidebarProps) {
 
 
 
