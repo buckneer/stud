@@ -1,5 +1,6 @@
 import Exam, { ExamDocument } from "../models/exam.model";
 import Period from "../models/period.model";
+import Student from "../models/student.model";
 import Subject from "../models/subject.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils"
@@ -75,6 +76,24 @@ export const getGradesByExam = async (_id: string) => {
 
     return exam;
 }
+
+// aggregate needs to be done here...
+// status ? passed -> get all grades where student_id = student && grade > 5
+// status ? failed -> get all grades where student_id = student && grade ===  5
+// status ? tbd -> get all exams where ended = false
+
+export const getStudentExams = async (_id: string, status: string) => {
+    let student = await Student.findOne({ _id });
+
+    if(!student) throw newError(404, 'Student ne postoji');
+
+    return 'Implement me!';
+}
+
+
+
+
+
 // export const updateStudents = async (_id: string, data: any) => {
 //     let examObject = await Exam.findOne({ _id });
 

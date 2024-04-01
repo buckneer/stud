@@ -31,9 +31,9 @@ export async function handleGetPeriod(req: Request, res: Response) {
 	try {
 		let { id } = req.params;
 
-		let resp = getPeriod(id);
+		let resp = await getPeriod(id);
 
-		return res.send(resp);
+		return res.status(200).send(resp);
 
 	} catch (e: any ) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');

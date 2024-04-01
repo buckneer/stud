@@ -10,31 +10,32 @@ import InputField from '../../../components/InputField/InputField';
 
 const PeriodAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
-	const { uni } = useParams();
+	const { uni: university } = useParams();
 
 	const periodOptions = [
 		{ value: "0", label: "Odaberite sami [vanredni]" },
-		{ value: "1", label: "Januarsko-februarski rok" },
-		{ value: "2", label: "Aprilski rok" },
-		{ value: "3", label: "Junski rok" },
-		{ value: "4", label: "Julski rok" },
-		{ value: "5", label: "Avgustovsko-septembarski rok" },
-		{ value: "6", label: "Oktobar I" },
-		{ value: "7", label: "Oktobar II" },
+		{ value: "Januarsko-februarski rok", label: "Januarsko-februarski rok" },
+		{ value: "Aprilski rok", label: "Aprilski rok" },
+		{ value: "Junski rok", label: "Junski rok" },
+		{ value: "Julski rok", label: "Julski rok" },
+		{ value: "Avgustovsko-septembarski rok", label: "Avgustovsko-septembarski rok" },
+		{ value: "Oktobar I", label: "Oktobar I" },
+		{ value: "Oktobar II", label: "Oktobar II" },
 	];
 
 	const [periodName, setPeriodName] = useState("");
 	const [irregularPeriodName, setIrregularPeriodName] = useState("");
 	const [periodStart, setPeriodStart] = useState("");
+	const [acceptDate, setAcceptDate] = useState('');
 	const [periodEnd, setPeriodEnd] = useState("");
 	// const [exams, setExams] = useState("");
 
 	const [
 		addPeriod,
 		{
-			isLoading: isaddPeriodAddLoading,
-			isSuccess: isaddPeriodAddSuccess,
-			isError: isaddPeriodAddError,
+			isLoading: isAddPeriodAddLoading,
+			isSuccess: isAddPeriodAddSuccess,
+			isError: isAddPeriodAddError,
 		}
 	] = useAddPeriodMutation();
 
@@ -42,10 +43,21 @@ const PeriodAdd = () => {
 		event.preventDefault();
 		event.stopPropagation();
 
-		// try {
-		// 	const awiat = addPeriod();
-		// } catch (error) {
-		// }
+		try {
+			const body = {
+				university, 
+				start: periodStart,
+				end: periodEnd, 
+				acceptDate,
+				semester: 1, 
+				name: (periodName === '0' && !irregularPeriodName) ? irregularPeriodName : periodName,
+				type: (periodName === '0' && !irregularPeriodName) ? 0 : 1
+			}
+
+			const result = await addPeriod(body).unwrap();
+		} catch (e: any) {
+			console.error(e)
+		}
 		// TODO: mozda treba da se doda department u backend 
 		// const body = {
 		// 	start: periodStart, end: periodEnd, exams: departments, university: uni! 
@@ -72,11 +84,11 @@ const PeriodAdd = () => {
 							<div className="form-title">Novi Ispitni rok</div>
 							<div className="form-desc" >Kreiranje novog ispitnog roka</div>
 							<MutationState
-								isLoading={isaddPeriodAddLoading}
-								isSuccess={isaddPeriodAddSuccess}
-								successMessage='Uspesno dodat profesor!'
-								isError={isaddPeriodAddError}
-								errorMessage='Greska prilikom registracije profesora!'
+								isLoading={isAddPeriodAddLoading}
+								isSuccess={isAddPeriodAddSuccess}
+								successMessage='Uspešno dodat ispitni rok!'
+								isError={isAddPeriodAddError}
+								errorMessage='Greška prilikom dodavanja ispitnog roka!'
 							/>
 						</div>
 						<form onSubmit={handleAddPeriod}>
@@ -91,6 +103,7 @@ const PeriodAdd = () => {
 							}
 							<InputField id='periodStart' type='date' name='Pocetak ispitnog roka' inputVal={periodStart} setVal={(e) => setPeriodStart(e.target.value)} />
 							<InputField id='periodEnd' type='date' name='Zavrsetak ispitnog roka' inputVal={periodEnd} setVal={(e) => setPeriodEnd(e.target.value)} />
+							<InputField id='periodAcceptDate' type='date' name='Rok za prijavu' inputVal={acceptDate} setVal={(e) => setAcceptDate(e.target.value)} />
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Ispitni Rok</button>
 							</div>

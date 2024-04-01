@@ -70,3 +70,13 @@ export const addProfessorToSubjects = async (_id: string, subjects: string[]) =>
     
     return newResponse('Uspešno ste dodali profesora na predmete');
 }
+
+export const getSubjectRole = async (_id: string, role: string) => {
+    let include = (role === 'student') ? 'students' : 'professors';
+
+    let subject: any = await Subject.findOne({ _id }, { [include]: 1 }).populate(include);
+
+    if(!subject) throw newError(404, 'Ne postoji predmet!');
+
+    return subject[include];
+}

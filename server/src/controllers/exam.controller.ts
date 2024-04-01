@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addExam, getExam, getExams, getGradesByExam, updateExam } from "../services/exam.service";
+import { addExam, getExam, getExams, getGradesByExam, getStudentExams, updateExam } from "../services/exam.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Exam from "../models/exam.model";
 
@@ -124,6 +124,24 @@ export async function handleGetGradesByExam(req: Request, res: Response) {
 
         let resp = await getGradesByExam(id);
         return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+
+export async function handleGetStudentExams(req: Request, res: Response) {
+    try {
+        let { id, status } = req.params;
+
+        let statusArray: string[] = [ 'passed', 'failed', 'tbd' ]; // tbd - to be determined
+
+        if(!status || statusArray.indexOf(status) === -1) {
+            return res.status(400).send('Nevalidan status!');
+        }
+
+        let resp = await getStudentExams(id, status);
+        
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
