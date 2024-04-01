@@ -23,7 +23,7 @@ const PeriodAdd = () => {
 		{ value: "7", label: "Oktobar II" },
 	];
 
-	const [periodName, setperiodName] = useState("");
+	const [periodName, setPeriodName] = useState("");
 	const [irregularPeriodName, setIrregularPeriodName] = useState("");
 	const [periodStart, setPeriodStart] = useState("");
 	const [periodEnd, setPeriodEnd] = useState("");
@@ -81,7 +81,7 @@ const PeriodAdd = () => {
 						</div>
 						<form onSubmit={handleAddPeriod}>
 							<div className='form-control'>
-								<Select onChange={(e: any) => setperiodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' required isClearable isSearchable options={periodOptions} />
+								<Select onChange={(e: any) => setPeriodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' required isClearable isSearchable options={periodOptions} />
 							</div>
 							{
 								periodName === "0" &&

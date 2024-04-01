@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useGetUniDepartmentsQuery } from '../../../app/api/departmentApiSlice';
 import { useGetDepSubjectsQuery } from '../../../app/api/subjectApiSlice';
+import InputField from '../../../components/InputField/InputField';
 
 interface SelectProps {
 	value: string;
@@ -27,6 +28,19 @@ const ExamAdd = () => {
 	// const [period, setPeriod] = useState("");
 	// const [grades, setGrades] = useState("");
 	// const [ended, setEnded] = useState(Boolean);
+	const [periodName, setPeriodName] = useState("");
+	const [irregularPeriodName, setIrregularPeriodName] = useState("");
+
+	const periodOptions = [
+		{ value: "0", label: "Odaberite sami [vanredni]" },
+		{ value: "1", label: "Januarsko-februarski rok" },
+		{ value: "2", label: "Aprilski rok" },
+		{ value: "3", label: "Junski rok" },
+		{ value: "4", label: "Julski rok" },
+		{ value: "5", label: "Avgustovsko-septembarski rok" },
+		{ value: "6", label: "Oktobar I" },
+		{ value: "7", label: "Oktobar II" },
+	];
 
 	const {
 		data: departmentsData,
@@ -112,18 +126,15 @@ const ExamAdd = () => {
 							}
 						</div>
 						<form onSubmit={handleAddExam}>
-							<div className='form-control mb-5'>
-								<label htmlFor="periodName" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-									<input
-										// value={period} onChange={(e) => setPeriod(e.target.value)}
-										type="text" id="periodName" placeholder="Trenutni rok" value={"Januarski-Februarski rok"} disabled autoComplete='off'
-										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-									/>
-									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Ispitni rok
-									</span>
-								</label>
+							<div className='form-control'>
+								<Select onChange={(e: any) => setPeriodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' required isClearable isSearchable options={periodOptions} />
 							</div>
+							{
+								periodName === "0" &&
+								<>
+									<InputField id='periodNameVandredni' type='text' name='Unesite vandredni rok' inputVal={irregularPeriodName} setVal={(e) => setIrregularPeriodName(e.target.value)} />
+								</>
+							}
 							<div className='form-control mb-5'>
 								<label htmlFor="periodDate" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 									<input
@@ -151,7 +162,6 @@ const ExamAdd = () => {
 								</>
 							}
 							{	
-
 								department?.value && isProfessorsSuccess && subject?.value &&
 								<>
 									<div className='form-control mb-5'>
