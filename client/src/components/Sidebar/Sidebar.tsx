@@ -17,9 +17,10 @@ import React from "react";
 export interface SidebarProps {
 	selectedData: number,
 	handleDataChange: (data: number) => void;
+	children: string | JSX.Element | JSX.Element[],
 }
 
-function Sidebar({selectedData, handleDataChange} : SidebarProps) {
+function Sidebar({selectedData, handleDataChange, children} : SidebarProps) {
 
 
 
@@ -36,16 +37,7 @@ function Sidebar({selectedData, handleDataChange} : SidebarProps) {
 			</div>
 			<div className="flex flex-col justify-between h-full">
 				<div className="pt-5 w-full flex flex-col gap-2 divide-y-2">
-					<div className="">
-						<SidebarItem name="Studenti" Icon={GraduationCap} active={selectedData == 0} to={0} changeData={handleDataChange} />
-						<SidebarItem name="Profesori" Icon={User} active={selectedData == 1}  to={1} changeData={handleDataChange} />
-						<SidebarItem name="STUD Služba" Icon={FolderArchive} active={selectedData == 2}  to={2} changeData={handleDataChange}/>
-					</div>
-					<div className="pt-1">
-						<SidebarItem name="Ispitni Rokovi" Icon={CalendarCheck} />
-						<SidebarItem name="Ispiti" Icon={LayoutList} />
-						<SidebarItem name="Predmeti" Icon={Book} />
-					</div>
+					{children}
 				</div>
 				<SidebarItem name="Odjavi se" Icon={LogOut} />
 			</div>

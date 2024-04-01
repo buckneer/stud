@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Login from './pages/Login/Login';
 import Register from './pages/service/Register/Register';
@@ -25,6 +25,7 @@ import Navbar from './components/Navbar';
 import SetPassword from './pages/SetPassword/SetPassword';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import NotFound from "./pages/NotFound/NotFound";
+import StudentHome from "./pages/student/StudentHome/StudentHome";
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -61,6 +62,9 @@ function App() {
               <Route path='/uni/:uni/department/:dep/exam/add' element={<ExamAdd/>} />
               <Route path='/uni/:uni/department/:dep/grade/add' element={<GradeAdd/>} />
               <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
+
+              {/* STUDENT ROUTES */}
+              <Route path='/uni/:uni/student' element={<StudentHome />} />
               {/* User has to have admin privileges */}
               {/* TODO: CHANGE THIS TO AdminRequired! */}
               <Route element={<TokenRequired />}>

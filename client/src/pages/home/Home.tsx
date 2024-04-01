@@ -41,7 +41,18 @@ export default function Home() {
       </Helmet>
       <div className="flex h-full">
         <UserContent title={titles[selectedData]} university={uni!} role={engRoles[selectedData]} />
-        <Sidebar selectedData={selectedData} handleDataChange={handleDataChange} />
+        <Sidebar selectedData={selectedData} handleDataChange={handleDataChange}>
+          <div className="">
+            <SidebarItem name="Studenti" Icon={GraduationCap} active={selectedData == 0} to={0} changeData={handleDataChange} />
+            <SidebarItem name="Profesori" Icon={User} active={selectedData == 1}  to={1} changeData={handleDataChange} />
+            <SidebarItem name="STUD Služba" Icon={FolderArchive} active={selectedData == 2}  to={2} changeData={handleDataChange}/>
+          </div>
+          <div className="pt-1">
+            <SidebarItem name="Ispitni Rokovi" Icon={CalendarCheck} />
+            <SidebarItem name="Ispiti" Icon={LayoutList} />
+            <SidebarItem name="Predmeti" Icon={Book} />
+          </div>
+        </Sidebar>
       </div>
 
     </div>
