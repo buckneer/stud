@@ -1,7 +1,7 @@
 import Student from './../models/student.model';
 import { Request, Response } from "express";
 import log from "../logger";
-import { addStudent, deleteStudent, getStudent, getStudents } from "../services/student.service";
+import { addStudent, deleteStudent, getStudent, getStudents, getStudentsByDepartment, getStudentsBySemester } from "../services/student.service";
 import { newResponse } from "../utils";
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
 import { getGradesByRole } from '../services/grade.service';
@@ -140,5 +140,32 @@ export async function handleGetStudentGrades(req: Request, res: Response) {
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetStudentsBySemester(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+        let { sem } = req.query;
+
+        if(!sem) {
+            return res.status(400).send({ message: 'Morate naznačiti semestar!' });
+        }
+
+        let resp = await getStudentsBySemester(id, sem);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetStudentsByDepartment(req: Request, res: Response) {
+    try {
+        let { id } = req.params;
+
+        let resp = await getStudentsByDepartment(id);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');   
     }
 }

@@ -6,7 +6,9 @@ export interface SubjectDocument extends Document {
     professors: Types.ObjectId[];
     department: Types.ObjectId;
     university: Types.ObjectId;
+    semester: number;
     espb: number;
+    degree: string; // OAS MAS DAS
     requiredSub: Types.ObjectId[];
 }
 
@@ -16,6 +18,8 @@ const SubjectSchema = new Schema({
     professors: [{type: Schema.ObjectId, ref: 'Professor'}],
     department: {type: Schema.ObjectId, ref: 'Department'},
     university: {type: Schema.ObjectId, ref: 'University'},
+    degree: {type: String, enum: ['OAS', 'MAS', 'DAS']},
+    semester: {type: String, required: true},
     espb: {type: Number},
     requiredSub: [{type: Schema.ObjectId, ref: 'Subject'}]
 });

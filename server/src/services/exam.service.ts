@@ -1,14 +1,20 @@
 import Exam, { ExamDocument } from "../models/exam.model";
+import Period from "../models/period.model";
 import Subject from "../models/subject.model";
+import University from "../models/university.model";
 import { newError, newResponse } from "../utils"
 
 
 export const addExam = async (data: ExamDocument) => {
+    // let date = new Date();
+    // TODO: check if period is in future
+    let period = await Period.findOne({ _id: data.period });
     
     let subject = await Subject.findOne({_id: data.subject});
     if(!subject) return newError(404, 'Predmet nije pronađen');
 
     let newExam = new Exam(data);
+    
 
     let saved = await newExam.save();
 
@@ -47,6 +53,28 @@ export const updateExam = async (_id: string, data: any) => {
     return newResponse('Ispit uspešno ažuriran');
 }
 
+export const getUniExams = async (_id: string) => {
+    let university = await University.findOne({ _id });
+
+    if(!university) throw newError(404, 'Ne postoji univerzitet!');
+
+    let exams = await Exam.find({ university: _id });
+
+    return exams;
+}
+
+export const getGradesByExam = async (_id: string) => {
+    let exam = await Exam.findOne({ _id }).populate({
+        path: 'grades',
+        populate: {
+            path: 'subject professor service' //, may not work...
+        }
+    });
+
+    if(!exam) throw newError(404, 'Ne postoji ispit!');
+
+    return exam;
+}
 // export const updateStudents = async (_id: string, data: any) => {
 //     let examObject = await Exam.findOne({ _id });
 

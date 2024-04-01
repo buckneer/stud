@@ -7,8 +7,6 @@ export async function handleAddGrade(req: Request, res: Response) {
             ...req.body
         }
 
-        
-
         let resp = await addGrade(data);
 
         return res.send(resp);

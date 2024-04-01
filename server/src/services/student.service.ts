@@ -59,6 +59,25 @@ export const deleteStudent = async (_id: string) => {
     return deleted;
 }
 
+export const getStudentsBySemester = async (_id: string, sem: any) => {
+    let university = await University.findOne({ _id });
+
+    if(!university) throw newError(404, 'Ne postoji univerzitet!');
+
+    let students = await Student.find({ university: _id, currentSemester: sem });
+
+    return students;
+}
+
+export const getStudentsByDepartment = async (_id: string) => {
+    let department = Department.findOne({ _id });
+
+    if(!department) throw newError(404, 'Ne postoji odsek!');
+
+    return Student.find({ department: _id });
+}
+
+
 // export const addStudentToSubjects = async (_id: string, subjects: string[]) => {
 //     let studentObj = await Student.findOne({ _id });
 

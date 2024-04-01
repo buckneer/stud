@@ -21,14 +21,14 @@ const StudentSchema = new Schema({
     user: { type: Schema.ObjectId, ref: 'User' },
     studentId: { type: String, required: true },
     modelNum: { type: String, required: true },
-    subjects: [{ type: String, ref: 'Subject', index: true  }], // Obj.Id
+    subjects: [{ type: Schema.ObjectId, ref: 'Subject', index: true  }], // Obj.Id
     completedSubjects: [{ type: Schema.ObjectId, ref: 'Subject', index: true }], // Obj.Id
     department: { type: Schema.ObjectId, ref: 'Department', required: false }, // Obj.Id
     degree: { type: String, enum: ['OAS', 'MAS', 'DAS'] },
     status: { type: String, enum: ['Budžet', 'Samofinansiranje', 'Done'], required: false },
     dateOfEnrollment: { type: String, required: false },
     currentSemester: { type: String, default: '1'},
-    grades: [{ type: String, ref: 'Grades', index: true }], // Obj.Id
+    grades: [{ type: Schema.ObjectId, ref: 'Grades', index: true }], // Obj.Id
     // universitiy: {type: Schema.ObjectId, required: false, ref: 'University'},
 });
 
