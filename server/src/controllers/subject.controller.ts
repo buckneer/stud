@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addProfessorToSubjects, addSubject, getSubject, getSubjects, updateSubject } from "../services/subject.service";
+import { addProfessorToSubjects, addSubject, getSubject, getSubjectRole, getSubjects, updateSubject } from "../services/subject.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Subject from "../models/subject.model";
 
@@ -137,9 +137,14 @@ export async function handleGetSubjectRole(req: Request, res: Response) {
     try {
         let { id, role } = req.params;
 
-        if(!role) {
-            return res.status(400).send({ message: 'Rola je neophodna!++++++++++++++++++++++++++++++++++++++++' })
-        }
+        if(!role || (role !== 'student' && role !== 'professor')) {
+            return res.status(400).send({ message: 'Rola je neophodna!' });
+        } 
+
+        let resp = await getSubjectRole(id, role);
+
+        return res.status(200).send(resp);
+        
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }

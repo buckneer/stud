@@ -83,6 +83,9 @@ export interface Grade {
 
 export interface Period {
 	_id?: string;
+	name?: string;
+	type?: number;
+	semester?: number;
 	start?: string;
 	end?: string;
 	exams?: string[] | Exam[];

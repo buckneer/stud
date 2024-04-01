@@ -5,10 +5,12 @@ import { useGetProfessorsQuery } from '../../../app/api/professorApiSlice';
 import Select, { GroupBase } from 'react-select';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetUniDepartmentsQuery } from '../../../app/api/departmentApiSlice';
 import { useGetDepSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import InputField from '../../../components/InputField/InputField';
+import MutationState from '../../../components/MutationState/MutationState';
+import { useGetPeriodQuery } from '../../../app/api/periodApiSlice';
 
 interface SelectProps {
 	value: string;
@@ -16,31 +18,14 @@ interface SelectProps {
 }
 
 const ExamAdd = () => {
-	
+	const navigate = useNavigate();
 	const session = useSelector((state: RootState) => state.session);
-	const { uni } = useParams();
+	const { uni, period }: any = useParams();
 	
 	const [date, setDate] = useState("");
 	const [department, setDepartment] = useState<SelectProps>();
 	const [subject, setSubject] = useState<SelectProps>();
 	const [professor, setProfessor] = useState<SelectProps>();
-	// const [students, setStudents] = useState<SelectProps>("");
-	// const [period, setPeriod] = useState("");
-	// const [grades, setGrades] = useState("");
-	// const [ended, setEnded] = useState(Boolean);
-	const [periodName, setPeriodName] = useState("");
-	const [irregularPeriodName, setIrregularPeriodName] = useState("");
-
-	const periodOptions = [
-		{ value: "0", label: "Odaberite sami [vanredni]" },
-		{ value: "1", label: "Januarsko-februarski rok" },
-		{ value: "2", label: "Aprilski rok" },
-		{ value: "3", label: "Junski rok" },
-		{ value: "4", label: "Julski rok" },
-		{ value: "5", label: "Avgustovsko-septembarski rok" },
-		{ value: "6", label: "Oktobar I" },
-		{ value: "7", label: "Oktobar II" },
-	];
 
 	const {
 		data: departmentsData,
@@ -61,7 +46,6 @@ const ExamAdd = () => {
 		skip: !uni || !session.accessToken || !department?.value
 	});
 
-	console.log(subjectsData);
 	const {
 		data: professorsData,
 		isLoading: isProfessorsLoading,
@@ -71,24 +55,42 @@ const ExamAdd = () => {
 		skip: !uni || !session.accessToken || !subject
 	});
 
-
+	const { 
+		data: periodData,
+		isLoading: isPeriodLoading,
+		isSuccess: isPeriodSuccess,
+		isError: isPeriodError
+	} = useGetPeriodQuery(period, {
+		skip: !session.accessToken || !period
+	});
 
 	const [
-		AddExam,
+		addExam,
 		{
-			isLoading: isExamAddLoading,
-			isSuccess: isExamAddSuccess,
-			isError: isExamAddError
+			isLoading: isAddExamLoading,
+			isSuccess: isAddExamSuccess,
+			isError: isAddExamError
 		}
 	] = useAddExamMutation();
 
-	const handleAddExam = (event: React.FormEvent<HTMLFormElement>) => {
+	const handleAddExam = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
 
-		// TODO: Jovance - Dodavanje ispita
-
-		// Link: http://localhost:3000/uni/65fafc2da919db458f7ed90d/department/65fcbc3cd45f1d327ffc4aee/exam/add
+		try {
+			const body = { 
+				date, 
+				subject: subject?.value, 
+				department: department?.value, 
+				professor: professor?.value,
+				university: uni
+			}
+		
+			// @ts-ignore
+			const result = await addExam(body).unwrap();
+		} catch (e: any) {
+			console.error(e);
+		}
 	}
 	
 	useEffect(() => {
@@ -97,9 +99,9 @@ const ExamAdd = () => {
 
 	let content : any = null;
 
-	if (isDepLoading || isProfessorsLoading || isSubjectsLoading) {
+	if (isDepLoading || isProfessorsLoading || isSubjectsLoading || isPeriodLoading) {
 		content = <Loader />
-	} else if (isDepSuccess) {
+	} else if (isDepSuccess && isPeriodSuccess) {
 		content =
 			<>
 				<div className='flex-grow flex justify-center items-center'>
@@ -107,34 +109,23 @@ const ExamAdd = () => {
 						<div className='form-header'>
 							<div className="form-title">Dodavanje Ispita</div>
 							<div className="form-desc" >Dodavanje predmeta roku</div>
-							{
-								isExamAddLoading ? <Loader /> : null
-							}
-							{
-								isExamAddSuccess ?
-									<div className="w-full flex justify-center">
-										<div className="bg-green-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-green-800 font-bold">Uspesno dodat predmet roku!</div>
-									</div>
-									: null
-							}
-							{
-								isExamAddError ?
-									<div className="w-full flex justify-center">
-										<div className="bg-red-200 rounded-2xl w-1/2 md:w-2/3 p-2 text-center my-2 text-red-800 font-bold">Greska prilikom dodavanje predmeta roku!</div>
-									</div>
-									: null
-							}
+							<MutationState 
+								isLoading={isAddExamLoading}
+								isSuccess={isAddExamSuccess}
+								isError={isAddExamError}
+								successMessage='Uspešno dodavanje ispita!'
+								errorMessage='Greška prilikom dodavanja ispita...'
+							/>
 						</div>
 						<form onSubmit={handleAddExam}>
-							<div className='form-control'>
-								<Select onChange={(e: any) => setPeriodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' required isClearable isSearchable options={periodOptions} />
+							<InputField id='periodNameVanredni' type='text' name='Rok' inputVal={periodData?.name} disabled={true}  />
+							<div className='form-control mb-5'>
+								<p className="px-3 pt-3 text-sm">Trajanje ispitnog roka</p>
+								<div className="flex font-bold">
+									{/* @ts-ignore */}
+									<p className="px-3 text-sm">{periodData?.start.split('-').reverse().join('.') }. - { periodData.end.split('-').reverse().join('.') }.</p>
+								</div>
 							</div>
-							{
-								periodName === "0" &&
-								<>
-									<InputField id='periodNameVandredni' type='text' name='Unesite vandredni rok' inputVal={irregularPeriodName} setVal={(e) => setIrregularPeriodName(e.target.value)} />
-								</>
-							}
 							<div className='form-control mb-5'>
 								<label htmlFor="periodDate" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
 									<input
@@ -174,24 +165,17 @@ const ExamAdd = () => {
 							
 							
 							<div className='footer flex items-center justify-center flex-col'>
-								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Kreiraj Ispitni Rok</button>
+								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Dodaj Ispit!</button>
 							</div>
 						</form>
 					</div>
 				</div>
 			</>
+	} else if (isPeriodError) {
+		navigate('/404_error');
 	}
 
 	return (
-		// <form onSubmit={handleSubmit} className='flex flex-col space-y-5 mx-5 justify-center items-center'>
-		// 	<label htmlFor="dateOfExam">Datum ispita: </label>
-		// 	<input id='dateOfExam' type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-		// 	<input type="text" placeholder='Ime predmeta' value={subject} onChange={(e) => setSubject(e.target.value)} required />
-		// 	<input type="text" placeholder='Ime profesora' value={proffesor} onChange={(e) => setProfessor(e.target.value)} required />
-		// 	<label htmlFor="timeOfExam">Vreme ispita: </label>
-		// 	<input id='timeOfExam' type="time" value={period} onChange={(e) => setPeriod(e.target.value)} required />
-		// 	<button type="submit" className='bg-black py-2 px-4 w-fit text-white rounded-sm font-semibold' >Dodaj ispit</button>
-		// </form>
 		<>
 			{ content }
 		</>

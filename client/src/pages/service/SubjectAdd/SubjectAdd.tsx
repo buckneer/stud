@@ -18,8 +18,8 @@ const SubjectAdd = () => {
 	const [code, setCode] = useState("");
 	const [department, setDepartment] = useState("");
 	const [professors, setProfessors] = useState<string[]>([]);
-	const [espb, setEspb] = useState("");
-	const [currentSemester, setCurrentSemester] = useState("");
+	const [espb, setEspb] = useState<number>();
+	const [semester, setSemester] = useState("");
 	const [degree, setDegree] = useState("");
 
 	const degreeOptions = [
@@ -67,16 +67,16 @@ const SubjectAdd = () => {
 		event.preventDefault();
 		event.stopPropagation();
 		
-		// try {
-		// 	const body = {
-		// 		name, code, department, professors, university: uni
-		// }
+		try {
+			const body = {
+				name, code, department, professors, university: uni, semester, espb, degree
+		}
 
-		// const result = await addSubject(body).unwrap();
+		const result = await addSubject(body).unwrap();
 		
-		// } catch (e: any) {
-		// 	console.error(e);
-		// }
+		} catch (e: any) {
+			console.error(e);
+		}
 	}
 
 	let content: any;
@@ -114,10 +114,10 @@ const SubjectAdd = () => {
 						<div className='form-control'>
 							<Select onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
 						</div>
-						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb} setVal={(e) => setEspb(e.target.value)} />
-						<InputField id='semestar' type='number' name='Semestar' inputVal={currentSemester} setVal={(e) => setCurrentSemester(e.target.value)} />
+						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb?.toString()} setVal={(e) => setEspb(parseInt(e.target.value))} />
+						<InputField id='semestar' type='number' name='Semestar' inputVal={semester} setVal={(e) => setSemester(e.target.value)} />
 						<div className='footer flex items-center justify-center flex-col'>
-							<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isAddSubjectSuccess}>Kreiraj Studenta</button>
+							<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isAddSubjectSuccess}>Kreiraj Predmet!</button>
 						</div>
 					</form>
 				</div>
