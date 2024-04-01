@@ -17,7 +17,7 @@ function StudTitle({ text } : StudTitleProps ) {
     return part;
   });
 
-  return <h1 className="text-xl">{styledParts}</h1>;
+  return <h1 className="text-xl font-bold">{styledParts}</h1>;
 };
 
 export default StudTitle;
