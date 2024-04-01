@@ -59,8 +59,8 @@ function App() {
               <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
               <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
               <Route path='/uni/:uni/period/add' element={<PeriodAdd/>} />
-              <Route path='/uni/:uni/department/:dep/exam/add' element={<ExamAdd/>} />
-              <Route path='/uni/:uni/department/:dep/grade/add' element={<GradeAdd/>} />
+              <Route path='/uni/:uni/exam/add' element={<ExamAdd/>} />
+              <Route path='/uni/:uni/grade/add' element={<GradeAdd/>} />
               <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
 
               {/* STUDENT ROUTES */}

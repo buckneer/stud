@@ -20,6 +20,13 @@ const SubjectAdd = () => {
 	const [professors, setProfessors] = useState<string[]>([]);
 	const [espb, setEspb] = useState("");
 	const [currentSemester, setCurrentSemester] = useState("");
+	const [degree, setDegree] = useState("");
+
+	const degreeOptions = [
+		{ value: "OAS", label: "Osnovne akademske studije" },
+		{ value: "MAS", label: "Master akademske studije" },
+		{ value: "DAS", label: "Doktorske akademske studije" }
+	]
 
 	const {
 		data: uniData,
@@ -103,6 +110,9 @@ const SubjectAdd = () => {
 							<Select onChange={(e: any) => setProfessors(e?.value)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
 								return { value: item._id, label: item.user.name };
 							})} />
+						</div>
+						<div className='form-control'>
+							<Select onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
 						</div>
 						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb} setVal={(e) => setEspb(e.target.value)} />
 						<InputField id='semestar' type='number' name='Semestar' inputVal={currentSemester} setVal={(e) => setCurrentSemester(e.target.value)} />
