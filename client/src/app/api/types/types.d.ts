@@ -79,7 +79,7 @@ export interface Grade {
 	service?: string | Service; 
 	serviceGrade?: number;
 	confirmed?: boolean;
-	student: string | Student;
+	student?: string | Student;
 	period?: string | Period; 
 }
 
@@ -92,6 +92,7 @@ export interface Period {
 	end?: string;
 	exams?: string[] | Exam[];
 	university?: string | University;
+	acceptDate?: string;
 }
 
 export interface Exam {
