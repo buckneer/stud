@@ -21,7 +21,7 @@ const ExamAdd = () => {
 	const navigate = useNavigate();
 	const session = useSelector((state: RootState) => state.session);
 	const { uni, period }: any = useParams();
-	
+
 	const [date, setDate] = useState("");
 	const [department, setDepartment] = useState<SelectProps>();
 	const [subject, setSubject] = useState<SelectProps>();
@@ -55,7 +55,7 @@ const ExamAdd = () => {
 		skip: !uni || !session.accessToken || !subject
 	});
 
-	const { 
+	const {
 		data: periodData,
 		isLoading: isPeriodLoading,
 		isSuccess: isPeriodSuccess,
@@ -78,21 +78,22 @@ const ExamAdd = () => {
 		event.stopPropagation();
 
 		try {
-			const body = { 
-				date, 
-				subject: subject?.value, 
-				department: department?.value, 
+			const body = {
+				date,
+				subject: subject?.value,
+				department: department?.value,
 				professor: professor?.value,
-				university: uni
+				university: uni,
+				period
 			}
-		
+
 			// @ts-ignore
 			const result = await addExam(body).unwrap();
 		} catch (e: any) {
 			console.error(e);
 		}
 	}
-	
+
 	useEffect(() => {
 		document.title = "Dodavanje ispita | Stud";
 	}, []);
@@ -109,7 +110,7 @@ const ExamAdd = () => {
 						<div className='form-header'>
 							<div className="form-title">Dodavanje Ispita</div>
 							<div className="form-desc" >Dodavanje predmeta roku</div>
-							<MutationState 
+							<MutationState
 								isLoading={isAddExamLoading}
 								isSuccess={isAddExamSuccess}
 								isError={isAddExamError}
@@ -143,7 +144,7 @@ const ExamAdd = () => {
 								})} />
 							</div>
 							{
-								(department?.value) && isSubjectsSuccess && 
+								(department?.value) && isSubjectsSuccess &&
 								<>
 									<div className='form-control mb-5'>
 										<Select	value={subject} onChange={(e: any) => setSubject({value: e?.value, label: e?.label})} placeholder="Izaberite predmet" className='w-full outline-none' isClearable isSearchable options={subjectsData.map((item: any) => {
@@ -152,7 +153,7 @@ const ExamAdd = () => {
 									</div>
 								</>
 							}
-							{	
+							{
 								department?.value && isProfessorsSuccess && subject?.value &&
 								<>
 									<div className='form-control mb-5'>
@@ -162,8 +163,8 @@ const ExamAdd = () => {
 									</div>
 								</>
 							}
-							
-							
+
+
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Dodaj Ispit!</button>
 							</div>
