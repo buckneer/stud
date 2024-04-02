@@ -1,6 +1,7 @@
 // TODO: Proveri da li postoji profesor na univerzitetu, ako ne postoji dodaj ga...
 
 import Professor, { ProfessorDocument } from "../models/professor.model";
+import Subject from "../models/subject.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils";
 
@@ -123,4 +124,16 @@ export const removeGradesFromProfessor = async (_id: string, grades: string[]) =
     if(!updated) throw newError();
 
     return newResponse('Uspešno ste uklonili predmete iz profesora');
+}
+
+export const addSubjectToProfessors = async (_id: string, professors: string[]) => {
+    let subject = await Subject.findOne({ _id });
+
+    if (!subject) throw newError(404, 'Ne postoji predmet!');
+
+    await Professor.updateMany({ _id: professors }, {
+        $addToSet: { subjects: _id }
+    });
+
+    return newResponse('Uspešno dodavanje predmeta profesorima!', 200);
 }

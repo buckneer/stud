@@ -1,5 +1,5 @@
 
-import { handleAddGradesToProfessor, handleAddProfessor, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessorGrades, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
+import { handleAddGradesToProfessor, handleAddProfessor, handleAddProfessorsToSubject, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessorGrades, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni, handleRemoveProfessorFromUni } from "./controllers/university.controller";
 import {
     handleAddUnisToUser,
@@ -17,7 +17,7 @@ import {
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleAddProfessorToDepartment, handleAddStudentsToDepartment, handleAddSubjectsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveProfessorFromDepartment, handleRemoveStudentFromDepartment, handleRemoveSubjectFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
-import { handleAddProfessorsToSubject, handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
+import { handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import { handleAddExam, handleAddGradesToExam, handleAddStudentsToExam, handleGetExam, handleGetExams, handleGetGradesByExam, handleGetStudentExams, handleGetUniExams, handleRemoveGradeFromExam, handleRemoveStudentFromExam, handleUpdateExam } from "./controllers/exam.controller";
 import { handleAddExamToPeriod, handleAddPeriod, handleGetAvailableExamsInPeriod, handleGetPeriod, handleGetPeriods, handleGetUniPeriods, handleRemoveExamFromPeriod, handleUpdatePeriod } from "./controllers/period.controller";
@@ -131,7 +131,6 @@ export default function (app: Express) {
     app.patch('/subject/:id/required/', handleAddRequiredsToSubject);
     app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
     app.get('/subject/:id/role/:role/', handleGetSubjectRole);
-
     // Grade
     app.post('/grades/', handleAddGrade);
     app.patch('/grades/:id/', handleUpdateGrade);

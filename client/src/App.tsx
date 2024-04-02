@@ -27,6 +27,7 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import NotFound from "./pages/NotFound/NotFound";
 import StudentHome from "./pages/student/StudentHome/StudentHome";
 import SubjectEdit from './pages/service/SubjectEdit/SubjectEdit';
+import DepartmentEdit from './pages/service/DepartmentEdit/DepartmentEdit';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -64,7 +65,7 @@ function App() {
               <Route path='/uni/:uni/period/:period/exam/add' element={<ExamAdd/>} />
               <Route path='/uni/:uni/grade/add' element={<GradeAdd/>} />
               <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
-
+              <Route path='/uni/:uni/department/:department/edit' element={<DepartmentEdit />} />
               {/* STUDENT ROUTES */}
               <Route path='/uni/:uni/student' element={<StudentHome />} />
               {/* User has to have admin privileges */}

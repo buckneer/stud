@@ -85,18 +85,6 @@ export async function handleAddProfessorToManySubjects(req: Request, res: Respon
     }
 }
 
-export async function handleAddProfessorsToSubject(req: Request, res: Response) {
-    try {
-        let { id } = req.params;
-        let { professors } = req.body;
-
-        let resp = await addToModelArray(Subject, id, 'professors', professors);
-        return res.status(200).send(resp);
-    } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');
-    }
-}
-
 export async function handleRemoveProfessorFromSubject(req: Request, res: Response) {
     try {
         let { id } = req.params;

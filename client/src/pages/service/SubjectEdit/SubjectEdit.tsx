@@ -81,16 +81,25 @@ const SubjectAdd = () => {
 	const handleSubjectEdit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
+
+		// add check here if anything changed at all...
+		
 		
 		try {
 			const body = {
-				name, code, department, professors, university: uni, semester, espb, degree
+				name, 
+				code, 
+				department, 
+				professors: professors?.map((elem: SelectProps) => elem.value), 
+				university: uni, 
+				semester, 
+				espb, 
+				degree
 		}
 
-    console.log(body);
 
-    // // @ts-ignore
-		// const result = await updateSubject({ id, body }).unwrap();
+    // @ts-ignore
+		const result = await updateSubject({ id, body }).unwrap();
 		
 		} catch (e: any) {
 			console.error(e);
@@ -121,18 +130,18 @@ const SubjectAdd = () => {
 						<InputField id='code' type='text' name='Kod Predmeta' inputVal={code} setVal={(e) => setCode(e.target.value)} />
 						<div className='form-control'>
               {/* @ts-ignore */}
-							<Select value={getLabel(department)} onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
+							<Select value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
 								return { value: item._id, label: item.name };
 							})} />
 						</div>
 						<div className='form-control'>
               {/* @ts-ignore */}
-							<Select value={getLabel(professors, professorsData)} onChange={(e: any) => setProfessors(e?.value)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
+							<Select value={professors} onChange={(e: any) => setProfessors(e)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
 								return { value: item._id, label: item.user.name };
 							})} />
 						</div>
 						<div className='form-control'>
-							<Select value={degreeOptions.find((i: any) => i.value === degree)} onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
+							<Select defaultValue={degreeOptions.find((i: any) => i.value === degree)} onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
 						</div>
 						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb?.toString()} setVal={(e) => setEspb(parseInt(e.target.value))} />
 						<InputField id='semestar' type='number' name='Semestar' inputVal={semester} setVal={(e) => setSemester(e.target.value)} />
@@ -153,25 +162,16 @@ const SubjectAdd = () => {
       setEspb(subjectData.espb!);
       setDegree(subjectData.degree!);
       setSemester(subjectData.semester!);
-      // @ts-ignore
-      setProfessors(subjectData.professors);
-    }
-
-    // if(subjectData && professorsData?.length) {
-    //   //@ts-ignore
-    //   let toAssign = subjectData.professors.map((prof: any) => ({
-    //     value: prof,
-    //     // @ts-ignore
-    //     label: professorsData.find((o: any) => o._id === prof)?.user?.name
-    //   }));
-    //   setProfessors(toAssign);
-    // }
-      
+			if(professorsData) {
+				// @ts-ignore
+				setProfessors(getLabel(subjectData.professors, professorsData, 'user.name'));
+			}
+    }      
   }, [ isSubjectSuccess, isProfessorsSuccess ])
 
 	return (
 		<>
-			{content}
+			{ content }
 		</>
 	);
 }

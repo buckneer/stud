@@ -16,7 +16,7 @@ export const addSubject = async (depId: string, data: SubjectDocument) => {
     const newSubject = new Subject(data);
     await newSubject.save();
 
-    return newResponse('Novi predmet kreiran');
+    return newResponse('Novi predmet kreiran', 200, { id: newSubject._id });
 }
 
 export const getSubject = async (_id: string) => {
