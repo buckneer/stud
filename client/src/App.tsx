@@ -26,6 +26,7 @@ import SetPassword from './pages/SetPassword/SetPassword';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import NotFound from "./pages/NotFound/NotFound";
 import StudentHome from "./pages/student/StudentHome/StudentHome";
+import SubjectEdit from './pages/service/SubjectEdit/SubjectEdit';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -55,6 +56,7 @@ function App() {
               {/* TODO: check if user is in uni :uni service here... */}
               <Route path='/uni/:uni/register' element={<Register/>} />
               <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
+              <Route path='/uni/:uni/subject/:id/edit' element={<SubjectEdit />} />
               <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
               <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
               <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
