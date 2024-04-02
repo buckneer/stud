@@ -1,11 +1,12 @@
 import { Document, Schema, model, Types } from 'mongoose';
+import {GradeDocument} from "./grade.model";
 
 export interface ExamDocument extends Document {
     date?: string;
     students?: Types.ObjectId[];
     subject?: Types.ObjectId;
     professor?: Types.ObjectId //! Can be removed
-    grades?: Types.ObjectId[];
+    grades?: Types.ObjectId[] | GradeDocument[] ;
     period?: Types.ObjectId;
     ended?: boolean;
     department?: Types.ObjectId;
@@ -13,7 +14,7 @@ export interface ExamDocument extends Document {
 }
 
 
-const ExamSchema = new Schema({ 
+const ExamSchema = new Schema({
     date: {type: String, required: true},
     students: [{type: Schema.ObjectId, ref: 'Student'}],
     subject: {type: Schema.ObjectId, ref: 'Subject'},

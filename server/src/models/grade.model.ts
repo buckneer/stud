@@ -3,23 +3,25 @@ import { Document, Schema, model, Types } from 'mongoose';
 export interface GradeDocument extends Document {
     subject?: Types.ObjectId; // Subject doc
     professor?: Types.ObjectId;
-    profesorGrade?: number;
+    professorGrade?: number;
     service?: Types.ObjectId; // Service doc
     serviceGrade?: number;
     confirmed?: boolean;
     student: Types.ObjectId;
-    period?: string; // Exam period
+    period?: Types.ObjectId; // Exam period
+	exam?: Types.ObjectId;
 }
 
 const GradeSchema = new Schema({
-    subject: { type: String },
+    subject: { type: Schema.ObjectId, ref: 'Subject' },
 	professor: {type: Schema.ObjectId, ref: 'Professor'},
 	professorGrade: {type: Number},
-	service: {type: String, ref: 'Service'},
+	service: {type: Schema.ObjectId, ref: 'Service'},
 	serviceGrade: {type: Number},
 	confirmed: {type: Boolean, default: false},
 	student: {type: Schema.ObjectId, ref: 'Student'},
-	period: {type: String, ref: 'Period'}
+	period: {type: Schema.ObjectId, ref: 'Period'},
+	exam: {type: Schema.ObjectId, ref: 'Exam'}
 });
 
 const Grade = model<GradeDocument>('Grade', GradeSchema);

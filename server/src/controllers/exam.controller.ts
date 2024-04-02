@@ -1,5 +1,13 @@
 import { Request, Response } from "express";
-import { addExam, getExam, getExams, getGradesByExam, getStudentExams, updateExam } from "../services/exam.service";
+import {
+    addExam,
+    addStudentToExams,
+    getExam,
+    getExams,
+    getGradesByExam, getPendingExamsProfessor,
+    getStudentExams,
+    updateExam
+} from "../services/exam.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Exam from "../models/exam.model";
 
@@ -13,7 +21,7 @@ export async function handleAddExam(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -22,7 +30,7 @@ export async function handleGetExams(req: Request, res: Response) {
         let exams = await getExams();
         return res.send(exams);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -34,7 +42,7 @@ export async function handleGetExam(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -51,7 +59,7 @@ export async function handleUpdateExam(req: Request, res: Response) {
         return res.status(200).send(resp);
 
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -63,7 +71,19 @@ export async function handleAddStudentsToExam(req: Request, res: Response) {
         let resp = await addToModelArray(Exam, id, 'students', students);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleAddStudentToExams(req: Request, res: Response) {
+    try {
+        let { id } = req.params; // <- This is student id
+        let { exams } = req.body;
+
+        let resp = await addStudentToExams(id, exams);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -75,7 +95,7 @@ export async function handleRemoveStudentFromExam(req: Request, res: Response) {
         let resp = await removeFromModelArray(Exam, id, 'students', student);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -87,7 +107,7 @@ export async function handleAddGradesToExam(req: Request, res: Response) {
         let resp = await addToModelArray(Exam, id, 'grades', grades);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -99,7 +119,7 @@ export async function handleRemoveGradeFromExam(req: Request, res: Response) {
         let resp = await removeFromModelArray(Exam, id, 'grades', grade);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -112,9 +132,9 @@ export async function handleGetUniExams(req: Request, res: Response) {
             active = false;
         }
 
-        
+
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -141,7 +161,21 @@ export async function handleGetStudentExams(req: Request, res: Response) {
         }
 
         let resp = await getStudentExams(id, status);
-        
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetPendingProfessorExams(req: Request, res: Response) {
+    try {
+    //     TODO get userId from the logged in user
+    //     This is temporary
+        let { period } = req.params;
+        if(!req.user) return res.status(401).send('Morate da se ulogujete');
+        let resp = await getPendingExamsProfessor(req.user.id, period);
+        return res.status(200).send(resp);
+
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }

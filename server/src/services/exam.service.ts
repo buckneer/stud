@@ -1,21 +1,22 @@
-import Exam, { ExamDocument } from "../models/exam.model";
+import Exam, {ExamDocument} from "../models/exam.model";
 import Period from "../models/period.model";
 import Student from "../models/student.model";
 import Subject from "../models/subject.model";
 import University from "../models/university.model";
-import { newError, newResponse } from "../utils"
+import {newError, newResponse} from "../utils"
+import Professor from "../models/professor.model";
 
 
 export const addExam = async (data: ExamDocument) => {
     // let date = new Date();
     // TODO: check if period is in future
     let period = await Period.findOne({ _id: data.period });
-    
+
     let subject = await Subject.findOne({_id: data.subject});
     if(!subject) return newError(404, 'Predmet nije pronađen');
 
     let newExam = new Exam(data);
-    
+
 
     let saved = await newExam.save();
 
@@ -25,7 +26,7 @@ export const addExam = async (data: ExamDocument) => {
 }
 
 export const getExam = async (_id: string) => {
-    
+
     let exam = await Exam.findOne({_id});
     if(!exam) return newError(404, 'Ispit nije pronađen');
 
@@ -77,19 +78,56 @@ export const getGradesByExam = async (_id: string) => {
     return exam;
 }
 
-// aggregate needs to be done here...
-// status ? passed -> get all grades where student_id = student && grade > 5
-// status ? failed -> get all grades where student_id = student && grade ===  5
-// status ? tbd -> get all exams where ended = false
-
 export const getStudentExams = async (_id: string, status: string) => {
     let student = await Student.findOne({ _id });
 
     if(!student) throw newError(404, 'Student ne postoji');
+    // Students 0 - because student can't know who else is on the exam
+    let allExams = await Exam.find({students: {$in: _id}}, {students: 0})
+        .populate({
+            path: "grades",
+            match: {student: _id}
+        });
 
-    return 'Implement me!';
+    let exams: ExamDocument[] = [];
+    if(status == 'tbd') {
+        exams = allExams.filter(exam => exam.grades!.length == 0);
+    } else {
+        const withGrades = allExams.filter(exam => exam.grades!.length > 0);
+        if (status === 'passed') {
+            exams = withGrades.filter(exam => {
+                // TODO maybe remove professorGrade later on
+                //@ts-ignore
+                exam.grades = exam.grades!.filter(grade => grade.professorGrade !== 5 && grade.serviceGrade !== 5);
+                return exam.grades!.length > 0;
+            });
+        } else {
+            exams = withGrades.filter(exam => {
+                // @ts-ignore
+                exam.grades = exam.grades!.filter(grade => grade.professorGrade === 5); // Using as any for quick fix
+                return exam.grades!.length > 0;
+            });
+        }
+    }
+
+    return exams;
 }
 
+export const getPendingExamsProfessor = async (_id: string, period: string) => {
+    let professor = await Professor.findOne({user: _id});
+
+    if (!professor) throw newError(404, "Profesor ne postoji");
+
+    // return Exam.find({professor: professor._id, grades: [], period});
+    return Exam.find({professor: professor._id, grades: []});
+}
+
+
+export const addStudentToExams = async (_id: string, exams: String[]) => {
+
+    await Exam.updateMany({_id: {"$in": exams}}, {$push: {students: _id}});
+
+}
 
 
 
@@ -100,7 +138,7 @@ export const getStudentExams = async (_id: string, status: string) => {
 //     if(!examObject) throw newError(404, 'Ispit nije pronadjen');
 
 //     let newStudents = [...examObject.students!, ...data];
-    
+
 //     examObject['students'] = newStudents;
 
 //     let result = await examObject.save();
@@ -117,7 +155,7 @@ export const getStudentExams = async (_id: string, status: string) => {
 //     if(!examObject) throw newError(404, 'Ispit nije pronadjen');
 
 //     let newGrades = [...examObject.grades!, ...data];
-    
+
 //     examObject.grades = newGrades;
 
 //     let result = await examObject.save();

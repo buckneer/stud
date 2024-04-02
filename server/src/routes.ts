@@ -19,7 +19,20 @@ import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleAddProfessorToDepartment, handleAddStudentsToDepartment, handleAddSubjectsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveProfessorFromDepartment, handleRemoveStudentFromDepartment, handleRemoveSubjectFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
 import { handleAddProfessorsToSubject, handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
-import { handleAddExam, handleAddGradesToExam, handleAddStudentsToExam, handleGetExam, handleGetExams, handleGetGradesByExam, handleGetStudentExams, handleGetUniExams, handleRemoveGradeFromExam, handleRemoveStudentFromExam, handleUpdateExam } from "./controllers/exam.controller";
+import {
+    handleAddExam,
+    handleAddGradesToExam,
+    handleAddStudentsToExam,
+    handleAddStudentToExams,
+    handleGetExam,
+    handleGetExams,
+    handleGetGradesByExam, handleGetPendingProfessorExams,
+    handleGetStudentExams,
+    handleGetUniExams,
+    handleRemoveGradeFromExam,
+    handleRemoveStudentFromExam,
+    handleUpdateExam
+} from "./controllers/exam.controller";
 import { handleAddExamToPeriod, handleAddPeriod, handleGetAvailableExamsInPeriod, handleGetPeriod, handleGetPeriods, handleGetUniPeriods, handleRemoveExamFromPeriod, handleUpdatePeriod } from "./controllers/period.controller";
 import { handleAddService, handleGetServiceGrades, handleGetServices } from "./controllers/service.controller";
 import {
@@ -56,8 +69,8 @@ export default function (app: Express) {
     app.get('/uni/:uni/user/:role/pending/', handleGetPendingUsers);
     app.delete('/user', handleUserDelete);
     app.get('/user/:id/uni/role/:role/', handleGetUserUnisByRole);
-    
-    
+
+
     // University
     app.post('/uni/', handleNewUni);
     app.get('/uni/', handleGetAllUnis);
@@ -73,7 +86,7 @@ export default function (app: Express) {
     app.get('/uni/:id/period/', handleGetUniPeriods);
     app.get('/uni/:id/exam/', handleGetUniExams);
 
-    
+
     // Student
     app.post('/student/', /* userGuard, roleGuard('service'), */ handleAddStudent);
     // app.post('/uni/:university/student', handleAddStudent);
@@ -91,7 +104,7 @@ export default function (app: Express) {
     //          ????
     app.patch('/completed_subject/student/:id/', handleAddSubjectsToCompleted);
     app.get('/uni/:id/student/semester', handleGetStudentsBySemester);
-    
+
 
     // Professor
     app.post('/professor/', handleAddProfessor);
@@ -119,7 +132,7 @@ export default function (app: Express) {
     app.patch('/department/:id/subject/', handleAddSubjectsToDepartment);
     app.delete('/department/:id/subject', handleRemoveSubjectFromDepartment);
     app.get('/department/:id/student/', handleGetStudentsByDepartment);
-    
+
     // Subject
     app.post('/subject/', handleAddSubject);
     app.patch('/subject/:id/', handleUpdateSubject);
@@ -149,8 +162,10 @@ export default function (app: Express) {
     app.delete('/exam/:id/grade/', handleRemoveGradeFromExam);
     app.get('/exam/:id/grade/', handleGetGradesByExam);
     app.get('/student/:id/status/:status/', handleGetStudentExams);
-    
-    
+    app.post('/exam/student/:id', handleAddStudentToExams);
+    app.get('/exam/period/:period/pending', userGuard, handleGetPendingProfessorExams);
+
+
     // Period
     app.post('/period/', handleAddPeriod);
     app.patch('/period/:id/', handleUpdatePeriod);
@@ -158,10 +173,13 @@ export default function (app: Express) {
     app.get('/period/', handleGetPeriods);
     app.patch('/period/:id/exam/', handleAddExamToPeriod);
     app.delete('/period/:id/exam/', handleRemoveExamFromPeriod);
+
+
+
     // Service
     app.post('/service/', handleAddService);
     app.get('/uni/:id/service/', handleGetServices); // uni services...
     app.delete('/service/:id/'); // <-- IMPLEMENT THIS...
     app.get('/service/:id/grade/', handleGetServiceGrades);
-    
+
 }
