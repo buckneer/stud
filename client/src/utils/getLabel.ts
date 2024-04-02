@@ -7,7 +7,7 @@ const getLabel = (toLook: any[] | string, data: any[], secondParam: string = '_i
       const selected = toLook!.map((prof: string) => ({
         value: prof,
         // @ts-ignore
-        label: get(data.find((p: any) => toLook.indexOf(p[param]) !== -1), secondParam)// change this...
+        label: get(data.find((p: any) => p[param] === prof), secondParam) // change this...
       }));
 
       return selected;
