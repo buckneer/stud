@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import {useLogoutMutation} from "../../app/api/sessionApiSlice";
 import {loggedOut} from "../../app/slices/sessionSlice";
 import Loader from "../Loader/Loader";
@@ -38,11 +38,6 @@ function RegularMenu() {
 
 
 
-
-
-
-
-
 	return (
 		<div className='navbar bg-black text-white mx-7 mt-3 flex align-center justify-between z-[999]'>
 			{isLogoutLoading && (<Loader />)}
@@ -67,11 +62,22 @@ function RegularMenu() {
 									<>
 										<div className="absolute right-5 top-10 text-center z-10 mt-2 w-fit px-5 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 											<div className="py-1" role="none">
-												<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Profile</a>
-												<a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">{session.user.name	}</a>
+												{/*TODO Change university links*/}
+												<Link to={`uni//student`} className="text-gray-700 block px-4 py-2 text-sm hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">
+													Profil
+												</Link>
+												{session.user.roles!.includes('service') && (
+													<>
+														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi odsek</Link>
+														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Korisnik</Link>
+														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Rok</Link>
+														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Predmet</Link>
+													</>
+												)}
+
 											</div>
 											<div className="py-1" role="none">
-												<div onClick={handleLogout} className="text-gray-700 cursor-pointer block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">
+												<div onClick={handleLogout} className="text-gray-700 cursor-pointer block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-2">
 													<div className='block mx-2'>
 														<div>
 															{

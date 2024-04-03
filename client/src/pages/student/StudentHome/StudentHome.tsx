@@ -21,10 +21,12 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { useGetAvailableExamsQuery } from "../../../app/api/examApiSlice";
+import {useAddStudentExamsMutation} from "../../../app/api/studentApiSlice";
 
 
 
 type TExam = {
+	_id: string;
 	code: string;
 	subject: string;
 	professor: string;
@@ -38,9 +40,8 @@ function StudentHome() {
 	const [selectedData, setSelectedData] = useState(0);
 	const [exams, setExams] = useState<string[]>([]);
 
-	const [rowSelection, setRowSelection] = React.useState({})
-	const [globalFilter, setGlobalFilter] = React.useState('');
-	
+	const [rowSelection, setRowSelection] = React.useState({});
+
 
 	const [data, setData] = useState<TExam[]>([]);
 
@@ -115,11 +116,21 @@ function StudentHome() {
 		isError: isExamError,
 	} = useGetAvailableExamsQuery({ university: uni, id: session.user._id });
 
+	const [
+		addExams,
+		examsState
+	] = useAddStudentExamsMutation();
+
 	const handleSend = async () => {
+
+		let exams = Object.keys(rowSelection).map(item => data[parseInt(item)]._id);
+
 		try {
 			let body = {
-
+				student: session.user._id,
+				body: {exams}
 			} // add exam ID's here;
+			await addExams(body)
 		} catch (e: any) {
 			console.error(e);
 		}
@@ -140,15 +151,16 @@ function StudentHome() {
 						<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
 					</div>
 				</div>
-				<div className="w-full">
+				<div className="w-full flex justify-center">
 					{/*<Table setExams={setExams} />*/}
-					<table className="w-full">
-						<thead>
+					<div className="table-container w-full m-5 border-2 border-slate-200 rounded-2xl overflow-hidden">
+						<table className="w-full">
+							<thead className="bg-slate-200 py-2">
 							{table.getHeaderGroups().map(headerGroup => (
 								<tr key={headerGroup.id}>
 									{headerGroup.headers.map(header => {
 										return (
-											<th key={header.id} colSpan={header.colSpan}>
+											<th className="py-2 font-black"  key={header.id} colSpan={header.colSpan}>
 												{header.isPlaceholder ? null : (
 													<>
 														{flexRender(
@@ -163,14 +175,14 @@ function StudentHome() {
 									})}
 								</tr>
 							))}
-						</thead>
-						<tbody>
+							</thead>
+							<tbody>
 							{table.getRowModel().rows.map(row => {
 								return (
-									<tr className="text-center" key={row.id}>
+									<tr className="text-center border-b-[1px] border-slate-200" key={row.id}>
 										{row.getVisibleCells().map(cell => {
 											return (
-												<td key={cell.id}>
+												<td className="py-2" key={cell.id}>
 													{flexRender(
 														cell.column.columnDef.cell,
 														cell.getContext()
@@ -181,8 +193,9 @@ function StudentHome() {
 									</tr>
 								)
 							})}
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div className="flex justify-end p-5">
 					<div className="bg-slate-100 rounded-2xl px-3 py-2 font-bold cursor-pointer transition-all hover:bg-white hover:border-black border-[1px] border-slate-100" onClick={() => { handleSend() }}>Prijavi izabrane ispite</div>
@@ -196,6 +209,7 @@ function StudentHome() {
 
 			examData.map((item: any) => {
 				let newExam: TExam = {
+					_id: item._id,
 					code: item.subject.code,
 					professor: item.professor._id,
 					subject: item.subject?.name,

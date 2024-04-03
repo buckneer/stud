@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {
     addExam,
-    addStudentToExams, canAddExam, examsCanAdd,
+    addStudentToExams, examsCanAdd,
     getExam,
     getExams,
     getGradesByExam, getPendingExamsProfessor,

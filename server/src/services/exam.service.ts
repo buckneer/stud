@@ -5,6 +5,7 @@ import Subject from "../models/subject.model";
 import University from "../models/university.model";
 import {newError, newResponse} from "../utils"
 import Professor from "../models/professor.model";
+import Department from "../models/department.model";
 
 
 export const addExam = async (data: ExamDocument) => {
@@ -120,14 +121,16 @@ export const getPendingExamsProfessor = async (_id: string, period: string) => {
 
 export const examsCanAdd = async (_id: string, uni: string) => {
     // TODO filter by period!
-    // TODO test!
     const exams = await Exam.find({ university: uni }).populate('professor subject');
 
+
     const filteredExams = await Promise.all(exams.map(async (exam) => {
-        return await canAddExam(_id, exam.subject!._id.toString());
+        return await canAddExam(_id, exam.subject!._id.toString(), exam._id.toString());
     }));
 
     const filteredResults = exams.filter((exam, index) => filteredExams[index]);
+
+
 
     return filteredResults;
 }
@@ -138,23 +141,21 @@ export const addStudentToExams = async (_id: string, exams: String[]) => {
     const student = await Student.findOne({user: _id});
     if(!student) throw newError(404, 'Student nije pronađen');
 
-    let notAdded = [];
+    let dep = await Department.findOne({_id: student.department});
+    if(!dep) throw newError(404, 'Odsek nije pronađen')
 
-    // @ts-ignore
-    const canAdd = await examsCanAdd(_id, student.university);
+    const canAdd = await examsCanAdd(_id, dep.university!.toString());
     const canAddIds = canAdd.map(subj => subj._id.toString());
 
     const filterAdd = exams.filter(exam => canAddIds.includes(exam));
 
-
-    // TODO update with exams that can actually add, this now accepts all that is offered (kinda greedy tbh)
     await Exam.updateMany({_id: {"$in": filterAdd}}, {$push: {students: _id}});
 
     return filterAdd;
-
 }
 
-export const canAddExam = async (userId: string, subjectId: string, semester?: number) => {
+
+export const canAddExam = async (userId: string, subjectId: string, exam?: string) => {
     const student = await Student.findOne({user: userId});
     if(!student) throw newError(404, 'Student nije pronađen');
 
@@ -163,6 +164,14 @@ export const canAddExam = async (userId: string, subjectId: string, semester?: n
 
     let signed = student.signs!.map(sign => sign.toString());
     if(!signed.includes(subjectId)) return false;
+
+    if(exam) {
+        let targetExam = await Exam.findOne({_id: exam});
+        console.log(targetExam);
+        if(!targetExam) return false;
+        let students = targetExam.students!.map(item => item.toString());
+        if(students.includes(userId)) return false;
+    }
 
     // TODO implement semester later!
 
