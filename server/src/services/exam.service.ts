@@ -93,21 +93,17 @@ export const getStudentExams = async (_id: string, status: string) => {
     if(status == 'tbd') {
         exams = allExams.filter(exam => exam.grades!.length == 0);
     } else {
-        const withGrades = allExams.filter(exam => exam.grades!.length > 0);
-        if (status === 'passed') {
-            exams = withGrades.filter(exam => {
-                // TODO maybe remove professorGrade later on
+        const filteredExams = allExams.filter(exam => exam.grades!.length > 0);
+        exams = filteredExams.filter(exam => {
+            if (status === 'passed') {
                 //@ts-ignore
                 exam.grades = exam.grades!.filter(grade => grade.professorGrade !== 5 && grade.serviceGrade !== 5);
-                return exam.grades!.length > 0;
-            });
-        } else {
-            exams = withGrades.filter(exam => {
-                // @ts-ignore
-                exam.grades = exam.grades!.filter(grade => grade.professorGrade === 5); // Using as any for quick fix
-                return exam.grades!.length > 0;
-            });
-        }
+            } else {
+                //@ts-ignore
+                exam.grades = exam.grades!.filter(grade => grade.professorGrade === 5);
+            }
+            return exam.grades!.length > 0;
+        });
     }
 
     return exams;
@@ -123,12 +119,62 @@ export const getPendingExamsProfessor = async (_id: string, period: string) => {
 }
 
 
-export const addStudentToExams = async (_id: string, exams: String[]) => {
+export const examsCanAdd = async (_id: string) => {
+    // TODO filter by period!
+    // TODO test!
+    const exams = await Exam.find({});
 
-    await Exam.updateMany({_id: {"$in": exams}}, {$push: {students: _id}});
+
+    const filteredExams = await Promise.all(exams.map(async (exam) => {
+        return await canAddExam(_id, exam.subject!.toString());
+    }));
+
+    const filteredResults = exams.filter((exam, index) => filteredExams[index]);
+
+    return filteredResults;
+}
+
+
+export const addStudentToExams = async (_id: string, exams: String[]) => {
+    // TODO test this!!
+    const student = await Student.findOne({user: _id});
+    if(!student) throw newError(404, 'Student nije pronađen');
+
+    let notAdded = [];
+
+    const canAdd = await examsCanAdd(_id);
+    const canAddIds = canAdd.map(subj => subj._id.toString());
+
+    const filterAdd = exams.filter(exam => canAddIds.includes(exam));
+
+    return filterAdd;
+    // TODO update with exams that can actually add, this now accepts all that is offered (kinda greedy tbh)
+    // await Exam.updateMany({_id: {"$in": filterAdd}}, {$push: {students: _id}});
 
 }
 
+export const canAddExam = async (userId: string, subjectId: string, semester?: number) => {
+    const student = await Student.findOne({user: userId});
+    if(!student) throw newError(404, 'Student nije pronađen');
+
+    const subject = await Subject.findOne({_id: subjectId});
+    if(!subject) throw newError(404, 'Predmet nije pronađen');
+
+    // TODO implement semester later!
+
+    if(!student.subjects) return false;
+    const studentSubjects = student.subjects.map(subj => subj.toString());
+
+    if(!studentSubjects.includes(subjectId)) return false;
+
+    const required = subject.requiredSub!.map(subj => subj.toString());
+
+    if(required.length === 0) return true;
+
+    const completed = student.completedSubjects!.map(subj => subj.toString());
+
+    return required.every(requiredSub => completed.includes(requiredSub));
+}
 
 
 

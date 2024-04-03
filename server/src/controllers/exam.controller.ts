@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {
     addExam,
-    addStudentToExams,
+    addStudentToExams, canAddExam, examsCanAdd,
     getExam,
     getExams,
     getGradesByExam, getPendingExamsProfessor,
@@ -69,6 +69,19 @@ export async function handleAddStudentsToExam(req: Request, res: Response) {
         let { students } = req.body;
 
         let resp = await addToModelArray(Exam, id, 'students', students);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleExamsCanAdd(req: Request, res: Response) {
+    try {
+        let { id } = req.params; // TODO remove with authguard
+
+
+        let resp = await examsCanAdd(id);
+
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
