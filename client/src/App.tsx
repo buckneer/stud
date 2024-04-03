@@ -11,7 +11,9 @@ import Home from './pages/home/Home';
 
 import ProfessorAdd from './pages/service/ProfessorAdd/ProfessorAdd';
 import DepartmentAdd from './pages/service/DepartmentAdd/DepartmentAdd';
+import DepartmentEdit from './pages/service/DepartmentEdit/DepartmentEdit';
 import PeriodAdd from './pages/service/PeriodAdd/PeriodAdd';
+import PeriodEdit from './pages/service/PeriodEdit/PeriodEdit';
 import ExamAdd from './pages/service/ExamAdd/ExamAdd';
 import GradeAdd from './pages/service/GradeAdd/GradeAdd';
 import ServiceAdd from './pages/service/ServiceAdd/ServiceAdd';
@@ -26,6 +28,9 @@ import SetPassword from './pages/SetPassword/SetPassword';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import NotFound from "./pages/NotFound/NotFound";
 import StudentHome from "./pages/student/StudentHome/StudentHome";
+import SubjectEdit from './pages/service/SubjectEdit/SubjectEdit';
+import StudentEdit from './pages/service/StudentEdit/StudentEdit';
+import ExamEdit from './pages/service/ExamEdit/ExamEdit';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -55,14 +60,19 @@ function App() {
               {/* TODO: check if user is in uni :uni service here... */}
               <Route path='/uni/:uni/register' element={<Register/>} />
               <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
+              <Route path='/uni/:uni/subject/:id/edit' element={<SubjectEdit />} />
               <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
+              <Route path='/uni/:uni/student/:id/edit' element={<StudentEdit />} />
               <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
               <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
+              <Route path='/uni/:uni/department/:id/edit' element={<DepartmentEdit/>} />
               <Route path='/uni/:uni/period/add' element={<PeriodAdd/>} />
+              <Route path='/uni/:uni/period/:id/edit' element={<PeriodEdit/>} />
               <Route path='/uni/:uni/period/:period/exam/add' element={<ExamAdd/>} />
+              <Route path='/uni/:uni/exam/:id/edit' element={<ExamEdit />} />
               <Route path='/uni/:uni/grade/add' element={<GradeAdd/>} />
               <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
-
+              <Route path='/uni/:uni/department/:department/edit' element={<DepartmentEdit />} />
               {/* STUDENT ROUTES */}
               <Route path='/uni/:uni/student' element={<StudentHome />} />
               {/* User has to have admin privileges */}

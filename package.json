@@ -14,6 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "@types/lodash.get": "^4.4.9",
+    "concurrently": "^8.2.2",
+    "lodash.get": "^4.4.2"
   }
 }

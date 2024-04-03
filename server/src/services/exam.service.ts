@@ -26,8 +26,7 @@ export const addExam = async (data: ExamDocument) => {
 }
 
 export const getExam = async (_id: string) => {
-
-    let exam = await Exam.findOne({_id});
+    let exam = await Exam.findOne({_id}).populate('period');
     if(!exam) return newError(404, 'Ispit nije pronađen');
 
     return exam;

@@ -66,6 +66,8 @@ export interface Subject {
 	department?: string;
 	university?: string;
 	espb?: number;
+	degree?: string;
+	semester?: any;
 	requiredSub?: string[] | Subject[];
 }
 
@@ -77,7 +79,7 @@ export interface Grade {
 	service?: string | Service; 
 	serviceGrade?: number;
 	confirmed?: boolean;
-	student: string | Student;
+	student?: string | Student;
 	period?: string | Period; 
 }
 
@@ -90,6 +92,7 @@ export interface Period {
 	end?: string;
 	exams?: string[] | Exam[];
 	university?: string | University;
+	acceptDate?: string;
 }
 
 export interface Exam {
@@ -101,6 +104,7 @@ export interface Exam {
 	grades?: string[] | Grade[];
 	period?: string | Period;
 	ended?: boolean;
+	department?: string | Department;
 	university?: string | University;
 }
 
