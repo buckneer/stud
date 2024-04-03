@@ -6,6 +6,7 @@ import 'dotenv/config';
 import { UserRequest, UserToken } from './UserRequest';
 import { getService, getServiceByUserId } from '../services/service.service';
 import log from "../logger";
+import Professor from "../models/professor.model";
 
 
 
@@ -43,6 +44,12 @@ export const roleGuard = (roles: string[]) => {
             if(req.user.roles.includes('professor')) {
 
 
+                let professor = await Professor.findOne({user: req.user.id});
+                if(!professor) return res.status(404).send(newError(404, 'Profesor nije pronađen'))
+                if(!req.params.subj) return res.status(404).send(newError(401, 'Predmet nije pronađen'));
+
+                let professorSubj = professor.subjects.map(subj => subj.toString());
+                if(!professorSubj.includes(req.params.subj)) return res.status(401).send(newError(401, 'Nemate pristup ovom predmetu'));
 
                 console.log("You are professor");
                 return next();
