@@ -125,7 +125,7 @@ export const examsCanAdd = async (_id: string) => {
 
 
     const filteredExams = await Promise.all(exams.map(async (exam) => {
-        return await canAddExam(_id, exam.subject!.toString());
+        return await canAddExam(_id, exam.subject!._id.toString());
     }));
 
     const filteredResults = exams.filter((exam, index) => filteredExams[index]);
@@ -146,9 +146,11 @@ export const addStudentToExams = async (_id: string, exams: String[]) => {
 
     const filterAdd = exams.filter(exam => canAddIds.includes(exam));
 
-    return filterAdd;
+
     // TODO update with exams that can actually add, this now accepts all that is offered (kinda greedy tbh)
-    // await Exam.updateMany({_id: {"$in": filterAdd}}, {$push: {students: _id}});
+    await Exam.updateMany({_id: {"$in": filterAdd}}, {$push: {students: _id}});
+
+    return filterAdd;
 
 }
 
@@ -158,6 +160,9 @@ export const canAddExam = async (userId: string, subjectId: string, semester?: n
 
     const subject = await Subject.findOne({_id: subjectId});
     if(!subject) throw newError(404, 'Predmet nije pronađen');
+
+    let signed = student.signs!.map(sign => sign.toString());
+    if(!signed.includes(subjectId)) return false;
 
     // TODO implement semester later!
 

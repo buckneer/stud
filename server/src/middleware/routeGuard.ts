@@ -41,6 +41,9 @@ export const roleGuard = (roles: string[]) => {
             if(!req.user.roles.some(item => roles.includes(item))) res.status(403).send(newError(403, 'STOJ!'));
 
             if(req.user.roles.includes('professor')) {
+
+
+
                 console.log("You are professor");
                 return next();
 

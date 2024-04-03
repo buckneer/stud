@@ -1,10 +1,11 @@
 import { Document, Schema, model, Types } from 'mongoose';
 import {GradeDocument} from "./grade.model";
+import {SubjectDocument} from "./subject.model";
 
 export interface ExamDocument extends Document {
     date?: string;
     students?: Types.ObjectId[];
-    subject?: Types.ObjectId;
+    subject?: Types.ObjectId | SubjectDocument;
     professor?: Types.ObjectId //! Can be removed
     grades?: Types.ObjectId[] | GradeDocument[] ;
     period?: Types.ObjectId;
