@@ -140,8 +140,11 @@ const studentApiSlice = apiSlice.injectEndpoints({
 export const {
 	useAddStudentMutation,
 	useAddStudentToUniMutation,
-	useDeleteStudentUniMutation,
+	useAddStudentExamsMutation,
 	useGetStudentQuery,
+	useGetUniStudentsQuery,
+	useDeleteStudentUniMutation,
 	useDeleteStudentMutation,
-	useGetUniStudentsQuery
+	useRemoveStudentExamMutation,
+	useUpdateStudentMutation
 } = studentApiSlice;

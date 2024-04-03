@@ -29,6 +29,7 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import NotFound from "./pages/NotFound/NotFound";
 import StudentHome from "./pages/student/StudentHome/StudentHome";
 import SubjectEdit from './pages/service/SubjectEdit/SubjectEdit';
+import StudentEdit from './pages/service/StudentEdit/StudentEdit';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -60,6 +61,7 @@ function App() {
               <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
               <Route path='/uni/:uni/subject/:id/edit' element={<SubjectEdit />} />
               <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
+              <Route path='/uni/:uni/student/:id/edit' element={<StudentEdit />} />
               <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
               <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
               <Route path='/uni/:uni/department/:id/edit' element={<DepartmentEdit/>} />
