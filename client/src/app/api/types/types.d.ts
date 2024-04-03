@@ -279,6 +279,7 @@ export interface DelUniProf {
 }
 
 export interface GiveSign {
+	subject: string;
 	body: {
 		professor: string;
 		students: string[];
