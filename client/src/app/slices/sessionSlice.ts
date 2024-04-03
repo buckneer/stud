@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { User, Session } from "../api/types/types";
+import { User, Session, Meta } from "../api/types/types";
 
 const initialState: Session = {
 	accessToken: '',
 	refreshToken: '',
-	user: {}
+	user: {},
+	metadata: {}
 }
 
 const sessionSlice = createSlice({
@@ -30,6 +31,15 @@ const sessionSlice = createSlice({
 				user: action.payload
 			}
 		},
+		setMetadata(state, action: PayloadAction<Meta>) {
+			return {
+				...state,
+				metadata: {
+					...state.metadata,
+					...action.payload
+				}
+			}
+		},
 		loggedOut() {
 			return initialState;
 		},
@@ -37,4 +47,4 @@ const sessionSlice = createSlice({
 });
 
 export default sessionSlice.reducer;
-export const { loggedOut, setAccess, setRefresh, setUser } = sessionSlice.actions;
+export const { loggedOut, setAccess, setRefresh, setUser, setMetadata } = sessionSlice.actions;

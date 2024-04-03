@@ -12,10 +12,12 @@ import {
 import SidebarItem from "../SidebarItem/SidebarItem";
 import { useParams } from "react-router";
 import { RootState } from "../../app/store";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGetAllUnisQuery, useGetUniQuery } from "../../app/api/uniApiSlice";
 import Select from 'react-select';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetUserUnisRoleQuery } from "../../app/api/userApiSlice";
+import { setMetadata } from "../../app/slices/sessionSlice";
 
 
 export interface SidebarProps {
@@ -24,8 +26,8 @@ export interface SidebarProps {
 	role?: string
 }
 
-function Sidebar({children} : SidebarProps) {
-
+function Sidebar({children, role = 'student'} : SidebarProps) {
+	const dispatch = useDispatch();
 	const session = useSelector((state: RootState) => state.session);
     const {uni} = useParams();
 	// const [currentUni, setCurrentUni] = useState("PMF"); if we want to switch uni
@@ -35,16 +37,36 @@ function Sidebar({children} : SidebarProps) {
         isLoading: isUniDataLoading,
         isSuccess: isUniDataSuccess,
         isError: isUniDataError
-    } = useGetUniQuery(uni! ,{
+				// @ts-ignore
+    } = useGetUserUnisRoleQuery({ user: session.user._id, role }, {
 		skip: !uni || !session.accessToken
 	});
+
+	const setUniversity = (university: string) => {
+		dispatch(setMetadata({ university }))
+	}
+
+	let uniContent: any;
+
+	if (isUniDataLoading) {
+		uniContent = <option>Učitavam...</option>
+	} else if (isUniDataSuccess) {
+		uniContent = uniData.map(uni => <option value={uni.university._id}>{ uni.university.name }</option>)
+	}
+
+	useEffect(() => {
+		if(uniData && !session.metadata.university) {
+			dispatch(setMetadata({ university: uniData[0].university._id }));
+		}
+	}, [ isUniDataSuccess ]);
 
 	return (
 		<div className='sidebar flex flex-col items-center divide-y-2 bg-slate-100 px-5 py-5'>
 			<div className="flex flex-col items-center gap-5 px-5 pb-4">
 				<University className="text-gray-700" size={100} />
-				<select className="border-0 rounded-xl w-full">
-					<option>{uniData?.name}</option>
+				{/* Maybe change this to state? */}
+				<select value={session.metadata.university} className="border-0 rounded-xl w-full" onChange={(e: any) => setUniversity(e.target.value)}>
+					{ uniContent }
 				</select>
 				{/*<h1 className="font-black">Logged in</h1>*/}
 			</div>

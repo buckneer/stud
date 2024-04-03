@@ -120,7 +120,7 @@ const examApiSlice = apiSlice.injectEndpoints({
 			}),
 			providesTags: (result, error, id) => (result)
 				? [...result.map((exam: Exam) => ({ type: 'Exam' as const, id: exam._id })),
-					{ type: 'Student', id: result.id }]
+					{ type: 'Student' as const, id }]
 				: [],
 		}),
 	})

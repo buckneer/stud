@@ -1,7 +1,13 @@
+export interface Meta {
+	university?: string;
+	tab?: string;
+}
+
 export interface Session {
 	accessToken: string,
 	refreshToken: string,
 	user: User;
+	metadata: Meta;
 }
 
 export interface User {
