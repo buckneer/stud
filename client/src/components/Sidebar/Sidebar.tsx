@@ -17,7 +17,8 @@ import { useGetAllUnisQuery, useGetUniQuery } from "../../app/api/uniApiSlice";
 import Select from 'react-select';
 import { useEffect, useState } from "react";
 import { useGetUserUnisRoleQuery } from "../../app/api/userApiSlice";
-import { setMetadata } from "../../app/slices/sessionSlice";
+import {setMetadata} from "../../app/slices/sessionSlice";
+
 
 
 export interface SidebarProps {

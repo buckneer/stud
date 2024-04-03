@@ -1,9 +1,6 @@
 import University from '../models/university.model';
-import Period, { PeriodDocument } from '../models/period.model';
-import { newError, newResponse } from '../utils';
-import Department from '../models/department.model';
-import Student from '../models/student.model';
-import { SubjectDocument } from '../models/subject.model';
+import Period, {PeriodDocument} from '../models/period.model';
+import {newError, newResponse} from '../utils';
 
 export const addPeriod = async (data: PeriodDocument) => {
 	let uniObj = await University.findOne({ _id: data.university });
@@ -13,7 +10,7 @@ export const addPeriod = async (data: PeriodDocument) => {
 	let newPeriod = new Period(data);
 
 	let saved = await newPeriod.save();
-	
+
 	if(!saved) return newError(500, 'Internal Server Error');
 
 	return newResponse('Ispitni rok je sačuvan', 200, { id: saved._id });
@@ -49,48 +46,48 @@ export const updatePeriod = async (_id: string, data: PeriodDocument) => {
 	return newResponse('Ispitni rok uspešno ažuriran');
 }
 
-export const getUniPeriods = async (_id: string/*, active: string | boolean*/) => {
+export const getUniPeriods = async (_id: string, filter: string) => {
 	let university = await University.findOne({ _id });
 
 	if(!university) throw newError(404, 'Ne postoji univerzitet!');
+	const currentDate = new Date();
+	const utcDate = new Date(currentDate.toISOString());
 
-	// let query = (active) 
-	// 	? { university: _id,  end: { $gte: new Date().toISOString() }}
-	// :  { university: _id }
+	let query = filter === 'all' ?
+		{university: _id} :
+		{university: _id, start: { $lte: utcDate }, end: { $gte: utcDate }}
 
-	let periods = await Period.find( { university: _id });
-
-	return periods;
+	return Period.find(query);
 }
 
-export const getAvailableExamsInPeriod = async (_id: string) => {
-	let student = await Student.findOne({ _id }).populate('subjects');
-
-	if(!student) throw newError(404, 'Student ne postoji!');
-	
-	let period = await Period.findOne({ acceptDate: { $gt: new Date(Date.now()) } });
-
-	if(!period) throw newError(400, 'Ne postoji aktivni ispitni rok!');
-
-	// return exams... 
-	let subjects = student.subjects?.filter((subject: any) => {
-		if(period.semester !== 0 && subject.semester !== period.semester) {
-			return false;
-		}
-
-		// test this one
-		if(!period?.exams?.find((ex: any) => student.subjects?.indexOf(ex) !== -1)) {
-			return false;
-		}
-
-		let reqSubs: any[] = subject?.requiredSub;
-		
-		if(reqSubs.length) {
-			return !reqSubs.find((sub: any) => student.completedSubjects?.indexOf(sub) === -1);
-		}
-
-		return true;
-	});
-
-	return subjects;
-}
+// export const getAvailableExamsInPeriod = async (_id: string) => {
+// 	let student = await Student.findOne({ _id }).populate('subjects');
+//
+// 	if(!student) throw newError(404, 'Student ne postoji!');
+//
+// 	let period = await Period.findOne({ acceptDate: { $gt: new Date(Date.now()) } });
+//
+// 	if(!period) throw newError(400, 'Ne postoji aktivni ispitni rok!');
+//
+// 	// return exams...
+// 	let subjects = student.subjects?.filter((subject: any) => {
+// 		if(period.semester !== 0 && subject.semester !== period.semester) {
+// 			return false;
+// 		}
+//
+// 		// test this one
+// 		if(!period?.exams?.find((ex: any) => student.subjects?.indexOf(ex) !== -1)) {
+// 			return false;
+// 		}
+//
+// 		let reqSubs: any[] = subject?.requiredSub;
+//
+// 		if(reqSubs.length) {
+// 			return !reqSubs.find((sub: any) => student.completedSubjects?.indexOf(sub) === -1);
+// 		}
+//
+// 		return true;
+// 	});
+//
+// 	return subjects;
+// }

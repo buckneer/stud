@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 
 export interface ContainerProps  {
-    children: string | JSX.Element | JSX.Element[],
+    children: ReactNode,
     shrink?: boolean;
 }
 

@@ -41,7 +41,7 @@ export default function Home() {
       </Helmet>
       <div className="flex h-full">
         <UserContent title={titles[selectedData]} university={uni!} role={engRoles[selectedData]} />
-        <Sidebar>
+        <Sidebar role="service">
           <div className="">
             <SidebarItem name="Studenti" Icon={GraduationCap} active={selectedData == 0} to={0} changeData={handleDataChange} />
             <SidebarItem name="Profesori" Icon={User} active={selectedData == 1}  to={1} changeData={handleDataChange} />

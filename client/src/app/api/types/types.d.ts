@@ -33,7 +33,7 @@ export interface Student {
 	dateOfEnrollment?: string;
 	currentSemester?: string;
 	grades?: string[] | Grade[];
-	universities?: string[] | Uni[];
+	university?: string | Uni;
 	signs?: string[] | Subject[];
 }
 
@@ -80,14 +80,14 @@ export interface Subject {
 
 export interface Grade {
 	_id?: string;
-	subject?: string | Subject; 
+	subject?: string | Subject;
 	professor?: string | Professor;
 	profesorGrade?: number;
-	service?: string | Service; 
+	service?: string | Service;
 	serviceGrade?: number;
 	confirmed?: boolean;
 	student?: string | Student;
-	period?: string | Period; 
+	period?: string | Period;
 }
 
 export interface Period {

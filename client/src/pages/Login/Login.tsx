@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLoginMutation } from './../../app/api/sessionApiSlice';
-import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
+import {Link, useNavigate, Navigate, useLocation, redirect} from "react-router-dom";
 import { Helmet } from 'react-helmet';
 import { RootState } from '../../app/store';
 import { useSelector } from 'react-redux';
@@ -40,9 +40,18 @@ const Login = () => {
 			setTimeout(() => {
 				// @ts-ignore
 				// TODO get university where this user is service. (FROM service model)
-				// console.log("Login result", result.user.universities);
+				console.log(session.user);
+				let rootUrl = `/uni/${tempUni}`
+				let redirectUrl = `${rootUrl}/student`;
 
-				(location?.state?.from) ? navigate(location.state.from) : navigate(`/uni/${tempUni}`);
+				if(result.user.roles!.includes('professor')) {
+					redirectUrl = `${rootUrl}/professor`
+				}
+
+				if(result.user.roles!.includes('service')) {
+					redirectUrl = `${rootUrl}/`
+				}
+				(location?.state?.from) ? navigate(location.state.from) : navigate(redirectUrl);
 			}, 1000);
 
 		} catch (error: any) {

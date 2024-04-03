@@ -252,15 +252,17 @@ export const getUserUnisByRole = async (_id: string, role: string) => {
 		'service': Service,
 		'student': Student
 	};
-	
-	
+
+
 	// @ts-ignore
 	const collectionName = roleToCollectionMap[role];
 	// @ts-ignore
 	const ModelToSearch = toSearch[role];
-	
+
+	console.log("Col: ", collectionName, "Model: ", ModelToSearch);
+
 	if(!collectionName) throw newError(400, 'Pogrešan role!');
-	
+
 	return ModelToSearch.find({ user: _id }).populate({
 		path: 'university',
 		select: '_id name'

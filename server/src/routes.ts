@@ -83,7 +83,7 @@ export default function (app: Express) {
     app.delete('/uni/:id/department/', handleRemoveDepartmentFromUni);
     app.patch('/uni/:id/service/', handleAddServicesToUni);
     app.delete('/uni/:id/service/', handleRemoveServiceFromUni);
-    app.get('/uni/:id/period/', handleGetUniPeriods);
+    app.get('/uni/:uni/period/', handleGetUniPeriods);
     app.get('/uni/:id/exam/', handleGetUniExams);
 
 
@@ -145,7 +145,7 @@ export default function (app: Express) {
     app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
     app.get('/subject/:id/role/:role/', handleGetSubjectRole);
     app.patch('/sign/subject/:id/', handleGiveSign);
-    
+
     // Grade
     app.post('/grades/', handleAddGrade);
     app.patch('/grades/:id/', handleUpdateGrade);

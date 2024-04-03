@@ -68,7 +68,7 @@ function RegularMenu() {
 												</Link>
 												{session.user.roles!.includes('service') && (
 													<>
-														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi odsek</Link>
+														<Link to={`/uni/${session.metadata.university}/department/add`} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi odsek</Link>
 														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Korisnik</Link>
 														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Rok</Link>
 														<Link to={"#"} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Predmet</Link>
