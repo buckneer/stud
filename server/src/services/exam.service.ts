@@ -121,7 +121,7 @@ export const getPendingExamsProfessor = async (_id: string, period: string) => {
 export const examsCanAdd = async (_id: string) => {
     // TODO filter by period!
     // TODO test!
-    const exams = await Exam.find({});
+    const exams = await Exam.find({}).populate('professor subject');
 
 
     const filteredExams = await Promise.all(exams.map(async (exam) => {
