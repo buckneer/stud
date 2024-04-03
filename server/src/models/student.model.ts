@@ -14,6 +14,7 @@ export interface StudentDocument extends Document {
     currentSemester?: string;
     grades?: Types.ObjectId[];
     exams?: Types.ObjectId[];
+    signs?: Types.ObjectId[];
     // university?: Types.ObjectId
 }
 
@@ -28,7 +29,8 @@ const StudentSchema = new Schema({
     status: { type: String, enum: ['Budžet', 'Samofinansiranje', 'Done'], required: false },
     dateOfEnrollment: { type: String, required: false },
     currentSemester: { type: String, default: '1'},
-    grades: [{ type: Schema.ObjectId, ref: 'Grades', index: true }], // Obj.Id
+    grades: [{ type: Schema.ObjectId, ref: 'Grades', index: true }], 
+    signs: [{ type: Schema.ObjectId, ref: 'Subject' }]// Obj.Id
     // universitiy: {type: Schema.ObjectId, required: false, ref: 'University'},
 });
 

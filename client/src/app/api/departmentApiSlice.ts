@@ -1,5 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { Department, UniDep, UpdateDep, AddUniDep, DelDep, AddStDep, DelStDep, AddProfDep, DelProfDep, AddSubDep, DelSubDep } from "./types/types";
+import { Department, UniDep, UpdateDep, AddUniDep, DelDep, AddStDep, DelStDep, AddProfDep, DelProfDep, AddSubDep, DelSubDep, Student } from "./types/types";
 
 const departmentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -123,6 +123,15 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 			invalidatesTags: (result, error, arg) => (result) 
 				? [{ type: 'Department' as const, id: arg.department }, { type: 'Subject' as const, id: arg.body.subject }] 
 				: [],
+		}),
+		getStudentsByDepartment: builder.query <Student[], string> ({
+			query: (id) => ({
+				url: `/department/${id}/student/`,
+			}),
+			providesTags: (result, error, id) => (result)
+				? [{ type: 'Department' as const, id }, 
+					...result.map((student: Student) => ({ type: 'Student' as const, id: student._id }))]
+				: [],
 		})
 	})
 });
@@ -139,5 +148,6 @@ export const {
 	useAddDepProfessorsMutation,
 	useDeleteDepProfessorMutation,
 	useAddDepSubjectsMutation,
-	useDeleteDepSubjectsMutation
+	useDeleteDepSubjectsMutation,
+	useGetStudentsByDepartmentQuery
 } = departmentApiSlice;

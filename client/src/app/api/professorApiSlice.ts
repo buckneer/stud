@@ -1,5 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { Professor, ProfBody, AddProfUni, DelProfUni, AddProfSub, DelProfSub, AddProfGrade, DelProfGrade, AddUniProf, DelUniProf } from "./types/types";
+import { Professor, ProfBody, AddProfUni, DelProfUni, AddProfSub, DelProfSub, AddProfGrade, DelProfGrade, AddUniProf, DelUniProf, GiveSign } from "./types/types";
 
 // TODO: add delete professor later...
 
@@ -126,6 +126,17 @@ const professorApiSlice = apiSlice.injectEndpoints({
 					{ type: 'Uni' as const, id: arg.body.university }] 
 				: [],
 		}),
+		giveSign: builder.mutation <any, any> ({
+			query: ({ subject, body }) => ({
+				url: `/sign/subject/${subject}`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error, arg) => (result)
+				? [{ type: 'Subject' as const, id: arg.subject },
+					...arg.body.students.map((student: string) => ({ type: 'Student' as const, id: student }))]
+				: [],
+		})
 	})
 });
 
