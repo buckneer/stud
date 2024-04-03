@@ -10,8 +10,12 @@ import {
 	UserCircle
 } from "lucide-react";
 import SidebarItem from "../SidebarItem/SidebarItem";
-import React from "react";
-
+import { useParams } from "react-router";
+import { RootState } from "../../app/store";
+import { useSelector } from 'react-redux';
+import { useGetAllUnisQuery, useGetUniQuery } from "../../app/api/uniApiSlice";
+import Select from 'react-select';
+import { useState } from "react";
 
 
 export interface SidebarProps {
@@ -22,16 +26,25 @@ export interface SidebarProps {
 
 function Sidebar({children} : SidebarProps) {
 
+	const session = useSelector((state: RootState) => state.session);
+    const {uni} = useParams();
+	// const [currentUni, setCurrentUni] = useState("PMF"); if we want to switch uni
 
+	const{
+        data: uniData,
+        isLoading: isUniDataLoading,
+        isSuccess: isUniDataSuccess,
+        isError: isUniDataError
+    } = useGetUniQuery(uni! ,{
+		skip: !uni || !session.accessToken
+	});
 
 	return (
 		<div className='sidebar flex flex-col items-center divide-y-2 bg-slate-100 px-5 py-5'>
 			<div className="flex flex-col items-center gap-5 px-5 pb-4">
 				<University className="text-gray-700" size={100} />
 				<select className="border-0 rounded-xl w-full">
-					<option>Hello World</option>
-					<option>Hello World 2</option>
-					<option>Hello World 3</option>
+					<option>{uniData?.name}</option>
 				</select>
 				{/*<h1 className="font-black">Logged in</h1>*/}
 			</div>

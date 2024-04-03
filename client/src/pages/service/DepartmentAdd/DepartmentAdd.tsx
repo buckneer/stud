@@ -6,6 +6,7 @@ import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import { useAddUniDepartmentMutation } from '../../../app/api/uniApiSlice';
 import MutationState from '../../../components/MutationState/MutationState';
+import InputField from '../../../components/InputField/InputField';
 
 const DepartmentAdd = () => {
 
@@ -86,17 +87,7 @@ const DepartmentAdd = () => {
 							/>
 						</div>
 						<form onSubmit={handleAddDepartment} >
-							<div className='form-control'>
-								<label htmlFor="nameOfDep" className="relative block overflow-hidden rounded-md bg-white px-3 pt-3 shadow-sm w-full">
-									<input
-										type="text" id="nameOfDep" placeholder="Zvanje profesora" value={name} onChange={(e) => setName(e.target.value)} autoComplete='off' required
-										className="peer pr-5 h-8 w-full border-none p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-									/>
-									<span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-										Naziv odseka
-									</span>
-								</label>
-							</div>
+							<InputField id="nameOfDep" name="Naziv odseka" type="text" inputVal={name} setVal={(e) => setName(e.target.value)} />
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isDepartmentAddSuccess}>Kreiraj Odsek</button>
 							</div>
