@@ -1,6 +1,7 @@
 // TODO: Proveri da li postoji profesor na univerzitetu, ako ne postoji dodaj ga...
 
 import Professor, { ProfessorDocument } from "../models/professor.model";
+import Student from "../models/student.model";
 import Subject from "../models/subject.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils";
@@ -136,4 +137,24 @@ export const addSubjectToProfessors = async (_id: string, professors: string[]) 
     });
 
     return newResponse('Uspešno dodavanje predmeta profesorima!', 200);
+}
+
+export const giveSign = async (_id: string, professor: string, students: string[]) => {
+    let professorObj = await Professor.findOne({ _id: professor });
+
+    if(!professorObj) throw newError(404, 'Ne postoji profesor!');
+
+    let studentsObj = await Student.find({ _id:  students, subjects: _id });
+
+    if(!studentsObj.length) throw newError(400, 'Niste dodali studente!');
+
+    let subject = await Subject.findOne({ _id, professors: professor });
+
+    if(!subject) throw newError(404, 'Ne postoji predmet!');
+
+    await Student.updateMany({ _id: students }, {
+        $addToSet: { signs: _id }
+    });
+
+    return newResponse('Uspešno ste dali potpis!');
 }

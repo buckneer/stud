@@ -28,6 +28,7 @@ export interface Student {
 	currentSemester?: string;
 	grades?: string[] | Grade[];
 	universities?: string[] | Uni[];
+	signs?: string[] | Subject[];
 }
 
 export interface Professor {
@@ -274,5 +275,12 @@ export interface DelUniProf {
 	professor: string;
 	body: {
 		university: string;
+	}
+}
+
+export interface GiveSign {
+	body: {
+		professor: string;
+		students: string[];
 	}
 }

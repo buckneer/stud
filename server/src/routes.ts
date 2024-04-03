@@ -1,5 +1,5 @@
 
-import { handleAddGradesToProfessor, handleAddProfessor, handleAddProfessorsToSubject, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessorGrades, handleGetProfessors, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
+import { handleAddGradesToProfessor, handleAddProfessor, handleAddProfessorsToSubject, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessorGrades, handleGetProfessors, handleGiveSign, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
 import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni, handleRemoveProfessorFromUni } from "./controllers/university.controller";
 import {
     handleAddUnisToUser,
@@ -144,6 +144,8 @@ export default function (app: Express) {
     app.patch('/subject/:id/required/', handleAddRequiredsToSubject);
     app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
     app.get('/subject/:id/role/:role/', handleGetSubjectRole);
+    app.patch('/sign/subject/:id/', handleGiveSign);
+    
     // Grade
     app.post('/grades/', handleAddGrade);
     app.patch('/grades/:id/', handleUpdateGrade);
