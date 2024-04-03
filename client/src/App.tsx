@@ -31,6 +31,7 @@ import StudentHome from "./pages/student/StudentHome/StudentHome";
 import SubjectEdit from './pages/service/SubjectEdit/SubjectEdit';
 import StudentEdit from './pages/service/StudentEdit/StudentEdit';
 import ExamEdit from './pages/service/ExamEdit/ExamEdit';
+import Departments from "./pages/department/DepartmentHome/DepartmentHome"
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -75,6 +76,8 @@ function App() {
               <Route path='/uni/:uni/department/:department/edit' element={<DepartmentEdit />} />
               {/* STUDENT ROUTES */}
               <Route path='/uni/:uni/student' element={<StudentHome />} />
+              <Route path='/uni/:uni/departments/' element={<Departments />} />
+
               {/* User has to have admin privileges */}
               {/* TODO: CHANGE THIS TO AdminRequired! */}
               <Route element={<TokenRequired />}>
