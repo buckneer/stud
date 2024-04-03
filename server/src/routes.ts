@@ -165,7 +165,7 @@ export default function (app: Express) {
     app.get('/student/:id/status/:status/', handleGetStudentExams);
     app.post('/exam/student/:id', handleAddStudentToExams);
     app.get('/exam/period/:period/pending', userGuard, handleGetPendingProfessorExams);
-    app.get('/exam/student/:id', handleExamsCanAdd);
+    app.get('/uni/:uni/exam/student/:id', handleExamsCanAdd);
 
     // Period
     app.post('/period/', handleAddPeriod);

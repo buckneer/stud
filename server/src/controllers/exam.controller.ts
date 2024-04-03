@@ -77,10 +77,10 @@ export async function handleAddStudentsToExam(req: Request, res: Response) {
 
 export async function handleExamsCanAdd(req: Request, res: Response) {
     try {
-        let { id } = req.params; // TODO remove with authguard
+        let { id, uni } = req.params; // TODO remove with authguard
 
 
-        let resp = await examsCanAdd(id);
+        let resp = await examsCanAdd(id, uni);
 
         return res.status(200).send(resp);
     } catch (e: any) {

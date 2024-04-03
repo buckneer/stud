@@ -1,11 +1,11 @@
-import {Helmet} from "react-helmet";
-import React, {HTMLProps, useState} from "react";
+import { Helmet } from "react-helmet";
+import React, { HTMLProps, useEffect, useState } from "react";
 import StudTitle from "../../../components/StudTitle/StudTitle";
 import Loader from "../../../components/Loader/Loader";
 import UserItem from "../../../components/UserItem/UserItem";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import SidebarItem from "../../../components/SidebarItem/SidebarItem";
-import {Book, CalendarCheck, FolderArchive, GraduationCap, LayoutList, User} from "lucide-react";
+import { Book, CalendarCheck, FolderArchive, GraduationCap, LayoutList, User } from "lucide-react";
 
 import {
 	ColumnDef,
@@ -16,65 +16,63 @@ import {
 	Table,
 	Column
 } from '@tanstack/react-table'
-import {Exam} from "../../../app/api/types/types";
+import { Exam } from "../../../app/api/types/types";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
+import { useGetAvailableExamsQuery } from "../../../app/api/examApiSlice";
 
 
 
-type Person = {
-	firstName: string
-	lastName: string
-	age: number
-	visits: number
-	status: string
-	progress: number
+type TExam = {
+	code: string;
+	subject: string;
+	professor: string;
+	semester?: string;
+	date?: string;
 }
 
-const defaultData: Exam[] = [
-	{
-		date: '12.07.2024'
-	},
-	{
-		date: '12.07.2024'
-	},
-	{
-		date: '12.07.2024'
-	},
-	{
-		date: '12.07.2024'
-	},
-]
-
-
-
 function StudentHome() {
-
-
-
+	const { uni } = useParams();
+	const session = useSelector((state: RootState) => state.session);
 	const [selectedData, setSelectedData] = useState(0);
 	const [exams, setExams] = useState<string[]>([]);
 
 	const [rowSelection, setRowSelection] = React.useState({})
 	const [globalFilter, setGlobalFilter] = React.useState('');
+	
 
-	const [data, setData] = React.useState([...defaultData])
+	const [data, setData] = useState<TExam[]>([]);
 
 
-	const columns = React.useMemo<ColumnDef<Exam>[]>(
+	const columns = React.useMemo<ColumnDef<TExam>[]>(
 		() => [
+			{
+				accessorFn: row => row.code,
+				id: 'code',
+				cell: info => info.getValue(),
+				header: () => <span>Kod</span>,
+			},
+			{
+				accessorFn: row => row.subject,
+				id: 'subject',
+				cell: info => info.getValue(),
+				header: () => <span>Predmet</span>,
+			},
+			{
+				accessorFn: row => row.professor,
+				id: 'professor',
+				cell: info => info.getValue(),
+				header: () => <span>Profesor</span>,
+			},
 			{
 				id: 'select',
 				header: ({ table }) => (
-					<IndeterminateCheckbox
-						{...{
-							checked: table.getIsAllRowsSelected(),
-							indeterminate: table.getIsSomeRowsSelected(),
-							onChange: table.getToggleAllRowsSelectedHandler(),
-						}}
-					/>
+					<>Izaberi?</>
 				),
 				cell: ({ row }) => (
-					<div className="px-1">
-						<IndeterminateCheckbox
+					<div className="px-">
+						<IndeterminateCheckbox className="rounded-full"
 							{...{
 								checked: row.getIsSelected(),
 								disabled: !row.getCanSelect(),
@@ -85,18 +83,12 @@ function StudentHome() {
 					</div>
 				),
 			},
-			{
-				accessorFn: row => row.date,
-				id: 'date',
-				cell: info => info.getValue(),
-				header: () => <span>Last Name</span>,
-			},
 		],
 		[]
 	)
 
 	const table = useReactTable({
-		data,
+		data: data || [],
 		columns,
 		state: {
 			rowSelection,
@@ -115,30 +107,43 @@ function StudentHome() {
 	}
 
 
+	// FIXME:
+	const {
+		data: examData,
+		isLoading: isExamLoading,
+		isSuccess: isExamSuccess,
+		isError: isExamError,
+	} = useGetAvailableExamsQuery({ university: uni, id: session.user._id });
 
-	const handleSend = () => {
+	const handleSend = async () => {
+		try {
+			let body = {
 
+			} // add exam ID's here;
+		} catch (e: any) {
+			console.error(e);
+		}
 		// TODO add mutation
 		console.log(exams);
 	}
 
-	return (
-		<div className="bg-white">
-			<Helmet>
-				<title>Početna | Stud</title>
-			</Helmet>
-			<div className="flex h-full">
-				<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full">
-					<div className="list-header flex justify-between p-5 ">
-						<StudTitle text={"Januarsko-Februarski ispitni rok"} />
-						<div className="search-container">
-							<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
-						</div>
+	let content: any;
+
+	if (isExamLoading) {
+		content = <Loader />
+	} else if (isExamSuccess) {
+		content =
+			<>
+				<div className="list-header flex justify-between p-5 ">
+					<StudTitle text={"Januarsko-Februarski ispitni rok"} />
+					<div className="search-container">
+						<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
 					</div>
-					<div className="w-full">
-						{/*<Table setExams={setExams} />*/}
-						<table>
-							<thead>
+				</div>
+				<div className="w-full">
+					{/*<Table setExams={setExams} />*/}
+					<table className="w-full">
+						<thead>
 							{table.getHeaderGroups().map(headerGroup => (
 								<tr key={headerGroup.id}>
 									{headerGroup.headers.map(header => {
@@ -158,11 +163,11 @@ function StudentHome() {
 									})}
 								</tr>
 							))}
-							</thead>
-							<tbody>
+						</thead>
+						<tbody>
 							{table.getRowModel().rows.map(row => {
 								return (
-									<tr key={row.id}>
+									<tr className="text-center" key={row.id}>
 										{row.getVisibleCells().map(cell => {
 											return (
 												<td key={cell.id}>
@@ -176,12 +181,44 @@ function StudentHome() {
 									</tr>
 								)
 							})}
-							</tbody>
-						</table>
-					</div>
-					<div className="flex justify-end p-5">
-						<div className="bg-slate-100 rounded-2xl px-3 py-2 font-bold cursor-pointer transition-all hover:bg-white hover:border-black border-[1px] border-slate-100" onClick={() => {handleSend()}}>Prijavi izabrane ispite</div>
-					</div>
+						</tbody>
+					</table>
+				</div>
+				<div className="flex justify-end p-5">
+					<div className="bg-slate-100 rounded-2xl px-3 py-2 font-bold cursor-pointer transition-all hover:bg-white hover:border-black border-[1px] border-slate-100" onClick={() => { handleSend() }}>Prijavi izabrane ispite</div>
+				</div>
+			</>
+	}
+
+	useEffect(() => {
+		if(examData) {
+			let tempExam: TExam[] = [];
+
+			examData.map((item: any) => {
+				let newExam: TExam = {
+					code: item.subject.code,
+					professor: item.professor._id,
+					subject: item.subject?.name,
+					date: item.date,
+					semester: item.subject?.semester!,
+				}
+
+				tempExam.push(newExam);
+			});
+
+			setData(tempExam);
+
+		}
+	}, [ isExamSuccess ]);
+
+	return (
+		<div className="bg-white">
+			<Helmet>
+				<title>Početna | Stud</title>
+			</Helmet>
+			<div className="flex h-full">
+				<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full">
+					{content}
 				</div>
 				<Sidebar>
 					<div className="pt-1">
@@ -196,10 +233,10 @@ function StudentHome() {
 }
 
 function IndeterminateCheckbox({
-	                               indeterminate,
-	                               className = '',
-	                               ...rest
-                               }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+	indeterminate,
+	className = '',
+	...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
 	const ref = React.useRef<HTMLInputElement>(null!)
 
 	React.useEffect(() => {

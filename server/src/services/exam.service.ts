@@ -118,11 +118,10 @@ export const getPendingExamsProfessor = async (_id: string, period: string) => {
 }
 
 
-export const examsCanAdd = async (_id: string) => {
+export const examsCanAdd = async (_id: string, uni: string) => {
     // TODO filter by period!
     // TODO test!
-    const exams = await Exam.find({}).populate('professor subject');
-
+    const exams = await Exam.find({ university: uni }).populate('professor subject');
 
     const filteredExams = await Promise.all(exams.map(async (exam) => {
         return await canAddExam(_id, exam.subject!._id.toString());
@@ -141,7 +140,8 @@ export const addStudentToExams = async (_id: string, exams: String[]) => {
 
     let notAdded = [];
 
-    const canAdd = await examsCanAdd(_id);
+    // @ts-ignore
+    const canAdd = await examsCanAdd(_id, student.university);
     const canAddIds = canAdd.map(subj => subj._id.toString());
 
     const filterAdd = exams.filter(exam => canAddIds.includes(exam));

@@ -126,7 +126,7 @@ const professorApiSlice = apiSlice.injectEndpoints({
 					{ type: 'Uni' as const, id: arg.body.university }] 
 				: [],
 		}),
-		giveSign: builder.mutation <any, any> ({
+		giveSign: builder.mutation <any, GiveSign> ({
 			query: ({ subject, body }) => ({
 				url: `/sign/subject/${subject}`,
 				method: 'PATCH',

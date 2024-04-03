@@ -115,14 +115,14 @@ const examApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		getAvailableExams: builder.query<any, any>({
-			query: (id) => ({
-				url: `/exam/student/${id}`,
+			query: ({ id, university }) => ({
+				url: `/uni/${university}/exam/student/${id}/`,
 			}),
 			providesTags: (result, error, id) => (result)
 				? [...result.map((exam: Exam) => ({ type: 'Exam' as const, id: exam._id })),
 					{ type: 'Student', id: result.id }]
 				: [],
-		})
+		}),
 	})
 });
 
@@ -135,4 +135,5 @@ export const {
 	useDeleteExamStudentMutation,
 	useAddExamGradesMutation,
 	useDeleteExamGradesMutation,
+	useGetAvailableExamsQuery
 } = examApiSlice;

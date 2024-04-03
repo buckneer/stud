@@ -33,6 +33,7 @@ interface AddStExam {
 }
 
 interface DelStExam {
+	uni: string;
 	student: string;
 	body: {
 		exam: string;
@@ -128,7 +129,7 @@ const studentApiSlice = apiSlice.injectEndpoints({
 			invalidatesTags: (result, error, arg) => (result) 
 				? [{ type: 'Student' as const, id: arg.student }, { type: 'Exam' as const, id: arg.body.exam }] 
 				: [],
-		})
+		}),
 		// addCompleted: builder.mutation <unknown, unknown> ({
 		// 	query: ({  }) => ({
 
