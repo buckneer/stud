@@ -104,6 +104,7 @@ export interface Exam {
 	grades?: string[] | Grade[];
 	period?: string | Period;
 	ended?: boolean;
+	department?: string | Department;
 	university?: string | University;
 }
 
