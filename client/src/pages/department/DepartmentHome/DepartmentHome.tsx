@@ -67,7 +67,7 @@ function DepartmentHome() {
                     </div>
                     <div
                         className="group relative inline-block overflow-hidden rounded py-2 px-4 text-white text-2xl font-bold">
-                        {/* 
+                        {/* Odkomentarisi i odluci se da li da ostavljamo ovaj patriotizam ?
                         <span className="ease absolute top-0 left-0 h-0 w-0 border-b-4 border-red-500 transition-all duration-300 group-hover:w-1/3"></span>
                         <span className="ease absolute top-0 left-1/3 h-0 w-0 border-b-4 border-blue-500 transition-all duration-300 group-hover:w-1/3"></span>
                         <span className="ease absolute top-0 left-2/3 h-0 w-0 border-b-4 border-white transition-all duration-300 group-hover:w-1/3"></span>
