@@ -10,7 +10,7 @@ const tags: string[] = [
 	'Uni', 'Student', 'Professor',
   'Department', 'Subject', 'Service', 
   'Grade', 'Exam', 'Period', 
-  'User', 'Role'
+  'User', 'Role', 'Optional'
 ];
 
 const baseQuery = fetchBaseQuery({ 

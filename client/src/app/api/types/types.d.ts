@@ -78,6 +78,16 @@ export interface Subject {
 	requiredSub?: string[] | Subject[];
 }
 
+export interface Optional {
+	_id?: string;
+	name?: string;
+	espb?: number;
+	subjects?: string[] | Subject[];
+	semester?: any;
+	department: string | Department;
+	university: string | University;
+}
+
 export interface Grade {
 	_id?: string;
 	subject?: string | Subject;
@@ -152,6 +162,15 @@ export interface DelUniSer {
 	university: string;
 	body: {
 		service: string;
+	}
+}
+
+// Optional API slice
+export interface AddSubjOpt {
+	university: string;
+	optional: string; 
+	body: {
+		subjects: string[];
 	}
 }
 

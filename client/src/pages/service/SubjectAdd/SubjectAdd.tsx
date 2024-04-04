@@ -26,12 +26,19 @@ const SubjectAdd = () => {
 	const [espb, setEspb] = useState<number>();
 	const [semester, setSemester] = useState("");
 	const [degree, setDegree] = useState("");
+	const [type, setType] = useState('');
+	const [optional, setOptional] = useState('');
 
 	const degreeOptions = [
 		{ value: "OAS", label: "Osnovne akademske studije" },
 		{ value: "MAS", label: "Master akademske studije" },
 		{ value: "DAS", label: "Doktorske akademske studije" }
 	]
+
+	const subjectOptions = [
+		{ value: 'R', label: 'Obavezni'  },
+		{ value: 'O', label: 'Izborni' },
+	];
 
 	const {
 		data: uniData,
@@ -138,6 +145,15 @@ const SubjectAdd = () => {
 						<div className='form-control'>
 							<Select onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
 						</div>
+						<div className="form-control">
+							<Select onChange={(e: any) => setType(e?.value)} placeholder="Izaberite tip predmeta" className="w-full outline-none" required isClearable isSearchable options={subjectOptions} />
+						</div>
+						{ 
+							type === 'R' && /* isOptionalLoaded && */
+							<>
+								{/* <Select onChange={(e: any) => setOptional(e?.value)} placeholder="Izaberite blok" className="w-full outline-none" required isClearable isSearchable options={}/> */}
+							</>
+						}
 						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb?.toString()} setVal={(e) => setEspb(parseInt(e.target.value))} />
 						<InputField id='semestar' type='number' name='Semestar' inputVal={semester} setVal={(e) => setSemester(e.target.value)} />
 						<div className='footer flex items-center justify-center flex-col'>
@@ -148,6 +164,7 @@ const SubjectAdd = () => {
 
 			</div>
 	}
+
 	return (
 		<>
 			{content}

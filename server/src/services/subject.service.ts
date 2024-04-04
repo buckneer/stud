@@ -3,6 +3,7 @@ import Subject, { SubjectDocument } from "../models/subject.model"
 import { newError, newResponse } from "../utils";
 import Department from "../models/department.model";
 import Professor from "../models/professor.model";
+import Optional from "../models/optional.model";
 
 
 export const addSubject = async (depId: string, data: SubjectDocument) => {
@@ -79,4 +80,29 @@ export const getSubjectRole = async (_id: string, role: string) => {
     if(!subject) throw newError(404, 'Ne postoji predmet!');
 
     return subject[include];
+}
+
+export const addSubjectsToOptional = async (_id: string, subjects: string[], uni: string) => {
+    let optional = await Optional.findOne({ _id, university: uni });
+
+    if(!optional) throw newError(404, 'Ne postoji izborni blok!');
+
+    let subjectsObj = await Subject.find({ _id: subjects, type: 'O' });
+
+    if(subjectsObj.length !== subjects.length) throw newError(400, 'Ne postoje predmeti!');
+
+    let isEveryValid = subjectsObj.every((e: any) => {
+        return (
+            e.semester === subjectsObj[0].semester 
+            && e.department === subjectsObj[0].department
+        )
+    });
+
+    if(!isEveryValid) throw newError(400, 'Izborni predmeti se moraju slušati u istom semestru!')
+
+    await optional.updateOne({
+        $addToSet: { subjects }
+    });
+
+    return newResponse('Uspešno ste dodali predmet na blok!', 200);
 }

@@ -17,7 +17,7 @@ import {
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleAddProfessorToDepartment, handleAddStudentsToDepartment, handleAddSubjectsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveProfessorFromDepartment, handleRemoveStudentFromDepartment, handleRemoveSubjectFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
-import { handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
+import { handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleAddSubjectsToOptional, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import {
     handleAddExam,
@@ -43,6 +43,7 @@ import {
     handleGetStudentGrades,
     handleGetStudents, handleGetStudentsByDepartment, handleGetStudentsBySemester, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent
 } from "./controllers/student.controller";
+import { handleAddOptional } from "./controllers/optional.controller";
 
 
 // TEST TOKENS:
@@ -152,6 +153,10 @@ export default function (app: Express) {
     app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
     app.get('/subject/:id/role/:role/', handleGetSubjectRole);
     app.patch('/sign/subject/:id/', handleGiveSign);
+    
+    // Optional
+    app.post('/optional/', handleAddOptional);
+    app.patch('/uni/:uni/optional/:opt/subject/', handleAddSubjectsToOptional);
 
     // Grade
     app.post('/grades/', handleAddGrade);

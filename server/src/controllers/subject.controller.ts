@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addProfessorToSubjects, addSubject, getSubject, getSubjectRole, getSubjects, updateSubject } from "../services/subject.service";
+import { addProfessorToSubjects, addSubject, addSubjectsToOptional, getSubject, getSubjectRole, getSubjects, updateSubject } from "../services/subject.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Subject from "../models/subject.model";
 
@@ -133,6 +133,19 @@ export async function handleGetSubjectRole(req: Request, res: Response) {
 
         return res.status(200).send(resp);
         
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+
+export async function handleAddSubjectsToOptional(req: Request, res: Response) {
+	try {
+        let { opt, uni } = req.params;
+        let { subjects } = req.body;
+
+        let resp = await addSubjectsToOptional(opt, subjects, uni);
+        return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
