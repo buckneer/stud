@@ -1,16 +1,16 @@
-import University from "../models/university.model";
-import Subject, { SubjectDocument } from "../models/subject.model"
-import { newError, newResponse } from "../utils";
+import Subject, {SubjectDocument} from "../models/subject.model"
+import {newError, newResponse} from "../utils";
 import Department from "../models/department.model";
 import Professor from "../models/professor.model";
+import User from "../models/user.model";
 
 
 export const addSubject = async (depId: string, data: SubjectDocument) => {
-    
+
     const department = await Department.findOne({_id: depId});
 
     if(!department) throw newError(404, 'Izabrani smer ne postoji');
-    
+
     // const professors = await Professor.find({'_id': {$in: data.professors}});
 
     const newSubject = new Subject(data);
@@ -26,7 +26,7 @@ export const getSubject = async (_id: string) => {
 }
 
 export const getSubjects = async (key?: string, value?: string) => {
-    
+
     let subjects: any[];
     console.log(key, value);
     if(key) {
@@ -67,7 +67,7 @@ export const addProfessorToSubjects = async (_id: string, subjects: string[]) =>
     });
 
     if(!updated) throw newError();
-    
+
     return newResponse('Uspešno ste dodali profesora na predmete');
 }
 
@@ -79,4 +79,12 @@ export const getSubjectRole = async (_id: string, role: string) => {
     if(!subject) throw newError(404, 'Ne postoji predmet!');
 
     return subject[include];
+}
+
+export const getProfessorSubjects = async (_id: string, uni: string) => {
+
+    let professor = await Professor.findOne({user: _id});
+    if(!professor) throw newError(404, 'Profesor nije pronađen');
+
+    return Subject.find({professors: professor._id, university: uni});
 }
