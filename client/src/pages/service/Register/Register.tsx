@@ -65,7 +65,7 @@ const Register = () => {
 			<div className='card'>
 				<form className='' onSubmit={handleRegister}>
 					<div className='form-header flex justify-center flex-col items-center'>
-						<div className="text-3xl font-semibold p-2 uppercase text-blue-800">Registracija</div>
+						<div className="text-3xl font-semibold p-2 uppercase text-black">Registracija</div>
 						<div className="text-gray-400 p-2" >Registracija novog korisnika</div>
 
 						<div id="FormHeader" className="w-full text-slate-100">
@@ -111,15 +111,15 @@ const Register = () => {
 							</span>
 						</label>
 					</div>
-					<div className='role-select my-5 w-full border-2 border-blue-800 flex justify-evenly rounded-3xl overflow-hidden'>
+					<div className='role-select my-5 w-full border-2 border-black flex flex-col md:flex-row justify-evenly md:rounded-3xl overflow-hidden'>
 						{roles.map((item, index) => (
-							<div className={`flex-1 cursor-pointer transition-all text-center p-1 ${selectedRole == index ? 'bg-blue-800 text-white' : ''} `} onClick={() => handleRole(index)}>
+							<div className={`flex-1 cursor-pointer transition-all text-center p-3 md:p-1 ${selectedRole == index ? 'bg-black text-white' : ''} `} onClick={() => handleRole(index)}>
 								{item}
 							</div>
 						))}
 					</div>
 					<div className='footer flex items-center justify-center flex-col'>
-						<button className='mt-5 bg-blue-800 px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isRegisterLoading}>Sačuvaj korisnika</button>
+						<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-slate-50 w-1/2 disabled:bg-gray-500' type='submit' disabled={isRegisterLoading}>Sačuvaj korisnika</button>
 					</div>
 				</form>
 			</div>
