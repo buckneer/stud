@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { newError } from "../utils";
 import 'dotenv/config';
 import { UserRequest, UserToken } from './UserRequest';
-import { getService, getServiceByUserId } from '../services/service.service';
+import {getService, getServiceByUserId, getServicesByUserId} from '../services/service.service';
 import log from "../logger";
 import Professor from "../models/professor.model";
 
@@ -32,27 +32,42 @@ export const userGuard = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
+export const isServiceInUniversity = async (req: Request) => {
+    if(!req.params.uni) return false;
+    let services = await getServicesByUserId(req.user!.id);
+    let unis = services.map(service => service.university.toString());
+    return unis.includes(req.params.uni);
+};
+
+export const isProfessorOnSubject = async (req: Request) => {
+    //TODO [1] implement this!
+}
+
 
 type TRoleWithCondition = {
     role: string;
-    when: (req: Request, ...args: any[]) => boolean;
+    when?: (req: Request, ...args: any[]) => Promise<boolean>;
 };
 
-export const AuthGuard = (rolesWithCondition: TRoleWithCondition[]) => {
+export const AuthGuard = (rolesWithCondition: TRoleWithCondition[], dynamicArgs?: any[][]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
 
             if (!req.user) return res.status(401).send(newError(401, 'Unauthorized'));
 
-            const hasPermission = rolesWithCondition.some(({ role, when }) => {
-
+            const hasPermission = await Promise.all(rolesWithCondition.map(async ({ role, when }, index) => {
+                let argsForWhen = [];
+                if(dynamicArgs) {
+                    argsForWhen = dynamicArgs[index] || [];
+                }
                 if (!when) {
                     return req.user!.roles.includes(role);
                 }
 
-                return req.user!.roles.includes(role) && when(req);
-            });
-            if (!hasPermission) {
+                return req.user!.roles.includes(role) && await when(req, ...argsForWhen);
+            }));
+
+            if (!hasPermission.some(permission => permission)) {
                 return res.status(403).send(newError(403, 'Forbidden'));
             }
             next();

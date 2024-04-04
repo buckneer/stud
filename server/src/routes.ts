@@ -15,9 +15,21 @@ import {
     handleSetPassword, handleUserDelete
 } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
-import { roleGuard, userGuard } from "./middleware/routeGuard";
+import {AuthGuard, isServiceInUniversity, roleGuard, userGuard} from "./middleware/routeGuard";
 import { handleAddDepartment, handleAddProfessorToDepartment, handleAddStudentsToDepartment, handleAddSubjectsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveProfessorFromDepartment, handleRemoveStudentFromDepartment, handleRemoveSubjectFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
-import { handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleAddSubjectsToOptional, handleGetAvailableReqSubjects, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
+import {
+    handleAddProfessorToManySubjects,
+    handleAddRequiredsToSubject,
+    handleAddSubject,
+    handleAddSubjectsToOptional, 
+    handleGetAvailableReqSubjects, handleGetProfessorSubjects,
+    handleGetSubject,
+    handleGetSubjectRole,
+    handleGetSubjects,
+    handleRemoveProfessorFromSubject,
+    handleRemoveRequiredFromSubject,
+    handleUpdateSubject
+} from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import {
     handleAddExam,
@@ -51,6 +63,15 @@ import { handleAddOptional, handleGetOptional } from "./controllers/optional.con
 // PROFESSOR: (profesor) eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGQ0YTMzMmZjMDQ2Nzc5NDE5NmU4NyIsImVtYWlsIjoicHJvZmVzb3JAZ21haWwuY29tIiwicm9sZXMiOlsicHJvZmVzc29yIl0sImlhdCI6MTcxMjE5MjQxN30.9B4_2VFrd-0jyfGq-DkdotM1I7O4YZeDmu1zYDS49Jg
 // SERVICE: (miftarisimel) eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MDU4MDc2Zjk3YjJhZDUyYTI0OTMxNiIsImVtYWlsIjoibWlmdGFyaXNpbWVsQGdtYWlsLmNvbSIsInJvbGVzIjpbInNlcnZpY2UiLCJzdHVkZW50Il0sImlhdCI6MTcxMjE5MjQ2M30.bun4bzNd0QJMwEmi4GTK402-ZAA4I4Y2pQs37uByvkY
 
+const serviceRoles = {
+    university: {role: 'service', when: isServiceInUniversity}
+}
+
+const profRoles = {
+    getSubjects: {role: 'professor'},
+    addGrade: {role: 'professor', }
+}
+
 export default function (app: Express) {
     app.get("/thanks", (request: Request, response: Response) => response.status(200).send({ message: 'Hvala Vam puno što koristite naše usluge! :)' }));
 
@@ -60,7 +81,8 @@ export default function (app: Express) {
     app.get('/protected/professor', userGuard, roleGuard(['professor']), (request: Request, response: Response) => response.sendStatus(200));
     app.get('/protected/service', userGuard, roleGuard(['service']), (request: Request, response: Response) => response.sendStatus(200));
 
-    app.get('/protected/professor/subject/:subj', userGuard, roleGuard(['professor', 'service']), (request: Request, response: Response) => response.sendStatus(200));
+    //app.get('/protected/', userGuard, roleGuard(['professor', 'service']), (request: Request, response: Response) => response.sendStatus(200));
+    app.get('/protected/uni/:uni/', userGuard, AuthGuard([serviceRoles.university]), (request: Request, response: Response) => response.sendStatus(200));
 
     // Session
     app.post('/login/', handleLogin);
@@ -153,6 +175,9 @@ export default function (app: Express) {
     app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
     app.get('/subject/:id/role/:role/', handleGetSubjectRole);
     app.patch('/sign/subject/:id/', handleGiveSign);
+    app.get('/uni/:uni/subjects/professor/',
+        userGuard,
+        AuthGuard([{role: 'professor'}]), handleGetProfessorSubjects);
     app.get('/uni/:uni/dep/:dep/subject/req/', handleGetAvailableReqSubjects);
 
     // Optional

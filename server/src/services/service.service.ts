@@ -65,3 +65,10 @@ export const getServiceByUserId = async (user: string) => {
 
     return service;
 }
+
+export const getServicesByUserId = async (user: string) => {
+    let service = await Service.find({user: user});
+    if(!service) throw newError(404, 'Studentska sluzba nije pronadjena');
+
+    return service;
+}
