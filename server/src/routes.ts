@@ -22,7 +22,7 @@ import {
     handleAddRequiredsToSubject,
     handleAddSubject,
     handleAddSubjectsToOptional, 
-    handleGetAvailableReqSubjects, handleGetProfessorSubjects,
+    handleGetAvailableReqSubjects, handleGetEnrollableSubjects, handleGetProfessorSubjects,
     handleGetSubject,
     handleGetSubjectRole,
     handleGetSubjects,
@@ -179,6 +179,7 @@ export default function (app: Express) {
         userGuard,
         AuthGuard([{role: 'professor'}]), handleGetProfessorSubjects);
     app.get('/uni/:uni/dep/:dep/subject/req/', handleGetAvailableReqSubjects);
+    app.get('/uni/:uni/dep/:dep/subject/', handleGetEnrollableSubjects)
 
     // Optional
     app.post('/optional/', handleAddOptional);

@@ -6,7 +6,8 @@ import {
     addSubjectsToOptional, getAvailableReqSubjects, getSubject,
     getSubjectRole,
     getSubjects,
-    updateSubject
+    updateSubject,
+    getEnrollableSubjects
 } from "../services/subject.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Subject from "../models/subject.model";
@@ -158,8 +159,6 @@ export async function handleGetProfessorSubjects(req: Request, res: Response) {
     }
 }
 
-
-
 export async function handleAddSubjectsToOptional(req: Request, res: Response) {
 	try {
         let { opt, uni } = req.params;
@@ -179,6 +178,20 @@ export async function handleGetAvailableReqSubjects(req: Request, res: Response)
 
         // @ts-ignore
         let resp = await getAvailableReqSubjects(uni, dep, semester);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetEnrollableSubjects(req: Request, res: Response) {
+    try {
+        let { uni, dep, sem } = req.params;
+        // WHILE TESTING:
+        // let user = req?.user?.id;
+
+        let user = '660d49fe2fc0467794196e74';
+        let resp = await getEnrollableSubjects(user, uni, dep);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

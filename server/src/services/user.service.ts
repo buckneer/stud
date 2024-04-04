@@ -37,7 +37,7 @@ export const sendPasswordMail = async (email: string) => {
 		let user = await User.findOne({ email });
 		let code = randomBytes(4).toString('hex').toUpperCase();
 
-		if (!user) throw newError(404, 'Korisnik nije pronadjen!');
+		if (!user) return newResponse('Poruka je poslata! Proverite Vašu e-poštu!');
 
 		let reset = {
 			code,
