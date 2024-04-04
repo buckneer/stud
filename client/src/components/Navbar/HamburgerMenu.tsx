@@ -8,7 +8,7 @@ function HamburgerMenu() {
 	const [open, setOpen] = useState(false);
 
 	return (
-		<div className="navbar bg-black text-white mx-7 mt-3 flex align-center justify-between z-[999]">
+		<div className="navbar bg-black pb-5 text-white mx-7 mt-3 flex align-center justify-between z-[999]">
 			<div className='branding flex items-center flex-1 text-white'>
 				<h1 className='font-black text-2xl'>STUD</h1>
 			</div>

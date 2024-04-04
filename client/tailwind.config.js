@@ -28,6 +28,7 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        'custombp': {'raw': '(max-height: 720px)'}
       },
     },
     extend: {

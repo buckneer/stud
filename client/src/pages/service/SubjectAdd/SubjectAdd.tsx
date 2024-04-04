@@ -33,6 +33,7 @@ const SubjectAdd = () => {
 	const [type, setType] = useState('');
 	const [optional, setOptional] = useState('');
 	const [requiredSub, setRequiredSub] = useState<SelectProps[]>([]);
+
 	const degreeOptions = [
 		{ value: "OAS", label: "Osnovne akademske studije" },
 		{ value: "MAS", label: "Master akademske studije" },
@@ -179,7 +180,7 @@ const SubjectAdd = () => {
 	if(isOptionalLoading) {
 		optionalContent = <Loader />
 	} else if (isOptionalSuccess) {
-		content = 
+		optionalContent = 
 			<>
 				<div className="form-control">
 					<Select onChange={(e: any) => setOptional(e?.value)} placeholder="Izaberite blok" className="w-full outline-none" required isClearable isSearchable options={optionalData!.map((item: any) => ({
