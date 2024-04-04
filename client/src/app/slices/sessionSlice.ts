@@ -6,7 +6,10 @@ const initialState: Session = {
 	accessToken: '',
 	refreshToken: '',
 	user: {},
-	metadata: {}
+	metadata: {
+		studentTab: 0,
+		serviceHome: 0
+	}
 }
 
 const sessionSlice = createSlice({

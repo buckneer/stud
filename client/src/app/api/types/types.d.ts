@@ -1,6 +1,7 @@
 export interface Meta {
 	university?: string;
-	tab?: string;
+	studentTab?: number;
+	serviceHome?: number;
 }
 
 export interface Session {
@@ -71,8 +72,9 @@ export interface Subject {
 	code?: string;
 	professors?: string[] | Professor[];
 	department?: string;
-	university?: string;
+	university?: string | Uni;
 	espb?: number;
+	type: string;
 	degree?: string;
 	semester?: any;
 	requiredSub?: string[] | Subject[];
@@ -168,7 +170,7 @@ export interface DelUniSer {
 // Optional API slice
 export interface AddSubjOpt {
 	university: string;
-	optional: string; 
+	optional: string;
 	body: {
 		subjects: string[];
 	}

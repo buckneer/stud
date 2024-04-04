@@ -12,13 +12,12 @@ export interface IExam {
 
 export interface ITable {
 	setExams?: SetStateAction<any>
-	data: IExam[],
 	cols?: string[],
 	children?: ReactNode
 }
 
 
-function Table({setExams, data, cols, children} : ITable) {
+function Table({cols, children} : ITable) {
 
 	return (
 		<table className="w-4/5 rounded-2xl overflow-hidden border-2 border-slate-500">

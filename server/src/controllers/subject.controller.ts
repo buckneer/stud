@@ -7,7 +7,7 @@ import {
     getSubjectRole,
     getSubjects,
     updateSubject,
-    getEnrollableSubjects
+    getEnrollableSubjects, getOptionalSubjects
 } from "../services/subject.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Subject from "../models/subject.model";
@@ -194,6 +194,21 @@ export async function handleGetEnrollableSubjects(req: Request, res: Response) {
         let resp = await getEnrollableSubjects(user, uni, dep);
         return res.status(200).send(resp);
     } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetOptionalSubjects(req: Request, res: Response) {
+    try {
+        let { uni, dep, sem } = req.params;
+        // WHILE TESTING:
+        // let user = req?.user?.id;
+
+        let user = '660d49fe2fc0467794196e74';
+        let resp = await getOptionalSubjects(user, uni, dep);
+
+        return res.status(200).send(resp);
+    } catch(e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
