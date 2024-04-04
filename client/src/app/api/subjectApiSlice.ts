@@ -142,6 +142,16 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'Subject' as const, id: arg.subject }] 
 				: [],
 		}),
+		getAvailableSubjects: builder.query <Subject[], { university: string, department: string }> ({
+			query: ({ university, department }) => ({
+				url: `/uni/${university}/dep/${department}/subject/`
+			}),
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'University' as const, id: arg.university },
+					{ type: 'Department' as const, id: arg.department },
+					...result.map((subject: Subject ) => ({ type: 'Subject' as const, id: subject._id }))]
+				: [],
+		})
 	})
 });
 
@@ -155,5 +165,6 @@ export const {
 	useDeleteSubjectProfessorMutation,
 	useAddRequiredSubjectsMutation,
 	useDeleteRequiredSubjectMutation,
-	useGetRequiredSubjectsQuery
+	useGetRequiredSubjectsQuery,
+	useGetAvailableSubjectsQuery
 } = subjectApiSlice;
