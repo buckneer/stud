@@ -44,9 +44,9 @@ export async function handleAddStudentsUni(req: Request, res: Response) {
 
 export async function handleGetUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { uni } = req.params;
 
-		let resp = await getUni(id);
+		let resp = await getUni(uni);
 
 		return res.status(200).send(resp);
 	} catch (e: any) {
@@ -57,10 +57,10 @@ export async function handleGetUni(req: Request, res: Response) {
 // TODO: add getUniversity()...
 export async function handleAddServicesToUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { uni } = req.params;
 		let { services } = req.body;
 
-		let resp = await addToModelArray(University, id, 'services', services);
+		let resp = await addToModelArray(University, uni, 'services', services);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -69,10 +69,10 @@ export async function handleAddServicesToUni(req: Request, res: Response) {
 
 export async function handleRemoveServiceFromUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { uni } = req.params;
 		let { service } = req.body;
 
-		let resp = await removeFromModelArray(University, id, 'services', service);
+		let resp = await removeFromModelArray(University, uni, 'services', service);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -81,10 +81,10 @@ export async function handleRemoveServiceFromUni(req: Request, res: Response) {
 
 export async function handleAddProfessorsToUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { uni } = req.params;
 		let { professors } = req.body;
 
-		let resp = await addToModelArray(University, id, 'professors', professors);
+		let resp = await addToModelArray(University, uni, 'professors', professors);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -105,10 +105,10 @@ export async function handleRemoveProfessorFromUni(req: Request, res: Response) 
 
 export async function handleAddDepartmentsToUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { uni } = req.params;
 		let { departments } = req.body;
 
-		let resp = await addToModelArray(University, id, 'departments', departments);
+		let resp = await addToModelArray(University, uni, 'departments', departments);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -117,10 +117,10 @@ export async function handleAddDepartmentsToUni(req: Request, res: Response) {
 
 export async function handleRemoveDepartmentFromUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { uni } = req.params;
 		let { department } = req.body;
 
-		let resp = await removeFromModelArray(University, id, 'departments', department);
+		let resp = await removeFromModelArray(University, uni, 'departments', department);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -129,10 +129,10 @@ export async function handleRemoveDepartmentFromUni(req: Request, res: Response)
 
 export async function handleAddStudentsToUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { uni } = req.params;
 		let { students } = req.body;
 
-		let resp = await addToModelArray(University, id, 'students', students);
+		let resp = await addToModelArray(University, uni, 'students', students);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');

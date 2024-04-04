@@ -45,14 +45,21 @@ import {
 } from "./controllers/student.controller";
 
 
+// TEST TOKENS:
+// STUDENT: (student3) eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGQ0OWZlMmZjMDQ2Nzc5NDE5NmU3NCIsImVtYWlsIjoic3R1ZGVudDNAZ21haWwuY29tIiwicm9sZXMiOlsic3R1ZGVudCJdLCJpYXQiOjE3MTIxOTIzNjR9.GgR-cOHj_5CHt5uo1fF-8FZtwz8MbOvaLC57e618zWA
+// PROFESSOR: (profesor) eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGQ0YTMzMmZjMDQ2Nzc5NDE5NmU4NyIsImVtYWlsIjoicHJvZmVzb3JAZ21haWwuY29tIiwicm9sZXMiOlsicHJvZmVzc29yIl0sImlhdCI6MTcxMjE5MjQxN30.9B4_2VFrd-0jyfGq-DkdotM1I7O4YZeDmu1zYDS49Jg
+// SERVICE: (miftarisimel) eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MDU4MDc2Zjk3YjJhZDUyYTI0OTMxNiIsImVtYWlsIjoibWlmdGFyaXNpbWVsQGdtYWlsLmNvbSIsInJvbGVzIjpbInNlcnZpY2UiLCJzdHVkZW50Il0sImlhdCI6MTcxMjE5MjQ2M30.bun4bzNd0QJMwEmi4GTK402-ZAA4I4Y2pQs37uByvkY
+
 export default function (app: Express) {
     app.get("/thanks", (request: Request, response: Response) => response.status(200).send({ message: 'Hvala Vam puno što koristite naše usluge! :)' }));
 
     app.get("/healthcheck", (request: Request, response: Response) => response.sendStatus(200));
     app.get('/protected', userGuard, (request: Request, response: Response) => response.sendStatus(200));
     app.get('/protected/user', userGuard, roleGuard(['student']), (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/admin', userGuard, roleGuard(['professor']), (request: Request, response: Response) => response.sendStatus(200));
+    app.get('/protected/professor', userGuard, roleGuard(['professor']), (request: Request, response: Response) => response.sendStatus(200));
     app.get('/protected/service', userGuard, roleGuard(['service']), (request: Request, response: Response) => response.sendStatus(200));
+
+    app.get('/protected/professor/subject/:subj', userGuard, roleGuard(['professor', 'service']), (request: Request, response: Response) => response.sendStatus(200));
 
     // Session
     app.post('/login/', handleLogin);
@@ -74,17 +81,17 @@ export default function (app: Express) {
     // University
     app.post('/uni/', handleNewUni);
     app.get('/uni/', handleGetAllUnis);
-    app.get('/uni/:id/', handleGetUni);
+    app.get('/uni/:uni/', handleGetUni);
     app.patch('/uni/', handleAddStudentsUni);
     app.patch('/uni/'); // <-- TREBA DA SE SREDI!
-    app.patch('/uni/:id/professor/', handleAddProfessorsToUni);
-    app.patch('/uni/:id/student/', handleAddStudentsToUni);
-    app.patch('/uni/:id/department', handleAddDepartmentsToUni);
-    app.delete('/uni/:id/department/', handleRemoveDepartmentFromUni);
-    app.patch('/uni/:id/service/', handleAddServicesToUni);
-    app.delete('/uni/:id/service/', handleRemoveServiceFromUni);
-    app.get('/uni/:uni/period/', handleGetUniPeriods);
-    app.get('/uni/:id/exam/', handleGetUniExams);
+    app.patch('/uni/:uni/professor/', handleAddProfessorsToUni);
+    app.patch('/uni/:uni/student/', handleAddStudentsToUni);
+    app.patch('/uni/:uni/department', handleAddDepartmentsToUni);
+    app.delete('/uni/:uni/department/', handleRemoveDepartmentFromUni);
+    app.patch('/uni/:uni/service/', handleAddServicesToUni);
+    app.delete('/uni/:uni/service/', handleRemoveServiceFromUni);
+    app.get('/uni/:uni/period/',  handleGetUniPeriods);
+    app.get('/uni/:uni/exam/', handleGetUniExams);
 
 
     // Student

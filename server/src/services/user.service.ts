@@ -98,7 +98,8 @@ export const loginUser = async (email: string, password: string, userAgent: stri
 		let matchingPass = await bcrypt.compare(password, user.password!);
 		if (!matchingPass) throw { status: 401, message: 'Pogresna email adresa ili lozinka' }
 		console.log(user);
-		const accessToken = jwt.sign({ id: user._id, email: user.email, roles: user.roles }, process.env.JWT_SECRET as string, { expiresIn });
+		const accessToken = jwt.sign({ id: user._id, email: user.email, roles: user.roles },
+			process.env.JWT_SECRET as string, { expiresIn });
 		const refreshToken = jwt.sign({ id: user._id, email: user.email, roles: user.roles },
 			process.env.REFRESH_SECRET as string);
 

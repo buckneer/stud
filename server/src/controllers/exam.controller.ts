@@ -138,7 +138,7 @@ export async function handleRemoveGradeFromExam(req: Request, res: Response) {
 
 export async function handleGetUniExams(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { uni } = req.params;
         let { active }: any = req.query;
 
         if(!active || active === '0') {

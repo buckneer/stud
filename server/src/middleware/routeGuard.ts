@@ -33,6 +33,36 @@ export const userGuard = async (req: Request, res: Response, next: NextFunction)
 }
 
 
+type TRoleWithCondition = {
+    role: string;
+    when: (req: Request, ...args: any[]) => boolean;
+};
+
+export const AuthGuard = (rolesWithCondition: TRoleWithCondition[]) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            if (!req.user) return res.status(401).send(newError(401, 'Unauthorized'));
+
+            const hasPermission = rolesWithCondition.some(({ role, when }) => {
+
+                if (!when) {
+                    return req.user!.roles.includes(role);
+                }
+
+                return req.user!.roles.includes(role) && when(req);
+            });
+            if (!hasPermission) {
+                return res.status(403).send(newError(403, 'Forbidden'));
+            }
+            next();
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send(newError(500, 'Internal Server Error'));
+        }
+    };
+}
+
 export const roleGuard = (roles: string[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         // Test url: http://localhost:3000/uni/65fafc2da919db458f7ed90d/student/add
@@ -42,7 +72,7 @@ export const roleGuard = (roles: string[]) => {
             if(!req.user.roles.some(item => roles.includes(item))) res.status(403).send(newError(403, 'STOJ!'));
 
             if(req.user.roles.includes('professor')) {
-
+                console.log("You are professor");
 
                 let professor = await Professor.findOne({user: req.user.id});
                 if(!professor) return res.status(404).send(newError(404, 'Profesor nije pronađen'))
@@ -51,7 +81,7 @@ export const roleGuard = (roles: string[]) => {
                 let professorSubj = professor.subjects.map(subj => subj.toString());
                 if(!professorSubj.includes(req.params.subj)) return res.status(401).send(newError(401, 'Nemate pristup ovom predmetu'));
 
-                console.log("You are professor");
+
                 return next();
 
             }
