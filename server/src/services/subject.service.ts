@@ -4,6 +4,7 @@ import Department from "../models/department.model";
 import Professor from "../models/professor.model";
 import Optional from "../models/optional.model";
 import User from "../models/user.model";
+import Student from "../models/student.model";
 
 
 export const addSubject = async (depId: string, data: SubjectDocument) => {
@@ -129,4 +130,27 @@ export const addSubjectsToOptional = async (_id: string, subjects: string[], uni
     });
 
     return newResponse('Uspešno ste dodali predmet na blok!', 200);
+}
+
+export const getEnrollableSubjects = async (user: string | undefined, university: string, department: string) => {
+    let student = await Student.findOne({ user, university, department });
+
+    if(!student) throw newError(404, 'Ne postoji student!');
+
+    let { completedSubjects, subjects, currentSemester } = student;
+    
+    let subjectObj = await Subject.find({ 
+        department, university, 
+        $expr: { 
+            $lte: [
+                { $convert: { input: '$semester', to: 'decimal' }},
+                // @ts-ignore
+                parseInt(currentSemester) 
+            ]
+        },
+        // @ts-ignore
+        _id: { $nin: [ ...completedSubjects, ...subjects ]}
+    });
+
+    return subjectObj;
 }
