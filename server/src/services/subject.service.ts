@@ -43,9 +43,9 @@ export const getSubjects = async (key?: string, value?: string) => {
 
 export const getAvailableReqSubjects = async (university: string, department: string, semester: string) => {
     // remove R here if it is not needed... same goes for parseInt shit...
-    // it is there because required subject by default is two semesters (1 year) behind 
-    return Subject.find({ 
-        university, department, type: 'R', 
+    // it is there because required subject by default is two semesters (1 year) behind
+    return Subject.find({
+        university, department, type: 'R',
         $expr: {
             $lt: [
                 { $convert: { input: '$semester', to: 'decimal' }},
@@ -118,7 +118,7 @@ export const addSubjectsToOptional = async (_id: string, subjects: string[], uni
 
     let isEveryValid = subjectsObj.every((e: any) => {
         return (
-            e.semester === subjectsObj[0].semester 
+            e.semester === subjectsObj[0].semester
             && e.department === subjectsObj[0].department
         )
     });
@@ -138,18 +138,25 @@ export const getEnrollableSubjects = async (user: string | undefined, university
     if(!student) throw newError(404, 'Ne postoji student!');
 
     let { completedSubjects, subjects, currentSemester } = student;
-    
-    let subjectObj = await Subject.find({ 
-        department, university, 
-        $expr: { 
+
+    let subjectObj = await Subject.find({
+        department, university,
+        $expr: {
             $lte: [
                 { $convert: { input: '$semester', to: 'decimal' }},
                 // @ts-ignore
-                parseInt(currentSemester) 
+                parseInt(currentSemester)
             ]
         },
         // @ts-ignore
         _id: { $nin: [ ...completedSubjects, ...subjects ]}
+    }).populate({
+        path: 'professors',
+        select: 'user',
+        populate: {
+            path: 'user',
+            select: 'name'
+        }
     });
 
     return subjectObj;

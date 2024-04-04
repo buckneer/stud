@@ -23,7 +23,6 @@ const university: string = "65fafc2da919db458f7ed90d";
 const role: string = "student";
 export default function Home() {
 
-
   const { uni } = useParams();
   const [selectedData, setSelectedData] = useState(0);
   const titles = ["Studenti", "Profesori", "STUD Sluzba"];
@@ -32,6 +31,8 @@ export default function Home() {
 
   const handleDataChange = (changeTo: number) => {
     setSelectedData(changeTo);
+
+
   }
 
   return (
