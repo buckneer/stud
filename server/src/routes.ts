@@ -17,7 +17,7 @@ import {
 import { Express, Request, Response } from "express";
 import { roleGuard, userGuard } from "./middleware/routeGuard";
 import { handleAddDepartment, handleAddProfessorToDepartment, handleAddStudentsToDepartment, handleAddSubjectsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveProfessorFromDepartment, handleRemoveStudentFromDepartment, handleRemoveSubjectFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
-import { handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleAddSubjectsToOptional, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
+import { handleAddProfessorToManySubjects, handleAddRequiredsToSubject, handleAddSubject, handleAddSubjectsToOptional, handleGetAvailableReqSubjects, handleGetSubject, handleGetSubjectRole, handleGetSubjects, handleRemoveProfessorFromSubject, handleRemoveRequiredFromSubject, handleUpdateSubject } from "./controllers/subject.controller";
 import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
 import {
     handleAddExam,
@@ -43,7 +43,7 @@ import {
     handleGetStudentGrades,
     handleGetStudents, handleGetStudentsByDepartment, handleGetStudentsBySemester, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent
 } from "./controllers/student.controller";
-import { handleAddOptional } from "./controllers/optional.controller";
+import { handleAddOptional, handleGetOptional } from "./controllers/optional.controller";
 
 
 // TEST TOKENS:
@@ -153,9 +153,11 @@ export default function (app: Express) {
     app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
     app.get('/subject/:id/role/:role/', handleGetSubjectRole);
     app.patch('/sign/subject/:id/', handleGiveSign);
-    
+    app.get('/uni/:uni/dep/:dep/subject/req/', handleGetAvailableReqSubjects);
+
     // Optional
     app.post('/optional/', handleAddOptional);
+    app.get('/uni/:uni/optional', handleGetOptional);
     app.patch('/uni/:uni/optional/:opt/subject/', handleAddSubjectsToOptional);
 
     // Grade
@@ -186,7 +188,6 @@ export default function (app: Express) {
     app.get('/period/', handleGetPeriods);
     app.patch('/period/:id/exam/', handleAddExamToPeriod);
     app.delete('/period/:id/exam/', handleRemoveExamFromPeriod);
-
 
 
     // Service

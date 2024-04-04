@@ -27,11 +27,25 @@ const optionalApiSlice = apiSlice.injectEndpoints({
 						...arg.body.subjects.map((subject: any) => ({ type: 'Subject' as const, id: subject })) ]
 				: [],
 		}),
+		getOptional: builder.query <Optional[], any> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/optional/`,
+				params: {
+					...body
+				}
+			}),
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'University' as const, id: arg.university },
+					...result.map((opt: Optional) => ({ type: 'Optional' as const, id: opt._id })),
+					{ type: 'Department' as const, id: arg.body.department }]
+				: [],
+		})
 	})
 });
 
 export const {
 	useAddOptionalMutation,
 	useAddSubjectsToOptionalMutation,
+	useGetOptionalQuery,
 } = optionalApiSlice;
 

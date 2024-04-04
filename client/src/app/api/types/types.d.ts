@@ -174,6 +174,14 @@ export interface AddSubjOpt {
 	}
 }
 
+export interface GetOpt {
+	university: string;
+	body: {
+		semester: string;
+		department: string;
+	}
+}
+
 // Department API slice
 export interface UniDep {
 	university: string;

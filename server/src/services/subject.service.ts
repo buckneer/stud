@@ -40,6 +40,21 @@ export const getSubjects = async (key?: string, value?: string) => {
     return subjects;
 }
 
+export const getAvailableReqSubjects = async (university: string, department: string, semester: string) => {
+    // remove R here if it is not needed... same goes for parseInt shit...
+    // it is there because required subject by default is two semesters (1 year) behind 
+    return Subject.find({ 
+        university, department, type: 'R', 
+        $expr: {
+            $lt: [
+                { $convert: { input: '$semester', to: 'decimal' }},
+                // @ts-ignore
+                (parseInt(semester) - 1)
+            ]
+        }
+    });
+}
+
 export const updateSubject = async (_id: string, data: SubjectDocument) => {
    let subject = Subject.findOne({_id});
 

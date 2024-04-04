@@ -15,8 +15,9 @@ export async function handleAddOptional(req: Request, res: Response) {
 export async function handleGetOptional(req: Request, res: Response) {
 	try {
 		let { uni } = req.params;
-		let { department, semester } = req.body;
+		let { department, semester } = req.query;
 
+		// @ts-ignore
 		let resp = await getOptional(uni, department, semester);
 		return res.status(200).send(resp);
 	} catch (e: any) {
