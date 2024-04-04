@@ -161,3 +161,36 @@ export const getEnrollableSubjects = async (user: string | undefined, university
 
     return subjectObj;
 }
+
+export const getOptionalSubjects = async (user: string | undefined, university: string, department: string) => {
+    let student = await Student.findOne({ user, university, department });
+
+    if(!student) throw newError(404, 'Ne postoji student!');
+
+    let { completedSubjects, subjects, currentSemester } = student;
+
+    let subjectObj = await Optional.find({
+        department, university,
+        $expr: {
+            $lte: [
+                { $convert: { input: '$semester', to: 'decimal' }},
+                // @ts-ignore
+                parseInt(currentSemester)
+            ]
+        },
+        // @ts-ignore
+        _id: { $nin: [ ...completedSubjects, ...subjects ]}
+    }).populate({
+        path: 'subjects',
+        populate: {
+            path: 'professors',
+            select: 'user',
+            populate: {
+                path: 'user',
+                select: 'name'
+            }
+        }
+    });
+
+    return subjectObj;
+}

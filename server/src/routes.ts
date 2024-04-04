@@ -21,8 +21,8 @@ import {
     handleAddProfessorToManySubjects,
     handleAddRequiredsToSubject,
     handleAddSubject,
-    handleAddSubjectsToOptional, 
-    handleGetAvailableReqSubjects, handleGetEnrollableSubjects, handleGetProfessorSubjects,
+    handleAddSubjectsToOptional,
+    handleGetAvailableReqSubjects, handleGetEnrollableSubjects, handleGetOptionalSubjects, handleGetProfessorSubjects,
     handleGetSubject,
     handleGetSubjectRole,
     handleGetSubjects,
@@ -180,6 +180,7 @@ export default function (app: Express) {
         AuthGuard([{role: 'professor'}]), handleGetProfessorSubjects);
     app.get('/uni/:uni/dep/:dep/subject/req/', handleGetAvailableReqSubjects);
     app.get('/uni/:uni/dep/:dep/subject/', handleGetEnrollableSubjects)
+    app.get('/uni/:uni/dep/:dep/subject/optional', handleGetOptionalSubjects);
 
     // Optional
     app.post('/optional/', handleAddOptional);
