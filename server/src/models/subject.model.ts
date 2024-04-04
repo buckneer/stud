@@ -11,7 +11,6 @@ export interface SubjectDocument extends Document {
     degree: string; // OAS MAS DAS
     requiredSub: Types.ObjectId[];
     type: "R" | "O";
-    options: Types.ObjectId[]
 }
 
 const SubjectSchema = new Schema({
@@ -24,7 +23,6 @@ const SubjectSchema = new Schema({
     semester: {type: String, required: true},
     espb: {type: Number},
     type: {type: String, required: true, default: "R"},
-    options: [{type: Types.ObjectId, ref: 'Subject'}],
     requiredSub: [{type: Schema.ObjectId, ref: 'Subject'}]
 });
 

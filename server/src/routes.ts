@@ -21,7 +21,8 @@ import {
     handleAddProfessorToManySubjects,
     handleAddRequiredsToSubject,
     handleAddSubject,
-    handleGetProfessorSubjects,
+    handleAddSubjectsToOptional, 
+    handleGetAvailableReqSubjects, handleGetProfessorSubjects,
     handleGetSubject,
     handleGetSubjectRole,
     handleGetSubjects,
@@ -54,6 +55,7 @@ import {
     handleGetStudentGrades,
     handleGetStudents, handleGetStudentsByDepartment, handleGetStudentsBySemester, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent
 } from "./controllers/student.controller";
+import { handleAddOptional, handleGetOptional } from "./controllers/optional.controller";
 
 
 // TEST TOKENS:
@@ -176,6 +178,12 @@ export default function (app: Express) {
     app.get('/uni/:uni/subjects/professor/',
         userGuard,
         AuthGuard([{role: 'professor'}]), handleGetProfessorSubjects);
+    app.get('/uni/:uni/dep/:dep/subject/req/', handleGetAvailableReqSubjects);
+
+    // Optional
+    app.post('/optional/', handleAddOptional);
+    app.get('/uni/:uni/optional', handleGetOptional);
+    app.patch('/uni/:uni/optional/:opt/subject/', handleAddSubjectsToOptional);
 
     // Grade
     app.post('/grades/', handleAddGrade);
@@ -205,7 +213,6 @@ export default function (app: Express) {
     app.get('/period/', handleGetPeriods);
     app.patch('/period/:id/exam/', handleAddExamToPeriod);
     app.delete('/period/:id/exam/', handleRemoveExamFromPeriod);
-
 
 
     // Service

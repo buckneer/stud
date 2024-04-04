@@ -3,7 +3,7 @@ import {
     addProfessorToSubjects,
     addSubject,
     getProfessorSubjects,
-    getSubject,
+    addSubjectsToOptional, getAvailableReqSubjects, getSubject,
     getSubjectRole,
     getSubjects,
     updateSubject
@@ -152,6 +152,33 @@ export async function handleGetProfessorSubjects(req: Request, res: Response) {
         let {uni} = req.params;
 
         let resp = await getProfessorSubjects(req.user!.id, uni);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+
+
+export async function handleAddSubjectsToOptional(req: Request, res: Response) {
+	try {
+        let { opt, uni } = req.params;
+        let { subjects } = req.body;
+
+        let resp = await addSubjectsToOptional(opt, subjects, uni);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetAvailableReqSubjects(req: Request, res: Response) {
+    try {
+        let { uni, dep } = req.params;
+        let { semester } = req.query;
+
+        // @ts-ignore
+        let resp = await getAvailableReqSubjects(uni, dep, semester);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

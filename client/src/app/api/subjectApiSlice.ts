@@ -34,6 +34,12 @@ interface DelReq {
 	}
 }
 
+interface GetReq {
+	university: string;
+	semester: string;
+	department: string;
+}
+
 const subjectApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addSubject: builder.mutation <unknown, Subject> ({
@@ -105,6 +111,17 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				{ type: 'Professor' as const, id: arg.body.professor }] 
 				: [],
 		}),
+		getRequiredSubjects: builder.query <Subject[], GetReq> ({
+			query: ({ university, department, semester }) => ({
+				url: `/uni/${university}/dep/${department}/subject/req/`,
+				params: { semester }
+			}),
+			providesTags: (result, error, arg) => (result) 
+				? [{ type: 'University' as const, id: arg.university },
+					{ type: 'Department' as const, id: arg.department },
+					...result.map((subject: Subject) => ({ type: 'Subject' as const, id: subject._id }))]
+				: [],
+		}),
 		addRequiredSubjects: builder.mutation <unknown, AddReq> ({
 			query: ({ subject, body }) => ({
 				url: `/subject/${subject}/required`,
@@ -138,4 +155,5 @@ export const {
 	useDeleteSubjectProfessorMutation,
 	useAddRequiredSubjectsMutation,
 	useDeleteRequiredSubjectMutation,
+	useGetRequiredSubjectsQuery
 } = subjectApiSlice;

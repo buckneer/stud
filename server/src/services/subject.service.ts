@@ -2,6 +2,7 @@ import Subject, {SubjectDocument} from "../models/subject.model"
 import {newError, newResponse} from "../utils";
 import Department from "../models/department.model";
 import Professor from "../models/professor.model";
+import Optional from "../models/optional.model";
 import User from "../models/user.model";
 
 
@@ -37,6 +38,21 @@ export const getSubjects = async (key?: string, value?: string) => {
     }
 
     return subjects;
+}
+
+export const getAvailableReqSubjects = async (university: string, department: string, semester: string) => {
+    // remove R here if it is not needed... same goes for parseInt shit...
+    // it is there because required subject by default is two semesters (1 year) behind 
+    return Subject.find({ 
+        university, department, type: 'R', 
+        $expr: {
+            $lt: [
+                { $convert: { input: '$semester', to: 'decimal' }},
+                // @ts-ignore
+                (parseInt(semester) - 1)
+            ]
+        }
+    });
 }
 
 export const updateSubject = async (_id: string, data: SubjectDocument) => {
@@ -87,4 +103,30 @@ export const getProfessorSubjects = async (_id: string, uni: string) => {
     if(!professor) throw newError(404, 'Profesor nije pronađen');
 
     return Subject.find({professors: professor._id, university: uni});
+}
+
+
+export const addSubjectsToOptional = async (_id: string, subjects: string[], uni: string) => {
+    let optional = await Optional.findOne({ _id, university: uni });
+
+    if(!optional) throw newError(404, 'Ne postoji izborni blok!');
+
+    let subjectsObj = await Subject.find({ _id: subjects, type: 'O' });
+
+    if(subjectsObj.length !== subjects.length) throw newError(400, 'Ne postoje predmeti!');
+
+    let isEveryValid = subjectsObj.every((e: any) => {
+        return (
+            e.semester === subjectsObj[0].semester 
+            && e.department === subjectsObj[0].department
+        )
+    });
+
+    if(!isEveryValid) throw newError(400, 'Izborni predmeti se moraju slušati u istom semestru!')
+
+    await optional.updateOne({
+        $addToSet: { subjects }
+    });
+
+    return newResponse('Uspešno ste dodali predmet na blok!', 200);
 }
