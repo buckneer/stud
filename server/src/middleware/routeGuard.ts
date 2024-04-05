@@ -52,7 +52,6 @@ type TRoleWithCondition = {
 export const AuthGuard = (rolesWithCondition: TRoleWithCondition[], dynamicArgs?: any[][]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
-
             if (!req.user) return res.status(401).send(newError(401, 'Unauthorized'));
 
             const hasPermission = await Promise.all(rolesWithCondition.map(async ({ role, when }, index) => {

@@ -180,11 +180,11 @@ export async function handleGetStudentsByDepartment(req: Request, res: Response)
 
 export async function handleAddSubjectsToStudent(req: Request, res: Response) {
     try {
-        let { stud, uni } = req.params; // TODO <= Get from req.user
+        let { uni } = req.params;
         let {subjects} = req.body;
+        let {id} = req.user!;
 
-
-        let resp = await addSubjectsToStudent(stud, subjects, uni);
+        let resp = await addSubjectsToStudent(id, subjects, uni);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

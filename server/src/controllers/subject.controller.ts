@@ -188,9 +188,7 @@ export async function handleGetEnrollableSubjects(req: Request, res: Response) {
     try {
         let { uni, dep, sem } = req.params;
         // WHILE TESTING:
-        // let user = req?.user?.id;
-
-        let user = '660d49fe2fc0467794196e74';
+        let user = req?.user?.id;
         let resp = await getEnrollableSubjects(user, uni, dep);
         return res.status(200).send(resp);
     } catch (e: any) {
@@ -202,9 +200,8 @@ export async function handleGetOptionalSubjects(req: Request, res: Response) {
     try {
         let { uni, dep, sem } = req.params;
         // WHILE TESTING:
-        // let user = req?.user?.id;
+        let user = req?.user?.id;
 
-        let user = '660d49fe2fc0467794196e74';
         let resp = await getOptionalSubjects(user, uni, dep);
 
         return res.status(200).send(resp);

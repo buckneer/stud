@@ -139,7 +139,8 @@ export const getEnrollableSubjects = async (user: string | undefined, university
 
 
     let { completedSubjects, subjects, currentSemester, degree } = student;
-
+    console.log(completedSubjects);
+    console.log(subjects);
     let subjectObj = await Subject.find({
         department, university,
         degree,

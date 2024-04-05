@@ -8,6 +8,7 @@ import {useGetAvailableOptionalsQuery} from "../../../app/api/optionalApiSlice";
 import {ChevronRight} from "lucide-react";
 import './animations.css';
 import TD from "../../../components/Table/TableColumn";
+import {useAddSubjectsToStudentMutation} from "../../../app/api/studentApiSlice";
 
 
 export interface ISubjectSelect {
@@ -42,7 +43,16 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 		isLoading: isOptionalBlockLoading,
 		isSuccess: isOptionalBlockSuccess,
 		isError: isOptionalBlockError
-	} = useGetAvailableOptionalsQuery({university: uni!, department: DEPARTMENT})
+	} = useGetAvailableOptionalsQuery({university: uni!, department: DEPARTMENT});
+
+	const [
+		addSubjects,
+		{
+			isLoading: isAddSubjectsLoading,
+			isError: isAddSubjectsError,
+			isSuccess: isAddSubjectsSuccess
+		}
+	] = useAddSubjectsToStudentMutation();
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -93,9 +103,18 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 		}
 	}
 
-	const handleSendSubjects = () => {
-		// TODO Add mutation
-		console.log(subjectsToAdd)
+	const handleSendSubjects = async () => {
+		const body = {
+			university: uni!,
+			body: {
+				subjects: subjectsToAdd
+			}
+		}
+		try {
+			await addSubjects(body);
+		} catch (e) {
+			console.error(e);
+		}
 	}
 
 	return (
@@ -200,7 +219,7 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 					disabled:shadow-none
 					disabled:text-white"
 					onClick={handleSendSubjects}
-					disabled={totalEspb !== 60}>
+					disabled={totalEspb > 60}>
 
 					Sačuvaj Izabrane Predmete
 				</button>

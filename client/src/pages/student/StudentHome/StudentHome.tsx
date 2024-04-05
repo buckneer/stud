@@ -36,7 +36,7 @@ function StudentHome() {
 			<Helmet>
 				<title>Početna | Stud</title>
 			</Helmet>
-			<div className="flex h-full">
+			<div className="flex h-full bg-white">
 				{session.metadata.studentTab == 0 && (<ExamPeriod session={session} uni={uni}/>)}
 				{session.metadata.studentTab == 2 && (<SubjectSelect session={session} uni={uni}/>)}
 				<Sidebar>

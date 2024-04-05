@@ -99,7 +99,7 @@ const studentApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: (result, error, arg) => (result)
 				? [...arg.body.subjects.map((subj: string) => ({ type: 'Subject' as const, id: subj })),
-					{ type: 'University' as const, id: arg.university }] 
+					{ type: 'University' as const, id: arg.university }]
 				: []
 		})
 		// addCompleted: builder.mutation <unknown, unknown> ({
@@ -119,5 +119,6 @@ export const {
 	useDeleteStudentUniMutation,
 	useDeleteStudentMutation,
 	useRemoveStudentExamMutation,
+	useAddSubjectsToStudentMutation,
 	useUpdateStudentMutation
 } = studentApiSlice;

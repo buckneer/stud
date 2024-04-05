@@ -76,8 +76,12 @@ const serviceRoles = {
 }
 
 const profRoles = {
-    getSubjects: {role: 'professor'},
+    professor: {role: 'professor'},
     addGrade: {role: 'professor', }
+}
+
+const studentRoles = {
+    student: {role: 'student'}
 }
 
 export default function (app: Express) {
@@ -142,7 +146,9 @@ export default function (app: Express) {
     //          ????
     app.patch('/completed_subject/student/:id/', handleAddSubjectsToCompleted);
     app.get('/uni/:id/student/semester', handleGetStudentsBySemester);
-    app.patch('/uni/:uni/student/:stud/subjects/', handleAddSubjectsToStudent);
+    app.patch('/uni/:uni/student/subject/',
+        userGuard,
+        AuthGuard([studentRoles.student]), handleAddSubjectsToStudent);
 
 
     // Professor
@@ -186,10 +192,15 @@ export default function (app: Express) {
     app.patch('/sign/subject/:id/', handleGiveSign);
     app.get('/uni/:uni/subjects/professor/',
         userGuard,
-        AuthGuard([{role: 'professor'}]), handleGetProfessorSubjects);
+        AuthGuard([profRoles.professor]), handleGetProfessorSubjects);
     app.get('/uni/:uni/dep/:dep/subject/req/', handleGetAvailableReqSubjects);
-    app.get('/uni/:uni/dep/:dep/subject/', handleGetEnrollableSubjects)
-    app.get('/uni/:uni/dep/:dep/subject/optional', handleGetOptionalSubjects);
+    app.get('/uni/:uni/dep/:dep/subject/',
+        userGuard,
+        AuthGuard([studentRoles.student]), handleGetEnrollableSubjects)
+    app.get('/uni/:uni/dep/:dep/subject/optional',
+        userGuard,
+        AuthGuard([studentRoles.student]),
+        handleGetOptionalSubjects);
 
     // Optional
     app.post('/optional/', handleAddOptional);
