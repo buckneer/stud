@@ -98,7 +98,7 @@ const PeriodEdit = () => {
 						</div>
 						<form onSubmit={handleAddPeriod}>
 							<div className='form-control'>
-								<Select value={periodOptions.find((i: any) => i.value === periodName)} onChange={(e: any) => setPeriodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' required isClearable isSearchable options={periodOptions} />
+								<Select maxMenuHeight={200} value={periodOptions.find((i: any) => i.value === periodName)} onChange={(e: any) => setPeriodName(e?.value)} placeholder="Izaberite rok" className='w-full outline-none' required isClearable isSearchable options={periodOptions} />
 							</div>
 							{
 								periodName === "0" &&

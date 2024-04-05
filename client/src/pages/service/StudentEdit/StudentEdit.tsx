@@ -118,13 +118,13 @@ const StudentEdit = () => {
 						<InputField id="studentId" name="Broj Indeksa" type="text" inputVal={studentId} setVal={(e) => setStudentId(e.target.value)} />
 						<div className='form-control'>
 							{/* @ts-ignore */}
-							<Select value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
+							<Select maxMenuHeight={200} value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
 								return { value: item._id, label: item.name };
 							})} />
 						</div>
 						<InputField id="semester" name="Semestar" type="number" inputVal={currentSemester} setVal={(e) => setCurrentSemester(e.target.value)} min={0} max={12} />
 						<div className='form-control'>
-							<Select value={degreeOptions.find((i: any) => i.value === degree)} onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
+							<Select maxMenuHeight={200} value={degreeOptions.find((i: any) => i.value === degree)} onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
 						</div>
 						<div className='footer flex items-center justify-center flex-col'>
 							<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' disabled={isUpdateStudentLoading}>Azuriraj Studenta</button>

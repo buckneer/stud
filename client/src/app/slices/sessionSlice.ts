@@ -8,7 +8,8 @@ const initialState: Session = {
 	user: {},
 	metadata: {
 		studentTab: 0,
-		serviceHome: 0
+		serviceHome: 0,
+		role: ''
 	}
 }
 

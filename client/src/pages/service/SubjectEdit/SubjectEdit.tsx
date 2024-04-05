@@ -130,18 +130,18 @@ const SubjectAdd = () => {
 						<InputField id='code' type='text' name='Kod Predmeta' inputVal={code} setVal={(e) => setCode(e.target.value)} />
 						<div className='form-control'>
               {/* @ts-ignore */}
-							<Select value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
+							<Select maxMenuHeight={200} value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
 								return { value: item._id, label: item.name };
 							})} />
 						</div>
 						<div className='form-control'>
               {/* @ts-ignore */}
-							<Select value={professors} onChange={(e: any) => setProfessors(e)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
+							<Select maxMenuHeight={200} value={professors} onChange={(e: any) => setProfessors(e)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
 								return { value: item._id, label: item.user.name };
 							})} />
 						</div>
 						<div className='form-control'>
-							<Select defaultValue={degreeOptions.find((i: any) => i.value === degree)} onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
+							<Select maxMenuHeight={200} defaultValue={degreeOptions.find((i: any) => i.value === degree)} onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
 						</div>
 						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb?.toString()} setVal={(e) => setEspb(parseInt(e.target.value))} />
 						<InputField id='semestar' type='number' name='Semestar' inputVal={semester} setVal={(e) => setSemester(e.target.value)} />

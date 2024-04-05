@@ -133,7 +133,7 @@ const ExamEdit = () => {
 							</div>
 							<div className='form-control mb-5'>
 								{/* @ts-ignore */}
-								<Select value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} placeholder="Izaberite odsek" className='w-full outline-none' isClearable isSearchable options={departmentsData.map((item:any) => {
+								<Select maxMenuHeight={200} value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} placeholder="Izaberite odsek" className='w-full outline-none' isClearable isSearchable options={departmentsData.map((item:any) => {
 									return { value: item._id, label: item.name};
 								})} />
 							</div>
@@ -142,7 +142,7 @@ const ExamEdit = () => {
 								<>
 									<div className='form-control mb-5'>
 										{/* @ts-ignore */}
-										<Select	value={getLabel(subject, subjectsData, '_id', 'name')} onChange={(e: any) => setSubject(e?.value)} placeholder="Izaberite predmet" className='w-full outline-none' isClearable isSearchable options={subjectsData.map((item: any) => {
+										<Select maxMenuHeight={200}	value={getLabel(subject, subjectsData, '_id', 'name')} onChange={(e: any) => setSubject(e?.value)} placeholder="Izaberite predmet" className='w-full outline-none' isClearable isSearchable options={subjectsData.map((item: any) => {
 											return { value: item._id, label: item.name};
 										})} />
 									</div>
@@ -153,7 +153,7 @@ const ExamEdit = () => {
 								<>
 									<div className='form-control mb-5'>
 										{/* @ts-ignore */}
-										<Select value={getLabel(professor, professorsData, '_id', 'user.name')} onChange={(e: any) => setProfessor(e?.value)} placeholder="Izaberite profesora" className='w-full outline-none' isClearable isSearchable options={professorsData.map((item: any) => {
+										<Select maxMenuHeight={200} value={getLabel(professor, professorsData, '_id', 'user.name')} onChange={(e: any) => setProfessor(e?.value)} placeholder="Izaberite profesora" className='w-full outline-none' isClearable isSearchable options={professorsData.map((item: any) => {
 											return { value: item._id, label: item.user.name};
 										})} />
 									</div>

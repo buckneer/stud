@@ -161,7 +161,7 @@ const ProfessorAdd = () => {
 							{
 								!user ?
 									<div className='form-control'>
-										<Select onChange={(e: any) => setUser(e?.value)} required isClearable isSearchable placeholder="Izaberite korisnika" className='w-full outline-none' options={usersData!.map((item) => {
+										<Select maxMenuHeight={200} onChange={(e: any) => setUser(e?.value)} required isClearable isSearchable placeholder="Izaberite korisnika" className='w-full outline-none' options={usersData!.map((item) => {
 											return { value: item._id, label: item.name };
 										})} />
 									</div> :
@@ -172,7 +172,7 @@ const ProfessorAdd = () => {
 							}
 							<InputField id="profesorId" name="Zvanje profesora" type="text" inputVal={title} setVal={(e) => setTitle(e.target.value)} />
 							<div className='form-control'>
-								<Select onChange={handleChange2} placeholder="Izaberite predmete" className='w-full outline-none' required isMulti options={subjectsData.map((item) => {
+								<Select maxMenuHeight={200} onChange={handleChange2} placeholder="Izaberite predmete" className='w-full outline-none' required isMulti options={subjectsData.map((item) => {
 									return { value: item._id, label: item.name };
 								})} />
 							</div>

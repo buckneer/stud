@@ -122,7 +122,7 @@ const ServiceAdd = () => {
 							{ 
 								!user && usersData ?
 									<div className="form-control">
-										<Select onChange={(e: any) => setUser(e?.value)} required isClearable isSearchable  placeholder="Izaberite korisnika za Sluzbu" className='w-full outline-none' options={usersData!.map((item) => {
+										<Select maxMenuHeight={200} onChange={(e: any) => setUser(e?.value)} required isClearable isSearchable  placeholder="Izaberite korisnika za Sluzbu" className='w-full outline-none' options={usersData!.map((item) => {
 											return { value: item._id, label: item.name };
 										})} />
 									</div> :
