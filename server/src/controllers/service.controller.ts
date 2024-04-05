@@ -32,10 +32,10 @@ export async function handleUpdateService(req: Request, res: Response) {
 
 export async function handleGetServices(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { uni } = req.params;
 
-        let resp: any = await getServices(id);
-        
+        let resp: any = await getServices(uni);
+
         return res.send(resp);
     } catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -44,9 +44,9 @@ export async function handleGetServices(req: Request, res: Response) {
 
 export async function handleGetServiceGrades(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { service } = req.params;
 
-        let resp = await getGradesByRole(id, Service);
+        let resp = await getGradesByRole(service, Service);
         return res.status(200).send(resp);
     } catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');

@@ -36,9 +36,9 @@ export async function handleGetExams(req: Request, res: Response) {
 
 export async function handleGetExam(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { exam } = req.params;
 
-        let resp = await getExam(id);
+        let resp = await getExam(exam);
 
         return res.send(resp);
     } catch (e: any) {
@@ -48,13 +48,13 @@ export async function handleGetExam(req: Request, res: Response) {
 
 export async function handleUpdateExam(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { exam } = req.params;
 
         let data = {
             ...req.body
         }
 
-        let resp = await updateExam(id, data);
+        let resp = await updateExam(exam, data);
 
         return res.status(200).send(resp);
 
@@ -65,10 +65,10 @@ export async function handleUpdateExam(req: Request, res: Response) {
 
 export async function handleAddStudentsToExam(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { exam } = req.params;
         let { students } = req.body;
 
-        let resp = await addToModelArray(Exam, id, 'students', students);
+        let resp = await addToModelArray(Exam, exam, 'students', students);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -77,10 +77,10 @@ export async function handleAddStudentsToExam(req: Request, res: Response) {
 
 export async function handleExamsCanAdd(req: Request, res: Response) {
     try {
-        let { id, uni } = req.params; // TODO remove with authguard
+        let { stud, uni } = req.params; // TODO remove with authguard
 
 
-        let resp = await examsCanAdd(id, uni);
+        let resp = await examsCanAdd(stud, uni);
 
         return res.status(200).send(resp);
     } catch (e: any) {
@@ -90,10 +90,10 @@ export async function handleExamsCanAdd(req: Request, res: Response) {
 
 export async function handleAddStudentToExams(req: Request, res: Response) {
     try {
-        let { id } = req.params; // <- This is student id
+        let { stud } = req.params; // <- This is student id
         let { exams } = req.body;
 
-        let resp = await addStudentToExams(id, exams);
+        let resp = await addStudentToExams(stud, exams);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -102,10 +102,10 @@ export async function handleAddStudentToExams(req: Request, res: Response) {
 
 export async function handleRemoveStudentFromExam(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { exam } = req.params;
         let { student } = req.body;
 
-        let resp = await removeFromModelArray(Exam, id, 'students', student);
+        let resp = await removeFromModelArray(Exam, exam, 'students', student);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -114,10 +114,10 @@ export async function handleRemoveStudentFromExam(req: Request, res: Response) {
 
 export async function handleAddGradesToExam(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { exam } = req.params;
         let { grades } = req.body;
 
-        let resp = await addToModelArray(Exam, id, 'grades', grades);
+        let resp = await addToModelArray(Exam, exam, 'grades', grades);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -126,10 +126,10 @@ export async function handleAddGradesToExam(req: Request, res: Response) {
 
 export async function handleRemoveGradeFromExam(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { exam } = req.params;
         let { grade } = req.body;
 
-        let resp = await removeFromModelArray(Exam, id, 'grades', grade);
+        let resp = await removeFromModelArray(Exam, exam, 'grades', grade);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -153,9 +153,9 @@ export async function handleGetUniExams(req: Request, res: Response) {
 
 export async function handleGetGradesByExam(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { exam } = req.params;
 
-        let resp = await getGradesByExam(id);
+        let resp = await getGradesByExam(exam);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -165,7 +165,7 @@ export async function handleGetGradesByExam(req: Request, res: Response) {
 
 export async function handleGetStudentExams(req: Request, res: Response) {
     try {
-        let { id, status } = req.params;
+        let { exam, status } = req.params;
 
         let statusArray: string[] = [ 'passed', 'failed', 'tbd' ]; // tbd - to be determined
 
@@ -173,7 +173,7 @@ export async function handleGetStudentExams(req: Request, res: Response) {
             return res.status(400).send('Nevalidan status!');
         }
 
-        let resp = await getStudentExams(id, status);
+        let resp = await getStudentExams(exam, status);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

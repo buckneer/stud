@@ -16,7 +16,6 @@ import {
 } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import {AuthGuard, isServiceInUniversity, roleGuard, userGuard} from "./middleware/routeGuard";
-import { handleAddDepartment, handleAddProfessorToDepartment, handleAddStudentsToDepartment, handleAddSubjectsToDepartment, handleGetDepartment, handleGetDepartments, handleRemoveProfessorFromDepartment, handleRemoveStudentFromDepartment, handleRemoveSubjectFromDepartment, handleUpdateDepartment } from "./controllers/department.controller";
 import {
     handleAddProfessorToManySubjects,
     handleAddRequiredsToSubject,
@@ -47,23 +46,17 @@ import {
 } from "./controllers/exam.controller";
 import { handleAddExamToPeriod, handleAddPeriod, handleGetAvailableExamsInPeriod, handleGetPeriod, handleGetPeriods, handleGetUniPeriods, handleRemoveExamFromPeriod, handleUpdatePeriod } from "./controllers/period.controller";
 import { handleAddService, handleGetServiceGrades, handleGetServices } from "./controllers/service.controller";
-import {
-    handleAddExamsToStudent,
-    handleAddStudent,
-    handleAddStudentToSubjects,
-    handleAddSubjectsToCompleted,
-    handleAddSubjectsToStudent,
-    handleDeleteStudent,
-    handleGetStudent,
-    handleGetStudentGrades,
-    handleGetStudents,
-    handleGetStudentsByDepartment,
-    handleGetStudentsBySemester,
-    handleRemoveStudentFromSubject,
-    handleUpdateStudent,
-    removeExamFromStudent
-} from "./controllers/student.controller";
-import { handleAddOptional, handleGetOptional } from "./controllers/optional.controller";
+import {depRouter} from "./routers/department.router";
+import {sessionRouter} from "./routers/user.router";
+import {uniRouter} from "./routers/university.router";
+import {studentRouter} from "./routers/student.router";
+import {professorRouter} from "./routers/professor.router";
+import {subjectRouter} from "./routers/subject.router";
+import {optionalRouter} from "./routers/optional.router";
+import {gradeRouter} from "./routers/grade.router";
+import {examRouter} from "./routers/exam.router";
+import {periodRouter} from "./routers/period.router";
+import {serviceRouter} from "./routers/service.router";
 
 
 // TEST TOKENS:
@@ -71,16 +64,13 @@ import { handleAddOptional, handleGetOptional } from "./controllers/optional.con
 // PROFESSOR: (profesor) eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGQ0YTMzMmZjMDQ2Nzc5NDE5NmU4NyIsImVtYWlsIjoicHJvZmVzb3JAZ21haWwuY29tIiwicm9sZXMiOlsicHJvZmVzc29yIl0sImlhdCI6MTcxMjE5MjQxN30.9B4_2VFrd-0jyfGq-DkdotM1I7O4YZeDmu1zYDS49Jg
 // SERVICE: (miftarisimel) eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MDU4MDc2Zjk3YjJhZDUyYTI0OTMxNiIsImVtYWlsIjoibWlmdGFyaXNpbWVsQGdtYWlsLmNvbSIsInJvbGVzIjpbInNlcnZpY2UiLCJzdHVkZW50Il0sImlhdCI6MTcxMjE5MjQ2M30.bun4bzNd0QJMwEmi4GTK402-ZAA4I4Y2pQs37uByvkY
 
-const serviceRoles = {
+export const serviceRoles = {
     university: {role: 'service', when: isServiceInUniversity}
 }
 
-const profRoles = {
-    professor: {role: 'professor'},
-    addGrade: {role: 'professor', }
-}
 
-const studentRoles = {
+
+export const studentRoles = {
     student: {role: 'student'}
 }
 
@@ -88,20 +78,8 @@ export default function (app: Express) {
     app.get("/thanks", (request: Request, response: Response) => response.status(200).send({ message: 'Hvala Vam puno što koristite naše usluge! :)' }));
 
     app.get("/healthcheck", (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected', userGuard, (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/user', userGuard, roleGuard(['student']), (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/professor', userGuard, roleGuard(['professor']), (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/service', userGuard, roleGuard(['service']), (request: Request, response: Response) => response.sendStatus(200));
-
     //app.get('/protected/', userGuard, roleGuard(['professor', 'service']), (request: Request, response: Response) => response.sendStatus(200));
-    app.get('/protected/uni/:uni/', userGuard, AuthGuard([serviceRoles.university]), (request: Request, response: Response) => response.sendStatus(200));
 
-    // Session
-    app.post('/login/', handleLogin);
-    app.post('/refresh/', handleRefresh);
-    app.post('/logout/', handleLogout);
-
-    // User
     app.post('/register/', userGuard, handleRegister);
     app.patch('/password/', handleSetPassword);
     app.post('/password/', handleSendPasswordMail);
@@ -112,135 +90,17 @@ export default function (app: Express) {
     app.delete('/user', handleUserDelete);
     app.get('/user/:id/uni/role/:role/', handleGetUserUnisByRole);
 
+    app.use('/', sessionRouter);
+    app.use('/uni', uniRouter);
+    app.use('/uni/:uni/department', depRouter);
+    app.use('/uni/:uni/student', studentRouter);
+    app.use('/uni/:uni/professor', professorRouter);
+    app.use('/uni/:uni/subject', subjectRouter);
+    app.use('/uni/:uni/optional', optionalRouter);
+    app.use('/uni/:uni/grade', gradeRouter);
+    app.use('/uni/:uni/exam', examRouter);
+    app.use('/uni/:uni/period', periodRouter)
+    app.use('/uni/:uni/service', serviceRouter);
 
-    // University
-    app.post('/uni/', handleNewUni);
-    app.get('/uni/', handleGetAllUnis);
-    app.get('/uni/:uni/', handleGetUni);
-    app.patch('/uni/', handleAddStudentsUni);
-    app.patch('/uni/'); // <-- TREBA DA SE SREDI!
-    app.patch('/uni/:uni/professor/', handleAddProfessorsToUni);
-    app.patch('/uni/:uni/student/', handleAddStudentsToUni);
-    app.patch('/uni/:uni/department', handleAddDepartmentsToUni);
-    app.delete('/uni/:uni/department/', handleRemoveDepartmentFromUni);
-    app.patch('/uni/:uni/service/', handleAddServicesToUni);
-    app.delete('/uni/:uni/service/', handleRemoveServiceFromUni);
-    app.get('/uni/:uni/period/',  handleGetUniPeriods);
-    app.get('/uni/:uni/exam/', handleGetUniExams);
-
-
-    // Student
-    app.post('/student/', /* userGuard, roleGuard('service'), */ handleAddStudent);
-    // app.post('/uni/:university/student', handleAddStudent);
-    app.get(['/student/', '/uni/:university/student/'], handleGetStudents);
-    app.get('/student/:id/', handleGetStudent);
-    app.delete('/student/:id/', handleDeleteStudent);
-    app.patch('/student/:id/', handleUpdateStudent);
-    app.patch('/student/:id/exam/', handleAddExamsToStudent);
-    app.delete('/student/:id/exam/', removeExamFromStudent);
-    app.get('/student/:id/grade/', handleGetStudentGrades);
-    app.get('/student/:id/period/exam/', handleGetAvailableExamsInPeriod);
-    // added here...:
-    app.patch('/subject/student/:id/', handleAddStudentToSubjects);
-    app.delete('/subject/student/:id/', handleRemoveStudentFromSubject);
-    //          ????
-    app.patch('/completed_subject/student/:id/', handleAddSubjectsToCompleted);
-    app.get('/uni/:id/student/semester', handleGetStudentsBySemester);
-    app.patch('/uni/:uni/student/subject/',
-        userGuard,
-        AuthGuard([studentRoles.student]), handleAddSubjectsToStudent);
-
-
-    // Professor
-    app.post('/professor/', handleAddProfessor);
-    app.get('/professor/:professor/', handleGetProfessor);
-    app.get('/uni/:university/professor/', handleGetProfessors); // <- add all university professors
-    app.patch('/professor/:professor/', handleUpdateProfessor);
-    app.patch('/professor/:id/subject/', handleAddProfessorToManySubjects);
-    app.patch('/professor/:id/grade/', handleAddGradesToProfessor);
-    app.delete('/professor/:id/grade/', handleRemoveGradeFromProfessor);
-    app.patch('/professor/:id/uni/', handleAddUniToProfessor);
-    app.delete('/professor/:id/uni/', handleRemoveUniFromProfessor);
-    app.patch('/professor/:id/subject/', handleAddSubjectsToProfessor);
-    app.delete('/professor/:id/subject/', handleRemoveProfessorFromUni);
-    app.get('/professor/:id/grade/', handleGetProfessorGrades);
-
-    // Departments
-    app.post('/uni/:uni/department/', handleAddDepartment);
-    app.patch('/department/:department/', handleUpdateDepartment);
-    app.get('/department/:department/', handleGetDepartment);
-    app.get('/uni/:university/department/', handleGetDepartments);
-    app.patch('/department/:id/student/', handleAddStudentsToDepartment);
-    app.delete('/department/:id/student/', handleRemoveStudentFromDepartment);
-    app.patch('/department/:id/professor/', handleAddProfessorToDepartment);
-    app.delete('/department/:id/professor/', handleRemoveProfessorFromDepartment);
-    app.patch('/department/:id/subject/', handleAddSubjectsToDepartment);
-    app.delete('/department/:id/subject', handleRemoveSubjectFromDepartment);
-    app.get('/department/:id/student/', handleGetStudentsByDepartment);
-
-    // Subject
-    app.post('/subject/', handleAddSubject);
-    app.patch('/subject/:id/', handleUpdateSubject);
-    app.get('/subject/:id/', handleGetSubject);
-    app.get('/department/:dep/subject/', handleGetSubjects);
-    app.get('/uni/:uni/subject/', handleGetSubjects);
-    app.patch('/subject/:id/professor/', handleAddProfessorsToSubject);
-    app.delete('/subject/:id/professor/', handleRemoveProfessorFromSubject);
-    app.patch('/subject/:id/required/', handleAddRequiredsToSubject);
-    app.delete('/subject/:id/required/', handleRemoveRequiredFromSubject);
-    app.get('/subject/:id/role/:role/', handleGetSubjectRole);
-    app.patch('/sign/subject/:id/', handleGiveSign);
-    app.get('/uni/:uni/subjects/professor/',
-        userGuard,
-        AuthGuard([profRoles.professor]), handleGetProfessorSubjects);
-    app.get('/uni/:uni/dep/:dep/subject/req/', handleGetAvailableReqSubjects);
-    app.get('/uni/:uni/dep/:dep/subject/',
-        userGuard,
-        AuthGuard([studentRoles.student]), handleGetEnrollableSubjects)
-    app.get('/uni/:uni/dep/:dep/subject/optional',
-        userGuard,
-        AuthGuard([studentRoles.student]),
-        handleGetOptionalSubjects);
-
-    // Optional
-    app.post('/optional/', handleAddOptional);
-    app.get('/uni/:uni/optional', handleGetOptional);
-    app.patch('/uni/:uni/optional/:opt/subject/', handleAddSubjectsToOptional);
-
-    // Grade
-    app.post('/grades/', handleAddGrade);
-    app.patch('/grades/:id/', handleUpdateGrade);
-    app.get('/grades/:id/', handleGetGrade);
-    app.get('/grades/', handleGetGrades);
-
-    // Exam
-    app.post('/exam/', handleAddExam);
-    app.patch('/exam/:id/', handleUpdateExam);
-    app.get('/exam/:id/', handleGetExam);
-    app.get('/exam/', handleGetExams);
-    app.patch('/exam/:id/student/', handleAddStudentsToExam);
-    app.delete('/exam/:id/student/', handleRemoveStudentFromExam);
-    app.patch('/exam/:id/grade/', handleAddGradesToExam);
-    app.delete('/exam/:id/grade/', handleRemoveGradeFromExam);
-    app.get('/exam/:id/grade/', handleGetGradesByExam);
-    app.get('/student/:id/status/:status/', handleGetStudentExams);
-    app.post('/exam/student/:id', handleAddStudentToExams);
-    app.get('/exam/period/:period/pending', userGuard, handleGetPendingProfessorExams);
-    app.get('/uni/:uni/exam/student/:id', handleExamsCanAdd);
-
-    // Period
-    app.post('/period/', handleAddPeriod);
-    app.patch('/period/:id/', handleUpdatePeriod);
-    app.get('/period/:id/', handleGetPeriod);
-    app.get('/period/', handleGetPeriods);
-    app.patch('/period/:id/exam/', handleAddExamToPeriod);
-    app.delete('/period/:id/exam/', handleRemoveExamFromPeriod);
-
-
-    // Service
-    app.post('/service/', handleAddService);
-    app.get('/uni/:id/service/', handleGetServices); // uni services...
-    app.delete('/service/:id/'); // <-- IMPLEMENT THIS...
-    app.get('/service/:id/grade/', handleGetServiceGrades);
 
 }

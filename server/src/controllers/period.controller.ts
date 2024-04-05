@@ -29,9 +29,9 @@ export async function handleGetPeriods(req: Request, res: Response) {
 
 export async function handleGetPeriod(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { period } = req.params;
 
-		let resp = await getPeriod(id);
+		let resp = await getPeriod(period);
 
 		return res.status(200).send(resp);
 
@@ -42,13 +42,13 @@ export async function handleGetPeriod(req: Request, res: Response) {
 
 export async function handleUpdatePeriod(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { period } = req.params;
 
 		let data: PeriodDocument = {
 			...req.body
 		}
 
-		let resp = await updatePeriod(id, data);
+		let resp = await updatePeriod(period, data);
 
 		return res.send(resp)
 	} catch (e: any ) {
@@ -58,10 +58,10 @@ export async function handleUpdatePeriod(req: Request, res: Response) {
 
 export async function handleAddExamToPeriod(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { period } = req.params;
 		let { exams } = req.body;
 
-		let resp = await addToModelArray(Period, id, 'exams', exams);
+		let resp = await addToModelArray(Period, period, 'exams', exams);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -70,10 +70,10 @@ export async function handleAddExamToPeriod(req: Request, res: Response) {
 
 export async function handleRemoveExamFromPeriod(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
+		let { period } = req.params;
 		let { exam } = req.body;
 
-		let resp = await removeFromModelArray(Period, id, 'exams', exam);
+		let resp = await removeFromModelArray(Period, period, 'exams', exam);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -100,7 +100,7 @@ export async function handleGetUniPeriods(req: Request, res: Response) {
 // student/:id/period/exam/
 export async function handleGetAvailableExamsInPeriod(req: Request, res: Response)  {
 	try {
-		let { id } = req.params;
+		let { stud } = req.params;
 
 		// let resp = await getAvailableExamsInPeriod(id);
 		return res.status(200).send("Implement");

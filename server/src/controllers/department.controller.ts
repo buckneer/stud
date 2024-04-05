@@ -16,19 +16,19 @@ export async function handleAddDepartment(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
 export async function handleGetDepartments(req: Request, res: Response) {
     try {
-        let { university } = req.params;
+        let { uni } = req.params;
 
-        let resp = await getDepartments(university);
+        let resp = await getDepartments(uni);
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -40,7 +40,7 @@ export async function handleGetDepartment(req: Request, res: Response) {
 
         return res.send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -57,19 +57,19 @@ export async function handleUpdateDepartment(req: Request, res: Response) {
         return res.send(resp);
 
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error'); 
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
 export async function handleAddStudentsToDepartment(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { department } = req.params;
         let { students } = req.body;
 
-        let resp = await addToModelArray(Department, id, 'students', students);
+        let resp = await addToModelArray(Department, department, 'students', students);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -81,7 +81,7 @@ export async function handleRemoveStudentFromDepartment(req: Request, res: Respo
         let resp = await removeFromModelArray(Department, id, 'students', student);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -93,7 +93,7 @@ export async function handleAddProfessorToDepartment(req: Request, res: Response
         let resp = await addToModelArray(Department, id, 'professors', professors);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -105,7 +105,7 @@ export async function handleRemoveProfessorFromDepartment(req: Request, res: Res
         let resp = await removeFromModelArray(Department, id, 'professors', professor);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -117,7 +117,7 @@ export async function handleAddSubjectsToDepartment(req: Request, res: Response)
         let resp = await addToModelArray(Department, id, 'subjects', subjects);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
 
@@ -129,6 +129,6 @@ export async function handleRemoveSubjectFromDepartment(req: Request, res: Respo
         let resp = await removeFromModelArray(Department, id, 'subjects', subject);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

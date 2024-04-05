@@ -93,10 +93,11 @@ export async function handleAddProfessorsToUni(req: Request, res: Response) {
 
 export async function handleRemoveProfessorFromUni(req: Request, res: Response) {
 	try {
-		let { id } = req.params;
-		let { professor } = req.body;
+		let { professor } = req.params;
+		// TODO rename this!!
+		let { data } = req.body;
 
-		let resp = await removeFromModelArray(University, id, 'professors', professor);
+		let resp = await removeFromModelArray(University, professor, 'professors', data);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
