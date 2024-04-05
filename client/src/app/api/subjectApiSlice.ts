@@ -151,7 +151,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 					{ type: 'Department' as const, id: arg.department },
 					...result.map((subject: Subject ) => ({ type: 'Subject' as const, id: subject._id }))]
 				: [],
-		})
+		}),
 	})
 });
 

@@ -170,7 +170,7 @@ const SubjectAdd = () => {
 		reqContent = 
 			<>
 				<div className="form-control">
-					<Select onChange={(e: any) => setRequiredSub(e)} isClearable isMulti isSearchable placeholder="Izaberite uslovne predmete" className='w-full outline-none' options={reqSubjectData!.map((item: any) => ({
+					<Select maxMenuHeight={150} onChange={(e: any) => setRequiredSub(e)} isClearable isMulti isSearchable placeholder="Izaberite uslovne predmete" className='w-full outline-none' options={reqSubjectData!.map((item: any) => ({
 						value: item._id, label: item.name
 					}))} />
 				</div>
@@ -183,7 +183,7 @@ const SubjectAdd = () => {
 		optionalContent = 
 			<>
 				<div className="form-control">
-					<Select onChange={(e: any) => setOptional(e?.value)} placeholder="Izaberite blok" className="w-full outline-none" required isClearable isSearchable options={optionalData!.map((item: any) => ({
+					<Select maxMenuHeight={150} onChange={(e: any) => setOptional(e?.value)} placeholder="Izaberite blok" className="w-full outline-none" required isClearable isSearchable options={optionalData!.map((item: any) => ({
 						value: item._id, label: item.name
 					}))}/> 
 				</div>
@@ -213,15 +213,15 @@ const SubjectAdd = () => {
 						<InputField id='espb' type='number' min={0} name='Broj Espb' inputVal={espb?.toString()} setVal={(e) => setEspb(parseInt(e.target.value))}/>
 						<InputField id='semestar' type='number' name='Semestar' inputVal={semester} setVal={(e) => setSemester(e.target.value)} />
 						<div className='form-control'>
-							<Select onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
+							<Select maxMenuHeight={150} onChange={(e: any) => setDegree(e?.value)} placeholder="Izaberite tip studija" className='w-full outline-none' required isClearable isSearchable options={degreeOptions} />
 						</div>
 						<div className='form-control'>
-							<Select onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
+							<Select maxMenuHeight={150} onChange={(e: any) => setDepartment(e?.value)} required isClearable isSearchable placeholder="Izaberite odsek" className='w-full outline-none' options={departmentsData!.map((item) => {
 								return { value: item._id, label: item.name };
 							})} />
 						</div>
 						<div className='form-control'>
-							<Select onChange={(e: any) => setProfessors(e)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
+							<Select maxMenuHeight={150} onChange={(e: any) => setProfessors(e)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
 								return { value: item._id, label: item.user.name };
 							})} />
 						</div>

@@ -5,6 +5,7 @@ import {useAddStudentExamsMutation} from "../../../app/api/studentApiSlice";
 import {Session} from "../../../app/api/types/types";
 import StudTitle from "../../../components/StudTitle/StudTitle";
 import Loader from "../../../components/Loader/Loader";
+import TD from "../../../components/Table/TableColumn";
 
 
 
@@ -95,20 +96,20 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 				{!isExamLoading && (
 					<Table cols={cols}>
 						{exams.length !== 0 ? exams.map(row => (
-							<tr>
-								<td className="py-2">{row.code}</td>
-								<td>{row.semester}</td>
-								<td>{row.subject}</td>
-								<td>{row.professor}</td>
-								<td>{row.date}</td>
-								<td>
+							<tr key={row._id} className={`${examsToAdd.includes(row._id!) ? 'bg-slate-100' : ''} `}>
+								<TD>{row.code}</TD>
+								<TD>{row.semester}</TD>
+								<TD>{row.subject}</TD>
+								<TD>{row.professor}</TD>
+								<TD>{row.date}</TD>
+								<TD>
 									<input
 										type="checkbox"
 										className="rounded-2xl checked:bg-black size-4 checked:border-0"
 										name={row._id}
 										onChange={handleCheck}
 									/>
-								</td>
+								</TD>
 							</tr>
 						)) : (<div className="p-5 font-black">Nema Ispita</div> )}
 					</Table>

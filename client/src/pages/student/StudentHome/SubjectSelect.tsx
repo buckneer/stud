@@ -2,9 +2,12 @@ import {Session, Subject} from "../../../app/api/types/types";
 import StudTitle from "../../../components/StudTitle/StudTitle";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {useGetAvailableSubjectsQuery} from "../../../app/api/subjectApiSlice";
-import {useGetStudentQuery} from "../../../app/api/studentApiSlice";
 import Table from "../../../components/Table/Table";
 import Loader from "../../../components/Loader/Loader";
+import {useGetAvailableOptionalsQuery} from "../../../app/api/optionalApiSlice";
+import {ChevronRight} from "lucide-react";
+import './animations.css';
+import TD from "../../../components/Table/TableColumn";
 
 
 export interface ISubjectSelect {
@@ -22,8 +25,24 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 	const [subjectsToAdd, setSubjectsToAdd] = useState<string[]>([]);
 	const [subjects, setSubjects] = useState<Subject[]>([]);
 	const [optionalSubjects, setOptionalSubjects] = useState<Subject[]>([]);
-	const [totalEspb, setTotalEspb] = useState(50);
+	const [totalEspb, setTotalEspb] = useState(0);
 	const [displayedTotal, setDisplayedTotal] = useState(0);
+	const [activeDropdown, setActiveDropdown] = useState<string[]>([]);
+
+	const {
+		data: availableSub,
+		isLoading: isSubjLoading,
+		isSuccess: isSubjSuccess,
+		isError: isSubjError
+		// @ts-ignore
+	} = useGetAvailableSubjectsQuery({university: uni!, department: DEPARTMENT});
+
+	const {
+		data: optionalBlocks,
+		isLoading: isOptionalBlockLoading,
+		isSuccess: isOptionalBlockSuccess,
+		isError: isOptionalBlockError
+	} = useGetAvailableOptionalsQuery({university: uni!, department: DEPARTMENT})
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -32,7 +51,7 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 			} else if (displayedTotal > totalEspb) {
 				setDisplayedTotal(prevTotal => prevTotal - 1);
 			}
-		}, 10); // Adjust the interval speed as needed
+		}, 10);
 
 		return () => clearInterval(interval);
 	}, [totalEspb, displayedTotal]);
@@ -48,13 +67,8 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 			setTotalEspb(prevState => prevState - espbValue);
 		}
 	};
-	const {
-		data: availableSub,
-		isLoading: isSubjLoading,
-		isSuccess: isSubjSuccess,
-		isError: isSubjError
-		// @ts-ignore
-	} = useGetAvailableSubjectsQuery({university: uni!, department: DEPARTMENT});
+
+
 
 	useEffect(() => {
 		if(availableSub) {
@@ -70,76 +84,123 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 		}
 	}, [isSubjLoading]);
 
+
+	const handleDropdown = (_id: string) => {
+		if(activeDropdown.includes(_id)) {
+			setActiveDropdown(prevState => prevState.filter(name => name !== _id));
+		} else {
+			setActiveDropdown(prevState => [...prevState, _id]);
+		}
+	}
+
+	const handleSendSubjects = () => {
+		// TODO Add mutation
+		console.log(subjectsToAdd)
+	}
+
 	return (
 		<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full">
 			<div className="list-header flex justify-between p-5 ">
 				<StudTitle text={"Odabir Predmeta"} />
-				<div className="search-container flex items-center justify-center gap-10">
+				<div className="search-container flex items-center justify-center gap-10 mr-10">
 					<div className="flex flex-col items-end">
 						<h1>Ukupno <b>ESPB</b>: </h1>
 						<h1 className="font-black"><span className={`text-2xl transition-all  ${totalEspb > 60 ? "text-red-600 text-3xl" : ''} ${totalEspb === 60 ? 'text-green-600': ''}`}>{displayedTotal}</span>/60</h1>
 					</div>
-					<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
 				</div>
 			</div>
 			<div className="w-full flex justify-center">
 				<Table cols={cols}>
 					{isSubjLoading && <Loader />}
 					{!isSubjLoading && availableSub!.length !== 0 && subjects!.map(subj => (
-						<tr>
-							<td className="py-2">{subj.code}</td>
-							<td className="py-2">{subj.name}</td>
-							<td className="py-2">
+						<tr key={subj._id} className={`${subjectsToAdd.includes(subj._id!) ? 'bg-slate-100' : ''} `}>
+							<TD>{subj.code}</TD>
+							<TD>{subj.name}</TD>
+							<TD>
 								{/*@ts-ignore*/}
 								{subj.professors!.map(prof => prof.user.name)}
-							</td>
-							<td>{subj.type === "R" ? 'O' : 'I'}</td>
-							<td>{subj.espb}</td>
-							<td>
+							</TD>
+							<TD>{subj.type === "R" ? 'O' : 'I'}</TD>
+							<TD>{subj.espb}</TD>
+							<TD>
 								<input
 									type="checkbox"
 									className="rounded-2xl checked:bg-black size-4 checked:border-0"
 									name={subj._id}
+									checked={subjectsToAdd.includes(subj._id!)}
 									value={subj.espb}
 									onChange={handleCheck}
 								/>
-							</td>
+							</TD>
 						</tr>
+					))}
+					{isOptionalBlockLoading && <Loader />}
+					{!isOptionalBlockLoading &&
+					isOptionalBlockSuccess &&
+					optionalBlocks.length !== 0 &&
+					optionalBlocks.map(optional => (
+						<>
+							<tr key={optional._id} className="bg-slate-100 cursor-pointer" onClick={() => handleDropdown(optional._id!)}>
+								<td className="flex justify-center py-2">
+									<ChevronRight className={`transition-transform transform ${activeDropdown.includes(optional._id!) ? 'rotate-90' : ''}`} />
+								</td>
+								<TD>{optional.name}</TD>
+								<td></td>
+								<td></td>
+								<TD>{optional.espb}</TD>
+								<td></td>
+							</tr>
+							{activeDropdown.includes(optional._id!) &&
+								optional.subjects &&
+								optional.subjects.length !== 0 &&
+								optional.subjects.map((subj: any, index) => (
+									<tr key={subj._id!} className={`subject-row overflow-hidden ${index === 0 ? 'delay-100' : ''} ${subjectsToAdd.includes(subj._id!) ? 'bg-slate-100' : ''}`}>
+										<TD >{subj.code}</TD>
+										<TD >{subj.name}</TD>
+										<TD >
+											{/*@ts-ignore*/}
+											{subj.professors!.map(prof => prof.user.name)}
+										</TD>
+										<TD>{subj.type === "R" ? 'O' : 'I'}</TD>
+										<TD>{subj.espb}</TD>
+										<TD>
+											<input
+												type="checkbox"
+												className="rounded-2xl checked:bg-black size-4 checked:border-0"
+												name={subj._id}
+												value={subj.espb}
+												checked={subjectsToAdd.includes(subj._id)}
+												onChange={handleCheck}
+											/>
+										</TD>
+									</tr>
+								))
+							}
+
+						</>
 					))}
 				</Table>
 			</div>
-			<div className="flex justify-center items-center my-5">
-				<h1 className="font-black">Izborni Predmeti</h1>
-			</div>
-			<div className="w-full flex justify-center">
-				<Table cols={cols}>
-					{isSubjLoading && <Loader />}
-					{!isSubjLoading && availableSub!.length !== 0 && optionalSubjects!.map(subj => (
-						<tr>
-							<td className="py-2">{subj.code}</td>
-							<td className="py-2">{subj.name}</td>
-							<td className="py-2">
-								{/*@ts-ignore*/}
-								{subj.professors!.map(prof => prof.user.name)}
-							</td>
-							<td>{subj.type === "R" ? 'O' : 'I'}</td>
-							<td>{subj.espb}</td>
-							<td>
-								<input
-									type="checkbox"
-									className="rounded-2xl checked:bg-black size-4 checked:border-0"
-									name={subj._id}
-									value={subj.espb}
-									onChange={handleCheck}
-								/>
-							</td>
-						</tr>
-					))}
-				</Table>
-			</div>
-			<div className="flex justify-end p-5">
+			<div className="flex justify-end p-5 w-3/5">
 				<button
-					className="bg-slate-100 rounded-2xl px-3 py-2 font-bold cursor-pointer transition-all hover:bg-white hover:border-black border-[1px] border-slate-100 disabled:bg-slate-600 disabled:text-white" disabled={totalEspb !== 60}>
+					className="bg-green-600
+					shadow-xl
+					text-white
+					rounded-full
+					px-3 py-2
+					font-black
+					cursor-pointer
+					transition-all
+
+					hover:bg-green-800
+
+
+					disabled:bg-gray-500
+					disabled:cursor-not-allowed
+					disabled:shadow-none
+					disabled:text-white"
+					onClick={handleSendSubjects}
+					disabled={totalEspb !== 60}>
 
 					Sačuvaj Izabrane Predmete
 				</button>
