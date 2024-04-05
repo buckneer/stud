@@ -43,7 +43,7 @@ const StudentEdit = () => {
 		isSuccess: isStudentDataSuccess,
 		isError: isStudentDataError,
 		error: isStudentError
-	} = useGetStudentQuery(studentIdParam!, {
+	} = useGetStudentQuery({ university: university!, id: studentIdParam! }, {
 		skip: !studentIdParam 
 	});
 
@@ -79,10 +79,10 @@ const StudentEdit = () => {
 				university: university!
 			}
 
-			const result = await updateStudent({id: studentIdParam!, body}).unwrap();
+			const result = await updateStudent({ university: university!, id: studentIdParam!, body }).unwrap();
 
 			// @ts-ignore
-			await addDepStudents({ department, body: { students: [result.id] } });
+			await addDepStudents({ university, department, body: { students: [result.id] } });
 		} catch (e: any) {
 			console.error(e);
 		}

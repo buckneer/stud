@@ -107,7 +107,7 @@ const StudentAdd = () => {
 				university: university!
 			}
 
-			const result = await studentAdd(body).unwrap();
+			const result = await studentAdd({ university: university!, body }).unwrap();
 
 			const resultBody: any = {
 				university: university,
@@ -120,7 +120,7 @@ const StudentAdd = () => {
 			await studentAddUni(resultBody);
 
 			// @ts-ignore
-			await addDepStudents({ department, body: { students: [result.id] } });
+			await addDepStudents({ univeristy, department, body: { students: [result.id] } });
 		} catch (e: any) {
 			console.error(e);
 		}

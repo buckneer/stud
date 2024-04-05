@@ -1,16 +1,16 @@
 import { apiSlice } from "./apiSlice";
-import { Student, UniUser, UpdateStudent, AddUni, DelUni, AddStExam, DelStExam, AddStSub } from "./types/types";
+import { Student, UniUser, UpdateStudent, AddUni, DelUni, AddStExam, DelStExam, AddStSub, Subject } from "./types/types";
 
 const studentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addStudent: builder.mutation <{ id: string }, any>({
-			query: (body) => ({
-				url: `/student/`,
+		addStudent: builder.mutation <{ id: string }, { university: string, body: Subject }> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/student/`,
 				method: 'POST',
 				body
 			}),
 			invalidatesTags: (result, error, arg) => (result)
-				? ['Student']
+				? [{ type: 'Student' as const }]
 				: []
 		}),
 		addStudentToUni: builder.mutation <unknown, AddUni> ({
@@ -34,12 +34,12 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				{ type: 'Uni' as const, id: arg.university }] // maybe add 'Subject', 'Department'
 				: []
 		}),
-		getStudent: builder.query <Student, string> ({
-			query: (id) => ({
-				url: `/student/${id}/`,
+		getStudent: builder.query <Student, { university: string; id: string }> ({
+			query: ({ university, id }) => ({
+				url: `/uni/${university}/student/${id}/`,
 			}),
-			providesTags: (result, error, id) => (result)
-				? [{ type: 'Student' as const, id }]
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Student' as const, id: arg.id }]
 				: []
 		}),
 		deleteStudent: builder.mutation <unknown, string> ({
@@ -61,8 +61,8 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		updateStudent: builder.mutation <unknown, UpdateStudent> ({
-			query: ({ id, body }) => ({
-				url: `/student/${id}/`,
+			query: ({ university, id, body }) => ({
+				url: `/uni/${university}/student/${id}/`,
 				method: 'PATCH',
 				body
 			}),
@@ -71,8 +71,8 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		addStudentExams: builder.mutation <unknown, AddStExam> ({
-			query: ({ student, body }) => ({
-				url: `/exam/student/${student}`,
+			query: ({ university, student, body }) => ({
+				url: `/uni/${university}/exam/student/${student}`,
 				method: 'POST',
 				body
 			}),
@@ -82,8 +82,8 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		removeStudentExam: builder.mutation <unknown, DelStExam> ({
-			query: ({ student, body }) => ({
-				url: `/student/${student}/exam/`,
+			query: ({ university, student, body }) => ({
+				url: `/uni/${university}/student/${student}/exam/`,
 				method: 'DELETE',
 				body
 			}),

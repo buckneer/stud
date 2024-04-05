@@ -13,9 +13,9 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				? ['Department'] 
 				: [],
 		}),
-		getDepartment: builder.query <Department, string> ({
-			query: (department) => ({
-				url: `/department/${department}/`
+		getDepartment: builder.query <Department, { university: string, department: string }> ({
+			query: ({ university, department }) => ({
+				url: `/uni/${university}/department/${department}/`
 			}),
 			providesTags: (result, error) => (result) 
 				? [{ type: 'Department' as const, id: result._id }] 
@@ -31,8 +31,8 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		updateDeparment: builder.mutation <unknown, UpdateDep> ({
-			query: ({ id, body }) => ({
-				url: `/department/${id}/`,
+			query: ({ university, id, body }) => ({
+				url: `/uni/${university}/department/${id}/`,
 				method: 'PATCH',
 				body
 			}),
@@ -62,8 +62,8 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		addDepStudents: builder.mutation <unknown, AddStDep> ({
-			query: ({ department, body }) => ({
-				url: `/department/${department}/student/`,
+			query: ({ university, department, body }) => ({
+				url: `/uni/${university}/department/${department}/student/`,
 				method: 'PATCH',
 				body
 			}),
@@ -73,8 +73,8 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		deleteDepStudent: builder.mutation <unknown, DelStDep> ({
-			query: ({ department, body }) => ({
-				url: `/department/${department}/student/`,
+			query: ({ university, department, body }) => ({
+				url: `/uni/${university}/department/${department}/student/`,
 				method: 'DELETE',
 				body
 			}),
@@ -83,8 +83,8 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		addDepProfessors: builder.mutation <unknown, AddProfDep> ({
-			query: ({ department, body }) => ({
-				url: `/department/${department}/professor/`,
+			query: ({ university, department, body }) => ({
+				url: `/uni/${university}/department/${department}/professor/`,
 				method: 'PATCH',
 				body
 			}),
@@ -94,8 +94,8 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		deleteDepProfessor: builder.mutation <unknown, DelProfDep> ({
-			query: ({ department, body }) => ({
-				url: `/department/${department}/professor/`,
+			query: ({ university, department, body }) => ({
+				url: `/uni/${university}/department/${department}/professor/`,
 				method: 'DELETE',
 				body
 			}),
@@ -104,8 +104,8 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		addDepSubjects: builder.mutation <unknown, AddSubDep> ({
-			query: ({ department, body }) => ({
-				url: `/department/${department}/subject/`,
+			query: ({ university, department, body }) => ({
+				url: `/uni/${university}/department/${department}/subject/`,
 				method: 'PATCH',
 				body
 			}),
@@ -115,8 +115,8 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		deleteDepSubjects: builder.mutation <unknown, DelSubDep> ({
-			query: ({ department, body }) => ({
-				url: `/department/${department}/subject/`,
+			query: ({ university, department, body }) => ({
+				url: `/uni/${university}/department/${department}/subject/`,
 				method: 'DELETE',
 				body
 			}),

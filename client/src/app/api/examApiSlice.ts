@@ -3,10 +3,12 @@ import { Exam } from "./types/types";
 
 interface UpdateExam {
 	id: string;
+	university: string;
 	body: Exam;
 }
 
 interface ExamStudents {
+	university: string;
 	exam: string;
 	body: {
 		students: string[];
@@ -14,6 +16,7 @@ interface ExamStudents {
 }
 
 interface ExamGrades {
+	university: string;
 	exam: string;
 	body: {
 		grades: string[];
@@ -21,6 +24,7 @@ interface ExamGrades {
 }
 
 interface DelExamGrade {
+	university: string;
 	exam: string;
 	body: {
 		grade: string;
@@ -28,6 +32,7 @@ interface DelExamGrade {
 }
 
 interface DelExamStudent {
+	university: string;
 	exam: string;
 	body: {
 		student: string;
@@ -36,9 +41,9 @@ interface DelExamStudent {
 
 const examApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addExam: builder.mutation <unknown, Exam> ({
-			query: (body) => ({
-				url: '/exam/',
+		addExam: builder.mutation <unknown, { university: string, body: Exam }> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/exam/`,
 				method: 'POST',
 				body
 			}),
@@ -46,25 +51,25 @@ const examApiSlice = apiSlice.injectEndpoints({
 				? ['Exam']
 				: []
 		}),
-		getExam: builder.query <Exam, string> ({
-			query: (id) => ({
-				url: `/exam/${id}/`
+		getExam: builder.query <Exam, { university: string, id: string }> ({
+			query: ({ university, id }) => ({
+				url: `/uni/${university}/exam/${id}/`
 			}),
-			providesTags: (result, error, id) => (result)
-				? [{ type: 'Exam', id }]
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Exam', id: arg.id }]
 				: [],
 		}),
 		getExams: builder.query <Exam[], string> ({
-			query: () => ({
-				url: '/exam/',
+			query: (university) => ({
+				url: `/uni/${university}/exam/`,
 			}),
 			providesTags: (result, error) => (result)
 				? ['Exam', ...result.map((exam: Exam) => ({ type: 'Uni' as const, id: exam.university }))]
 				: []
 		}),
 		updateExam: builder.mutation <unknown, UpdateExam> ({
-			query: ({ id, body }) => ({
-				url: `/exam/${id}/`,
+			query: ({ university, id, body }) => ({
+				url: `/uni/${university}/exam/${id}/`,
 				method: 'PATCH',
 				body
 			}),
@@ -73,8 +78,8 @@ const examApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		addExamStudents: builder.mutation <unknown, ExamStudents> ({
-			query: ({ exam, body }) => ({
-				url: `/exam/${exam}/student/`,
+			query: ({ university, exam, body }) => ({
+				url: `/uni/${university}/exam/${exam}/student/`,
 				method: 'PATCH',
 				body
 			}),
@@ -84,8 +89,8 @@ const examApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		deleteExamStudent: builder.mutation <unknown, DelExamStudent> ({
-			query: ({ exam, body }) => ({
-				url: `/exam/${exam}/student/`,
+			query: ({ university, exam, body }) => ({
+				url: `/uni/${university}/exam/${exam}/student/`,
 				method: 'DELETE',
 				body
 			}),
@@ -94,8 +99,8 @@ const examApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		addExamGrades: builder.mutation <unknown, ExamGrades> ({
-			query: ({ exam, body }) => ({
-				url: `/exam/${exam}/grade/`,
+			query: ({ university, exam, body }) => ({
+				url: `/uni/${university}/exam/${exam}/grade/`,
 				method: 'PATCH',
 				body
 			}),
@@ -105,8 +110,8 @@ const examApiSlice = apiSlice.injectEndpoints({
 				: []
 		}),
 		deleteExamGrades: builder.mutation <unknown, DelExamGrade> ({
-			query: ({ exam, body }) => ({
-				url: `/exam/${exam}/grade/`,
+			query: ({ university, exam, body }) => ({
+				url: `/uni/${university}/exam/${exam}/grade/`,
 				method: 'DELETE',
 				body
 			}),

@@ -3,9 +3,9 @@ import { Service } from './types/types';
 
 const serviceApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addService: builder.mutation <unknown, Service> ({
-			query: (body) => ({
-				url: '/service/',
+		addService: builder.mutation <unknown, { university: string, body: Service }> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/service/`,
 				method: 'POST',
 				body
 			}),
@@ -13,13 +13,13 @@ const serviceApiSlice = apiSlice.injectEndpoints({
 				? ['Service', /*{ type: 'Uni' as const, id: body.university },*/] 
 				: [],
 		}),
-		deleteService: builder.mutation <unknown, string> ({
-			query: (id) => ({
-				url: `/service/${id}/`,
+		deleteService: builder.mutation <unknown, { university: string, id: string }> ({
+			query: ({ university, id }) => ({
+				url: `/uni/${university}/service/${id}/`,
 				method: 'DELETE'
 			}),
-			invalidatesTags: (result, error, id) => (result) 
-				? [{ type: 'Service' as const, id }, 'Uni'] 
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Service' as const, id: arg.id }, 'Uni'] 
 				: [],
 		}),
 		getServices: builder.query <Service[], string> ({

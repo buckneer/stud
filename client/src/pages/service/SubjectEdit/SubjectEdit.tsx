@@ -48,7 +48,7 @@ const SubjectAdd = () => {
     isLoading: isSubjectLoading,
     isSuccess: isSubjectSuccess,
     isError: isSubjectError
-  } = useGetSubjectQuery(id!, {
+  } = useGetSubjectQuery({ university: uni!, id: id! }, {
     skip: !uni || !session.accessToken
   });
 
@@ -99,7 +99,7 @@ const SubjectAdd = () => {
 
 
     // @ts-ignore
-		const result = await updateSubject({ id, body }).unwrap();
+		const result = await updateSubject({ university: uni, id, body }).unwrap();
 		
 		} catch (e: any) {
 			console.error(e);

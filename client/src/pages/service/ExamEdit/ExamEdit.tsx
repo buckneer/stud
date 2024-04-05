@@ -27,7 +27,7 @@ const ExamEdit = () => {
 		isLoading: isExamLoading,
 		isSuccess: isExamSuccess,
 		isError: isExamError
-	} = useGetExamQuery(id);
+	} = useGetExamQuery({ university: uni!, id });
 
 	const {
 		data: departmentsData,
@@ -44,7 +44,7 @@ const ExamEdit = () => {
 		isSuccess: isSubjectsSuccess,
 		isError: isSubjectsError
 		// @ts-ignore
-	} = useGetDepSubjectsQuery(department, {
+	} = useGetDepSubjectsQuery({ university: uni!, department }, {
 		skip: !uni || !session.accessToken || !department
 	});
 
@@ -80,7 +80,7 @@ const ExamEdit = () => {
 			}
 		
 			// @ts-ignore
-			const result = await updateExam({ id, body }).unwrap();
+			const result = await updateExam({ university: uni!, id, body }).unwrap();
 		} catch (e: any) {
 			console.error(e);
 		}

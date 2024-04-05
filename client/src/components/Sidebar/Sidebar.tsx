@@ -1,24 +1,15 @@
 import {
-	Book,
-	CalendarCheck,
-	FolderArchive,
-	GraduationCap,
-	LayoutList,
 	LogOut,
 	University,
-	User,
-	UserCircle
 } from "lucide-react";
 import SidebarItem from "../SidebarItem/SidebarItem";
 import { useParams } from "react-router";
 import { RootState } from "../../app/store";
 import { useDispatch, useSelector } from 'react-redux';
-import { useGetAllUnisQuery, useGetUniQuery } from "../../app/api/uniApiSlice";
-import Select from 'react-select';
 import { useEffect, useState } from "react";
 import { useGetUserUnisRoleQuery } from "../../app/api/userApiSlice";
 import {setMetadata} from "../../app/slices/sessionSlice";
-
+import { useNavigate } from "react-router-dom";
 
 
 export interface SidebarProps {
@@ -29,8 +20,9 @@ export interface SidebarProps {
 
 function Sidebar({children, role = 'student'} : SidebarProps) {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const session = useSelector((state: RootState) => state.session);
-    const {uni} = useParams();
+  const {uni} = useParams();
 	// const [currentUni, setCurrentUni] = useState("PMF"); if we want to switch uni
 
 	const{
@@ -45,6 +37,7 @@ function Sidebar({children, role = 'student'} : SidebarProps) {
 
 	const setUniversity = (university: string) => {
 		dispatch(setMetadata({ university }))
+		navigate(`/uni/${university}/${session.metadata.role}`);
 	}
 
 	let uniContent: any;

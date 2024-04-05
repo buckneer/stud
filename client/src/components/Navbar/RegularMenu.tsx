@@ -63,7 +63,7 @@ function RegularMenu() {
 										<div className="absolute right-5 top-10 text-center z-10 mt-2 w-fit px-5 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 											<div className="py-1" role="none">
 												{/*TODO Change university links*/}
-												<Link to={`uni//student`} className="text-gray-700 block px-4 py-2 text-sm hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">
+												<Link to={`uni/${session.metadata.university}/${session.metadata.role}`} className="text-gray-700 block px-4 py-2 text-sm hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">
 													Profil
 												</Link>
 												{session.user.roles!.includes('service') && (

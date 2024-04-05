@@ -75,7 +75,7 @@ export interface Subject {
 	department?: string;
 	university?: string | Uni;
 	espb?: number;
-	type: string;
+	type?: string;
 	degree?: string;
 	semester?: any;
 	requiredSub?: string[] | Subject[];
@@ -141,6 +141,7 @@ export interface UniUser {
 }
 
 export interface UpdateStudent {
+	university: string;
 	id: string;
 	body: Student;
 }
@@ -160,6 +161,7 @@ export interface DelUni {
 }
 
 export interface AddStExam {
+	university: string;
 	student: string | undefined;
 	body: {
 		exams: string[];
@@ -167,7 +169,7 @@ export interface AddStExam {
 }
 
 export interface DelStExam {
-	uni: string;
+	university: string;
 	student: string;
 	body: {
 		exam: string;
@@ -239,6 +241,7 @@ export interface UniDep {
 }
 
 export interface UpdateDep {
+	university: string;
 	id: string;
 	body: Department;
 }
@@ -258,6 +261,7 @@ export interface DelDep {
 }
 
 export interface AddStDep {
+	university: string;
 	department: string;
 	body: {
 		students: string[];
@@ -265,6 +269,7 @@ export interface AddStDep {
 }
 
 export interface DelStDep {
+	university: string;
 	department: string;
 	body: {
 		student: string;
@@ -272,6 +277,7 @@ export interface DelStDep {
 }
 
 export interface AddProfDep {
+	university: string;
 	department: string;
 	body: {
 		professors: string[];
@@ -279,6 +285,7 @@ export interface AddProfDep {
 }
 
 export interface DelProfDep {
+	university: string;
 	department: string;
 	body: {
 		professor: string;
@@ -286,6 +293,7 @@ export interface DelProfDep {
 }
 
 export interface AddSubDep {
+	university: string;
 	department: string;
 	body: {
 		subjects: string[];
@@ -293,6 +301,7 @@ export interface AddSubDep {
 }
 
 export interface DelSubDep {
+	university: string;
 	department: string;
 	body: {
 		subject: string;
@@ -301,6 +310,7 @@ export interface DelSubDep {
 
 // Professor API slice
 export interface ProfBody {
+	university: string;
 	professor: string;
 	body: Professor;
 }
@@ -321,12 +331,14 @@ export interface DelProfUni {
 
 export interface AddProfSub {
 	professor: string;
+	university: string;
 	body: {
 		subjects: string[];
 	}
 }
 
 export interface DelProfSub {
+	university: string;
 	professor: string;
 	body: {
 		subject: string;
@@ -334,6 +346,7 @@ export interface DelProfSub {
 }
 
 export interface AddProfGrade {
+	university: string;
 	professor: string;
 	body: {
 		grades: string[];
@@ -341,6 +354,7 @@ export interface AddProfGrade {
 }
 
 export interface DelProfGrade {
+	university: string;
 	professor: string;
 	body: {
 		grade: string;
@@ -349,20 +363,17 @@ export interface DelProfGrade {
 
 export interface AddUniProf {
 	professor: string;
-	body: {
-		universities: string[];
-	}
+	university: string;
 }
 
 export interface DelUniProf {
 	professor: string;
-	body: {
-		university: string;
-	}
+	university: string;
 }
 
 export interface GiveSign {
 	subject: string;
+	university: string;
 	body: {
 		professor: string;
 		students: string[];

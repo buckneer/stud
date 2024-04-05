@@ -3,16 +3,16 @@ import { Optional, AddSubjOpt } from './types/types';
 
 const optionalApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addOptional: builder.mutation<any, Optional>({
-			query: (body) => ({
-				url: `/optional/`,
+		addOptional: builder.mutation<any, { university: string; body: Optional }>({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/optional/`,
 				method: 'POST',
 				body
 			}),
-			invalidatesTags: (result, error, body) => (result)
+			invalidatesTags: (result, error, arg) => (result)
 				// @ts-ignore
 				? [ ...body.subjects?.map((subject: string) => ({ type: 'Subject' as const, id: subject })),
-					{ type: 'Department' as const, id: body.department },
+					{ type: 'Department' as const, id: arg.body.department },
 					'Optional' ]
         : []
     }),

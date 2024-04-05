@@ -73,7 +73,7 @@ const ServiceAdd = () => {
 				user, university
 			};
 
-			const result = await addService(body).unwrap();
+			const result = await addService({ university: university!, body }).unwrap();
 
 			const resultBody = {
 				// @ts-ignore

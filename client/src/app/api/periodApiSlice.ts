@@ -3,10 +3,12 @@ import { Period } from "./types/types";
 
 interface UpdatePeriod {
 	id: string;
+	university: string;
 	body: Period;
 }
 
 interface PeriodExam {
+	university: string;
 	period: string;
 	body: {
 		exams: string[];
@@ -14,6 +16,7 @@ interface PeriodExam {
 }
 
 interface DelPeriod {
+	university: string;
 	period: string;
 	body: {
 		exam: string;
@@ -22,35 +25,35 @@ interface DelPeriod {
 
 const periodApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addPeriod: builder.mutation <{ id: string }, Period> ({
-			query: (body) => ({
-				url: '/period/',
+		addPeriod: builder.mutation <{ id: string }, { university: string; body: Period }> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/period/`,
 				method: 'POST',
 				body
 			}),
 			invalidatesTags: (result, error) => (result) 
-				? ['Period'] 
+				? [{ type: 'Period' as const }] 
 				: [],
 		}),
-		getPeriod: builder.query <Period, string> ({
-			query: (id) => ({
+		getPeriod: builder.query <Period, { university: string; id: string }> ({
+			query: ({ university, id }) => ({
 				url: `/period/${id}/`
 			}),
-			providesTags: (result, error, id) => (result) 
-				? [{ type: 'Period' as const, id }] 
+			providesTags: (result, error, arg) => (result) 
+				? [{ type: 'Period' as const, id: arg.id }] 
 				: [],
 		}),
-		getPeriods: builder.query <Period[], void> ({
-			query: () => ({
-				url: '/period/'
+		getUniPeriods: builder.query <Period[], { university: string }> ({
+			query: (university) => ({
+				url: `/uni/${university}/period`
 			}),
 			providesTags: (result, error) => (result) 
 				? [...result.map((period: Period) => ({ type: 'Period' as const, id: period._id }))] 
 				: [],
 		}),
 		updatePeriod: builder.mutation <unknown, UpdatePeriod> ({
-			query: ({ id, body }) => ({
-				url: `/period/${id}/`,
+			query: ({ university, id, body }) => ({
+				url: `/uni/${university}/period/${id}/`,
 				method: 'PATCH',
 				body
 			}),
@@ -59,8 +62,8 @@ const periodApiSlice = apiSlice.injectEndpoints({
 			: [],
 		}),
 		addPeriodExams: builder.mutation <unknown, PeriodExam> ({
-			query: ({ period, body }) => ({
-					url: `/period/${period}/exam/`,
+			query: ({ university, period, body }) => ({
+					url: `/uni/${university}/period/${period}/exam/`,
 					method: 'PATCH',
 					body
 			}),
@@ -70,8 +73,8 @@ const periodApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		deletePeriodExam: builder.mutation <unknown, DelPeriod> ({
-			query: ({ period, body }) => ({
-				url: `/period/${period}/exam/`,
+			query: ({ university, period, body }) => ({
+				url: `/uni/${university}/period/${period}/exam/`,
 				method: 'DELETE',
 				body
 			}),
@@ -85,7 +88,7 @@ const periodApiSlice = apiSlice.injectEndpoints({
 export const {
 	useAddPeriodMutation,
 	useGetPeriodQuery,
-	useGetPeriodsQuery,
+	useGetUniPeriodsQuery,
 	useUpdatePeriodMutation,
 	useAddPeriodExamsMutation,
 	useDeletePeriodExamMutation,

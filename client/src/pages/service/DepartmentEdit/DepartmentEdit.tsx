@@ -24,7 +24,7 @@ const DepartmentEdit = () => {
 		isLoading: isUniDepLoading,
 		isSuccess: isUniDepSuccess,
 		isError: isUniDepError
-	} = useGetDepartmentQuery(id!, {
+	} = useGetDepartmentQuery({ university: uni!, department: id! }, {
 		skip: !id || !session.accessToken
 	});
 
@@ -53,7 +53,7 @@ const DepartmentEdit = () => {
 			const body = {
 				name
 			};
-			const result = await updateDepartment({ id: id!, body }).unwrap();
+			const result = await updateDepartment({ university: uni!, id: id!, body }).unwrap();
 
 			// @ts-ignore 
 			const resultBody: any = { departments: [result._id] };

@@ -121,10 +121,10 @@ export async function handleRemoveGradeFromProfessor(req: Request, res: Response
 
 export async function handleAddUniToProfessor(req: Request, res: Response) {
     try {
-        let { professor } = req.params;
-        let { universities } = req.body;
+        let { professor, university } = req.params;
 
-        let resp = await addToModelArray(Professor, professor, 'universities', universities);
+        // @ts-ignore
+        let resp = await addToModelArray(Professor, professor, 'universities', [ university ]);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

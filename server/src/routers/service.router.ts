@@ -6,10 +6,10 @@ import {handleAddService, handleGetServiceGrades, handleGetServices} from "../co
 const router = express.Router({mergeParams: true});
 
 
+router.post('/', handleAddService);
 router.get('/', handleGetServices); // uni services...
 router.get('/:service/grade/', handleGetServiceGrades);
 
-router.post('/service/', handleAddService);
 
 router.delete('/:service/'); // <-- IMPLEMENT THIS...
 

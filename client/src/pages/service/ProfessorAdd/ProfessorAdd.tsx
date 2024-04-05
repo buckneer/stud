@@ -107,7 +107,7 @@ const ProfessorAdd = () => {
 
 				title, subjects: subjects!, university: uni!, user
 			};
-			const result = await fetchAddProfessor(body).unwrap();
+			const result = await fetchAddProfessor({ university: uni!, body }).unwrap();
 			// @ts-ignore
 			const resultBody: any = { professors: [result.id] };
 
@@ -117,11 +117,11 @@ const ProfessorAdd = () => {
 			const subjectBody: any = { subjects: subjects! };
 
 			// @ts-ignore
-			await addProfToSub({ professor: result.id, body: subjectBody });
+			await addProfToSub({ university, professor: result.id, body: subjectBody });
 
 			const uniBody: any = { universities: [university] }
 			// @ts-ignore
-			await addUniToProf({ professor: result.id, body: uniBody });
+			await addUniToProf({ university, professor: result.id, body: uniBody });
 		} catch (e: any) {
 			console.error(e);
 		}

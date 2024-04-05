@@ -29,7 +29,7 @@ const PeriodEdit = () => {
 		isSuccess: isPeriodDataSuccess,
 		isError: isPeriodDataError,
 		error: periodError
-	} = useGetPeriodQuery(periodId!, {
+	} = useGetPeriodQuery({ university: university!, id: periodId! }, {
 		skip: !periodId || !session.accessToken
 	})
 
@@ -39,7 +39,7 @@ const PeriodEdit = () => {
 	const [acceptDate, setAcceptDate] = useState('');
 	const [periodEnd, setPeriodEnd] = useState("");
 	// const [exams, setExams] = useState("");
-	console.log(periodName)
+	
 	const [
 		updatePeriod,
 		{
@@ -64,7 +64,7 @@ const PeriodEdit = () => {
 				type: (periodName === '0' && irregularPeriodName) ? 0 : 1
 			}
 
-			const result = await updatePeriod({id: periodId!, body}).unwrap();
+			const result = await updatePeriod({id: periodId!, university: university!, body}).unwrap();
 		} catch (e: any) {
 			console.error(e)
 		}

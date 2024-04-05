@@ -54,7 +54,7 @@ const PeriodAdd = () => {
 				type: (periodName === '0' && !irregularPeriodName) ? 0 : 1
 			}
 
-			const result = await addPeriod(body).unwrap();
+			const result = await addPeriod({ university: university!, body }).unwrap();
 		} catch (e: any) {
 			console.error(e)
 		}

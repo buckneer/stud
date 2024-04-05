@@ -7,15 +7,12 @@ import StudTitle from "../../../components/StudTitle/StudTitle";
 import Loader from "../../../components/Loader/Loader";
 import TD from "../../../components/Table/TableColumn";
 
-
-
 export interface IExamPeriod {
 	session: Session,
 	uni?: string;
 }
 
 function ExamPeriod({session, uni} : IExamPeriod) {
-
 	const [exams, setExams] = useState<IExam[]>([]);
 
 	const [examsToAdd, setExamsToAdd] = useState<string[]>([]);
@@ -71,10 +68,11 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 
 		try {
 			let body = {
+				university: uni!,
 				student: session.user._id,
 				body: {exams: examsToAdd}
 			} // add exam ID's here;
-			await addExams(body)
+			await addExams(body);
 		} catch (e: any) {
 			console.error(e);
 		}

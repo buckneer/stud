@@ -88,7 +88,7 @@ const ExamAdd = () => {
 			}
 
 			// @ts-ignore
-			const result = await addExam(body).unwrap();
+			const result = await addExam({ university: uni!, body }).unwrap();
 		} catch (e: any) {
 			console.error(e);
 		}

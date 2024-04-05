@@ -2,11 +2,13 @@ import { apiSlice } from "./apiSlice";
 import { Subject } from "./types/types";
 
 interface UpdateSubject {
+	university: string;
 	id: string;
 	body: Subject;
 }
 
 interface AddSubProf {
+	university: string;
 	subject: string;
 	body: {
 		professors: string[];
@@ -14,6 +16,7 @@ interface AddSubProf {
 }
 
 interface DelSubProf {
+	university: string;
 	subject: string;
 	body: {
 		professor: string;
@@ -21,6 +24,7 @@ interface DelSubProf {
 }
 
 interface AddReq {
+	university: string;
 	subject: string;
 	body: {
 		requiredSub: string[];
@@ -28,6 +32,7 @@ interface AddReq {
 }
 
 interface DelReq {
+	university: string;
 	subject: string;
 	body: {
 		requiredSub: string;
@@ -42,32 +47,35 @@ interface GetReq {
 
 const subjectApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
-		addSubject: builder.mutation <unknown, Subject> ({
-			query: (body) => ({
-				url: `/subject/`,
+		addSubject: builder.mutation <unknown, { university: string, body: Subject }> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/subject/`,
 				method: 'POST',
 				body
 			}),
-			invalidatesTags: (result, error, body) => (result) 
-				? ['Subject'] 
+			invalidatesTags: (result, error, arg) => (result) 
+				? [{ type: 'Subject' as const },
+					{ type: 'University' as const, id: arg.university }] 
 				: [],
 		}),
-		getSubject: builder.query <Subject, string> ({
-			query: (id) => ({
-				url: `/subject/${id}`
+		getSubject: builder.query <Subject, { university: string; id: string }> ({
+			query: ({ university, id }) => ({
+				url: `/uni/${university}/subject/${id}`
 			}),
-			providesTags: (result, error, id) => (result) 
-				? [{ type: 'Subject' as const, id },
-					{ type: 'Department' as const, id: result.department }] 
+			providesTags: (result, error, arg) => (result) 
+				? [{ type: 'Subject' as const, id: arg.id },
+					{ type: 'Department' as const, id: result.department },
+					{ type: 'University' as const, id: arg.university }] 
 				: [],
 		}),
-		getDepSubjects: builder.query <Subject[], string> ({
-			query: (department) => ({
-				url: `/department/${department}/subject/`
+		getDepSubjects: builder.query <Subject[], { university: string; department: string }> ({
+			query: ({ university, department }) => ({
+				url: `/uni/${university}/department/${department}/subject/`
 			}),
-			providesTags: (result, error, id) => (result) 
+			providesTags: (result, error, arg) => (result) 
 				? [ ...result.map((subject: Subject) => ({ type: 'Subject' as const, id: subject._id })),
-				 { type: 'Department' as const, id }] 
+				{ type: 'Department' as const, id: arg.department },
+				{ type: 'University' as const, id: arg.university }] 
 				: [],
 		}),
 		getUniSubjects: builder.query <Subject[], string> ({
@@ -80,8 +88,8 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 			: [],
 		}),
 		updateSubject: builder.mutation <unknown, UpdateSubject> ({
-			query: ({ id, body }) => ({
-				url: `/subject/${id}/`,
+			query: ({ university, id, body }) => ({
+				url: `/uni/${university}/subject/${id}/`,
 				method: 'PATCH',
 				body
 			}),
@@ -90,8 +98,8 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		addSubjectProfessors: builder.mutation <unknown, AddSubProf> ({
-			query: ({ subject, body }) => ({
-				url: `/subject/${subject}/professor/`,
+			query: ({ university, subject, body }) => ({
+				url: `/uni/${university}/subject/${subject}/professor/`,
 				method: 'PATCH',
 				body
 			}),
@@ -101,8 +109,8 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		deleteSubjectProfessor: builder.mutation <unknown, DelSubProf> ({
-			query: ({ subject, body }) => ({
-				url: `/subject/${subject}/professor/`,
+			query: ({ university, subject, body }) => ({
+				url: `/uni/${university}/subject/${subject}/professor/`,
 				method: 'DELETE',
 				body
 			}),
@@ -123,8 +131,8 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		addRequiredSubjects: builder.mutation <unknown, AddReq> ({
-			query: ({ subject, body }) => ({
-				url: `/subject/${subject}/required`,
+			query: ({ university, subject, body }) => ({
+				url: `/uni/${university}/subject/${subject}/required`,
 				method: 'PATCH',
 				body
 			}),
@@ -133,8 +141,8 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 				: [],
 		}),
 		deleteRequiredSubject: builder.mutation <unknown, DelReq> ({
-			query: ({ subject, body }) => ({
-				url: `/subject/${subject}/required`,
+			query: ({ university, subject, body }) => ({
+				url: `/university/${university}/subject/${subject}/required`,
 				method: 'DELETE',
 				body
 			}),

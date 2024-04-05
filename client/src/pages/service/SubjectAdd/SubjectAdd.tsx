@@ -133,14 +133,14 @@ const SubjectAdd = () => {
 				type,
 			}
 
-			const result: any = await addSubject(body).unwrap();
+			const result: any = await addSubject({ university: uni!, body }).unwrap();
 
 			const addProfBody = {
 				professors: prof
 			}
 
 			// @ts-ignore
-			await addProfessors({ subject: result.id, body: addProfBody });
+			await addProfessors({ university: uni!, subject: result.id, body: addProfBody });
 
 			if(optional) {
 				const subjToOpt: AddSubjOpt = {
