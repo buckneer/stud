@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import { RootState } from '../../app/store';
 import { useSelector } from 'react-redux';
 import MutationState from '../../components/MutationState/MutationState';
+import { useLazyGetUserUnisRoleQuery } from '../../app/api/userApiSlice';
 
 
 const Login = () => {
@@ -25,6 +26,13 @@ const Login = () => {
 		}
 	] = useLoginMutation();
 
+	const [
+		getUnis,
+		{
+			isError: isGetUnisError
+		}
+	] = useLazyGetUserUnisRoleQuery();
+
 	const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -36,23 +44,15 @@ const Login = () => {
 			};
 
 			const result = await login(body).unwrap();
-			let tempUni = "66057fc6f97b2ad52a249310"
-			setTimeout(() => {
-				// @ts-ignore
-				// TODO get university where this user is service. (FROM service model)
-				console.log(session.user);
-				let rootUrl = `/uni/${tempUni}`
-				let redirectUrl = `${rootUrl}/student`;
 
-				if(result.user.roles!.includes('professor')) {
-					redirectUrl = `${rootUrl}/professor`
-				}
+			const unis = await getUnis({ user: result.user._id!, role: result.user.roles![0] }).unwrap();
 
-				if(result.user.roles!.includes('service')) {
-					redirectUrl = `${rootUrl}/`
-				}
-				(location?.state?.from) ? navigate(location.state.from) : navigate(redirectUrl);
-			}, 1000);
+			// @ts-ignore
+			// TODO get university where this user is service. (FROM service model)
+			let redirectUrl = `/uni/${unis[0]._id}/${result.user.roles![0]}`;
+
+			(location?.state?.from) ? navigate(location.state.from) : navigate(redirectUrl);
+
 
 		} catch (error: any) {
 			console.error(error);

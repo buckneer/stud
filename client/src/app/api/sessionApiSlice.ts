@@ -14,6 +14,7 @@ const sessionApiSlice = apiSlice.injectEndpoints({
 			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
 				try {
 					const { data } = await queryFulfilled;
+					
 					setTimeout(() => {
 						dispatch(setAccess(data.accessToken));
 						dispatch(setRefresh(data.refreshToken));
@@ -21,9 +22,6 @@ const sessionApiSlice = apiSlice.injectEndpoints({
 						dispatch(setMetadata({ role: data.user.roles![0] }));
 					}, 1000);
 
-					// @ts-ignore
-					let result = await dispatch(apiSlice.endpoints.getUserUnisRole.initiate({ user: data.user._id, role: data.user.roles![0] }));
-					console.log('hello', result);
 				} catch (e: any) {
 					dispatch(loggedOut());
 					dispatch(apiSlice.util.resetApiState());

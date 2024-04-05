@@ -170,7 +170,7 @@ const SubjectAdd = () => {
 		reqContent = 
 			<>
 				<div className="form-control">
-					<Select maxMenuHeight={150} onChange={(e: any) => setRequiredSub(e)} isClearable isMulti isSearchable placeholder="Izaberite uslovne predmete" className='w-full outline-none' options={reqSubjectData!.map((item: any) => ({
+					<Select maxMenuHeight={200} onChange={(e: any) => setRequiredSub(e)} isClearable isMulti isSearchable placeholder="Izaberite uslovne predmete" className='w-full outline-none' options={reqSubjectData!.map((item: any) => ({
 						value: item._id, label: item.name
 					}))} />
 				</div>
@@ -183,7 +183,7 @@ const SubjectAdd = () => {
 		optionalContent = 
 			<>
 				<div className="form-control">
-					<Select maxMenuHeight={150} onChange={(e: any) => setOptional(e?.value)} placeholder="Izaberite blok" className="w-full outline-none" required isClearable isSearchable options={optionalData!.map((item: any) => ({
+					<Select maxMenuHeight={200} onChange={(e: any) => setOptional(e?.value)} placeholder="Izaberite blok" className="w-full outline-none" required isClearable isSearchable options={optionalData!.map((item: any) => ({
 						value: item._id, label: item.name
 					}))}/> 
 				</div>

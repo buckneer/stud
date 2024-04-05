@@ -57,7 +57,7 @@ function App() {
 
             {/* User has to be logged in to access these */}
             <Route element={<TokenRequired />}>
-              <Route path='/uni/:uni/' element={<Home />} />
+              <Route path='/uni/:uni/service' element={<Home />} />
               {/* TODO: check if user is in uni :uni service here... */}
               <Route path='/uni/:uni/register' element={<Register/>} />
               <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
