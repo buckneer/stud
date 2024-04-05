@@ -1,44 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { Student } from "./types/types";
-
-interface UniUser {
-	university: string,
-	body: Student
-}
-
-interface UpdateStudent {
-	id: string;
-	body: Student;
-}
-
-interface AddUni {
-	university: string;
-	body: {
-		students: string[];
-	}
-}
-
-interface DelUni {
-	university: string;
-	body: {
-		student: string;
-	}
-}
-
-interface AddStExam {
-	student: string | undefined;
-	body: {
-		exams: string[];
-	}
-}
-
-interface DelStExam {
-	uni: string;
-	student: string;
-	body: {
-		exam: string;
-	}
-}
+import { Student, UniUser, UpdateStudent, AddUni, DelUni, AddStExam, DelStExam, AddStSub } from "./types/types";
 
 const studentApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -130,6 +91,17 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'Student' as const, id: arg.student }, { type: 'Exam' as const, id: arg.body.exam }]
 				: [],
 		}),
+		addSubjectsToStudent: builder.mutation <any, AddStSub> ({
+			query: ({ university, body }) => ({
+				url: `/uni/${university}/student/subject/`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error, arg) => (result)
+				? [...arg.body.subjects.map((subj: string) => ({ type: 'Subject' as const, id: subj })),
+					{ type: 'University' as const, id: arg.university }] 
+				: []
+		})
 		// addCompleted: builder.mutation <unknown, unknown> ({
 		// 	query: ({  }) => ({
 

@@ -2,6 +2,7 @@ export interface Meta {
 	university?: string;
 	studentTab?: number;
 	serviceHome?: number;
+	role?: string;
 }
 
 export interface Session {
@@ -32,7 +33,7 @@ export interface Student {
 	degree?: string;
 	status?: string;
 	dateOfEnrollment?: string;
-	currentSemester?: string;
+	currentSemester?: any;
 	grades?: string[] | Grade[];
 	university?: string | Uni;
 	signs?: string[] | Subject[];
@@ -131,6 +132,53 @@ export interface Service {
 	_id?: string;
 	user?: string | User;
 	university?: string | University;
+}
+
+// Subject 
+export interface UniUser {
+	university: string,
+	body: Student
+}
+
+export interface UpdateStudent {
+	id: string;
+	body: Student;
+}
+
+export interface AddUni {
+	university: string;
+	body: {
+		students: string[];
+	}
+}
+
+export interface DelUni {
+	university: string;
+	body: {
+		student: string;
+	}
+}
+
+export interface AddStExam {
+	student: string | undefined;
+	body: {
+		exams: string[];
+	}
+}
+
+export interface DelStExam {
+	uni: string;
+	student: string;
+	body: {
+		exam: string;
+	}
+}
+
+export interface AddStSub {
+	university: string;
+	body: {
+		subjects: string[];
+	}
 }
 
 // Uni API slice

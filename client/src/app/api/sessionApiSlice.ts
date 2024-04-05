@@ -1,6 +1,7 @@
 import { apiSlice } from './apiSlice';
-import { setAccess, setRefresh, loggedOut, setUser } from '../slices/sessionSlice';
+import { setAccess, setRefresh, loggedOut, setUser, setMetadata } from '../slices/sessionSlice';
 import { Session, User } from './types/types';
+
 
 const sessionApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
@@ -17,14 +18,19 @@ const sessionApiSlice = apiSlice.injectEndpoints({
 						dispatch(setAccess(data.accessToken));
 						dispatch(setRefresh(data.refreshToken));
 						dispatch(setUser(data.user));
+						dispatch(setMetadata({ role: data.user.roles![0] }));
 					}, 1000);
+
+					// @ts-ignore
+					let result = await dispatch(apiSlice.endpoints.getUserUnisRole.initiate({ user: data.user._id, role: data.user.roles![0] }));
+					console.log('hello', result);
 				} catch (e: any) {
 					dispatch(loggedOut());
 					dispatch(apiSlice.util.resetApiState());
 				}
 			},
 		}),
-		logout: builder.mutation({
+		logout: builder.mutation <any, { refreshToken: string; }> ({
 			query: (body) => ({
 				url: '/logout',
 				method: 'POST',
