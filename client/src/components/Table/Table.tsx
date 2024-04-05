@@ -20,15 +20,15 @@ export interface ITable {
 function Table({cols, children} : ITable) {
 
 	return (
-		<table className="w-4/5 rounded-2xl overflow-hidden border-2 border-slate-500">
+		<table className="w-4/5 rounded-2xl overflow-hidden">
 			<thead className="bg-slate-100">
 				<tr className="text-sm">
 					{cols && cols.map(item => (
-						<th className="p-5">{item}</th>
+						<th className="px-6 py-4 text-center font-medium text-black uppercase">{item}</th>
 					))}
 				</tr>
 			</thead>
-			<tbody className="text-center">
+			<tbody className="text-center divide-y divide-slate-200 dark:divide-gray-700">
 				{children}
 			</tbody>
 		</table>
