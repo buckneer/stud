@@ -16,36 +16,6 @@ import {
 } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
 import {AuthGuard, isServiceInUniversity, roleGuard, userGuard} from "./middleware/routeGuard";
-import {
-    handleAddProfessorToManySubjects,
-    handleAddRequiredsToSubject,
-    handleAddSubject,
-    handleAddSubjectsToOptional,
-    handleGetAvailableReqSubjects, handleGetEnrollableSubjects, handleGetOptionalSubjects, handleGetProfessorSubjects,
-    handleGetSubject,
-    handleGetSubjectRole,
-    handleGetSubjects,
-    handleRemoveProfessorFromSubject,
-    handleRemoveRequiredFromSubject,
-    handleUpdateSubject
-} from "./controllers/subject.controller";
-import { handleAddGrade, handleGetGrade, handleGetGrades, handleUpdateGrade } from "./controllers/grade.controller";
-import {
-    handleAddExam,
-    handleAddGradesToExam,
-    handleAddStudentsToExam,
-    handleAddStudentToExams, handleExamsCanAdd,
-    handleGetExam,
-    handleGetExams,
-    handleGetGradesByExam, handleGetPendingProfessorExams,
-    handleGetStudentExams,
-    handleGetUniExams,
-    handleRemoveGradeFromExam,
-    handleRemoveStudentFromExam,
-    handleUpdateExam
-} from "./controllers/exam.controller";
-import { handleAddExamToPeriod, handleAddPeriod, handleGetAvailableExamsInPeriod, handleGetPeriod, handleGetPeriods, handleGetUniPeriods, handleRemoveExamFromPeriod, handleUpdatePeriod } from "./controllers/period.controller";
-import { handleAddService, handleGetServiceGrades, handleGetServices } from "./controllers/service.controller";
 import {depRouter} from "./routers/department.router";
 import {sessionRouter} from "./routers/user.router";
 import {uniRouter} from "./routers/university.router";
@@ -78,7 +48,6 @@ export default function (app: Express) {
     app.get("/thanks", (request: Request, response: Response) => response.status(200).send({ message: 'Hvala Vam puno što koristite naše usluge! :)' }));
 
     app.get("/healthcheck", (request: Request, response: Response) => response.sendStatus(200));
-    //app.get('/protected/', userGuard, roleGuard(['professor', 'service']), (request: Request, response: Response) => response.sendStatus(200));
 
     app.post('/register/', userGuard, handleRegister);
     app.patch('/password/', handleSetPassword);
@@ -101,6 +70,4 @@ export default function (app: Express) {
     app.use('/uni/:uni/exam', examRouter);
     app.use('/uni/:uni/period', periodRouter)
     app.use('/uni/:uni/service', serviceRouter);
-
-
 }
