@@ -5,6 +5,7 @@ import { randomBytes } from 'crypto';
 import { newError, newResponse } from "../utils";
 import University from "../models/university.model";
 import Department from '../models/department.model';
+import Subject from "../models/subject.model";
 
 export const addStudent = async (student: StudentDocument, university: string) => {
 
@@ -14,14 +15,14 @@ export const addStudent = async (student: StudentDocument, university: string) =
 
     let newStudent = new Student(student);
     let user = await User.findOne({ _id: student.user });
-    
+
 
     if(!user) throw newError(404, 'Korisnik nije pronađen!');
 
     newStudent.user = user._id;
     newStudent.modelNum = randomBytes(4).toString('hex');
     let saved = await newStudent.save();
-    
+
     if(!saved) throw newError(500, 'Internal Server Error');
 
     return newResponse('Novi Student je kreiran', 200, { id: saved._id });
@@ -33,7 +34,7 @@ export const getStudents = async (university: string = '') => {
     // TODO: we dont have university in students
     // TODO omit password and code from the results
     let department = await Department.find({ university });
-    
+
     let students = await Student.find({ department }).populate('user');
 
     return students;
@@ -77,19 +78,35 @@ export const getStudentsByDepartment = async (_id: string) => {
     return Student.find({ department: _id });
 }
 
+export const addSubjectsToStudent = async (_id: string, subjects: string[], uni: string) => {
+    let student = await Student.findOne({user: _id, university: uni});
+    if(!student) throw newError(404, 'Student ne postoji!');
+    let enrolledSemester = student.currentSemester!;
+
+    // TODO handle differently
+    let availableSubj = await Subject.find({_id: subjects});
+    if(availableSubj.length !== subjects.length) throw newError(404, 'Predmeti ne postoje');
+
+    let enrollable = availableSubj.filter(subj => subj.semester == enrolledSemester)
+    console.log(availableSubj);
+    let update = await Student.updateOne({user:_id}, {
+        $addToSet: {subjects: enrollable}
+    });
+    return newResponse('Predmeti su sacuvani');
+}
 
 // export const addStudentToSubjects = async (_id: string, subjects: string[]) => {
 //     let studentObj = await Student.findOne({ _id });
 
 //     if(!studentObj) throw newError(404, 'Ne postoji student sa tim id-em');
 
-//     // TODO: 
+//     // TODO:
 //     // - add check if student already has such subjects in his array
 //     // - add check if every subjects exist on the department that student is rolled in
 
 //     // @ts-ignore
 //     studentObj.subjects = [ ...studentObj.subjects, ...subjects ];
-    
+
 //     let updated = await studentObj.save();
 //     if(!updated) throw newError();
 
@@ -114,11 +131,11 @@ export const getStudentsByDepartment = async (_id: string) => {
 
 //     if(!studentObj) throw newError(404, 'Ne postoji student sa tim id-em');
 
-//     // @ts-ignore 
+//     // @ts-ignore
 //     studentObj.completedSubjects = [ ...studentObj.completedSubjects, ...subjects ];
 
 //     let updated = await studentObj.save();
 //     if(!updated) throw newError();
-    
+
 //     return newResponse('Uspešno ste označili predmete kao položene!');
 // }
