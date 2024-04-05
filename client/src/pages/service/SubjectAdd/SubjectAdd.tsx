@@ -107,7 +107,7 @@ const SubjectAdd = () => {
 		}
 	] = useAddSubjectsToOptionalMutation();
 
-	const 
+	const
 		{
 			data: optionalData,
 			isLoading: isOptionalLoading,
@@ -120,28 +120,28 @@ const SubjectAdd = () => {
 	const handleSubjectAdd = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-		
+
 		try {
 			let prof = professors?.map((elem: SelectProps) => elem.value);
 			let reqSub = requiredSub?.map((elem: SelectProps) => elem.value);
 			const body = {
-				name, code, department, 
+				name, code, department,
 				professors: prof,
-				university: uni, 
+				university: uni,
 				requiredSub: reqSub,
 				semester, espb, degree,
-				type, 
+				type,
 			}
 
 			const result: any = await addSubject(body).unwrap();
-			
+
 			const addProfBody = {
 				professors: prof
 			}
 
 			// @ts-ignore
 			await addProfessors({ subject: result.id, body: addProfBody });
-			
+
 			if(optional) {
 				const subjToOpt: AddSubjOpt = {
 					university: uni!,
@@ -150,7 +150,7 @@ const SubjectAdd = () => {
 						subjects: [ result.id ]
 					}
 				}
-	
+
 				await addSubjToOpt(subjToOpt);
 			}
 		} catch (e: any) {
@@ -167,7 +167,7 @@ const SubjectAdd = () => {
 	if(isReqSubjectsLoading) {
 		reqContent = <Loader />
 	} else if(isReqSubjectsSuccess) {
-		reqContent = 
+		reqContent =
 			<>
 				<div className="form-control">
 					<Select maxMenuHeight={200} onChange={(e: any) => setRequiredSub(e)} isClearable isMulti isSearchable placeholder="Izaberite uslovne predmete" className='w-full outline-none' options={reqSubjectData!.map((item: any) => ({
@@ -180,12 +180,12 @@ const SubjectAdd = () => {
 	if(isOptionalLoading) {
 		optionalContent = <Loader />
 	} else if (isOptionalSuccess) {
-		optionalContent = 
+		optionalContent =
 			<>
 				<div className="form-control">
 					<Select maxMenuHeight={200} onChange={(e: any) => setOptional(e?.value)} placeholder="Izaberite blok" className="w-full outline-none" required isClearable isSearchable options={optionalData!.map((item: any) => ({
 						value: item._id, label: item.name
-					}))}/> 
+					}))}/>
 				</div>
 			</>
 	}
@@ -221,15 +221,15 @@ const SubjectAdd = () => {
 							})} />
 						</div>
 						<div className='form-control'>
-							<Select maxMenuHeight={200} onChange={(e: any) => setProfessors(e)} required isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
+							<Select maxMenuHeight={200} onChange={(e: any) => setProfessors(e)} isClearable isMulti isSearchable placeholder="Izaberite profesore" className='w-full outline-none' options={professorsData!.map((item: any) => {
 								return { value: item._id, label: item.user.name };
 							})} />
 						</div>
 						{
-							department && semester && professors?.length ?
+							department && semester ?
 							<>
 								<div className="form-control">
-									<Select maxMenuHeight={200} onChange={(e: any) => setType(e?.value)} placeholder="Izaberite tip predmeta" className="w-full outline-none" required isClearable isSearchable options={subjectOptions} />
+									<Select maxMenuHeight={200} onChange={(e: any) => setType(e?.value)} placeholder="Izaberite tip predmeta" className="w-full outline-none" isClearable isSearchable options={subjectOptions} />
 								</div>
 							</> : null
 						}

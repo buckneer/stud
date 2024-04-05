@@ -81,7 +81,7 @@
   }
 
   .routes-container > div {
-    @apply flex flex-col flex-grow h-full overflow-y-scroll bg-slate-100 m-0 lg:mx-5 lg:mb-5 rounded-none lg:rounded-2xl overflow-hidden;
+    @apply flex flex-col flex-grow h-full overflow-y-scroll bg-slate-100 m-0  lg:mb-5 rounded-none lg:rounded-2xl overflow-hidden;
   }
 
   .navbar {

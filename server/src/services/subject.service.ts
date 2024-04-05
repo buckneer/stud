@@ -46,13 +46,7 @@ export const getAvailableReqSubjects = async (university: string, department: st
     // it is there because required subject by default is two semesters (1 year) behind
     return Subject.find({
         university, department, type: 'R',
-        $expr: {
-            $lt: [
-                { $convert: { input: '$semester', to: 'decimal' }},
-                // @ts-ignore
-                (parseInt(semester) - 1)
-            ]
-        }
+        semester: {$lt: semester}
     });
 }
 

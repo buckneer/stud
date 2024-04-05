@@ -33,7 +33,7 @@ function UserContent({title, university, role}: UserContentProps) {
 	} = useGetProfessorsQuery(university)
 
 	return (
-		<div className="lists-container flex-1 h-full overflow-y-scroll py-5">
+		<div className="lists-container flex-1 h-full overflow-y-scroll py-5 bg-white">
 			<div className="list-header flex justify-between p-5 ">
 				<StudTitle text={title} />
 				<div className="search-container">
