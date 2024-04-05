@@ -49,11 +49,19 @@ import { handleAddExamToPeriod, handleAddPeriod, handleGetAvailableExamsInPeriod
 import { handleAddService, handleGetServiceGrades, handleGetServices } from "./controllers/service.controller";
 import {
     handleAddExamsToStudent,
-    handleAddStudent, handleAddStudentToSubjects, handleAddSubjectsToCompleted,
+    handleAddStudent,
+    handleAddStudentToSubjects,
+    handleAddSubjectsToCompleted,
+    handleAddSubjectsToStudent,
     handleDeleteStudent,
     handleGetStudent,
     handleGetStudentGrades,
-    handleGetStudents, handleGetStudentsByDepartment, handleGetStudentsBySemester, handleRemoveStudentFromSubject, handleUpdateStudent, removeExamFromStudent
+    handleGetStudents,
+    handleGetStudentsByDepartment,
+    handleGetStudentsBySemester,
+    handleRemoveStudentFromSubject,
+    handleUpdateStudent,
+    removeExamFromStudent
 } from "./controllers/student.controller";
 import { handleAddOptional, handleGetOptional } from "./controllers/optional.controller";
 
@@ -134,6 +142,7 @@ export default function (app: Express) {
     //          ????
     app.patch('/completed_subject/student/:id/', handleAddSubjectsToCompleted);
     app.get('/uni/:id/student/semester', handleGetStudentsBySemester);
+    app.patch('/uni/:uni/student/:stud/subjects/', handleAddSubjectsToStudent);
 
 
     // Professor

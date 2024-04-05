@@ -137,19 +137,15 @@ export const getEnrollableSubjects = async (user: string | undefined, university
 
     if(!student) throw newError(404, 'Ne postoji student!');
 
-    let { completedSubjects, subjects, currentSemester } = student;
+
+    let { completedSubjects, subjects, currentSemester, degree } = student;
 
     let subjectObj = await Subject.find({
         department, university,
-        $expr: {
-            $lte: [
-                { $convert: { input: '$semester', to: 'decimal' }},
-                // @ts-ignore
-                parseInt(currentSemester)
-            ]
-        },
+        degree,
         // @ts-ignore
-        _id: { $nin: [ ...completedSubjects, ...subjects ]}
+        _id: { $nin: [ ...completedSubjects, ...subjects ]},
+        semester: {$lte: currentSemester}
     }).populate({
         path: 'professors',
         select: 'user',
@@ -167,19 +163,14 @@ export const getOptionalSubjects = async (user: string | undefined, university: 
 
     if(!student) throw newError(404, 'Ne postoji student!');
 
-    let { completedSubjects, subjects, currentSemester } = student;
+    let { completedSubjects, subjects, currentSemester, degree } = student;
 
     let subjectObj = await Optional.find({
         department, university,
-        $expr: {
-            $lte: [
-                { $convert: { input: '$semester', to: 'decimal' }},
-                // @ts-ignore
-                parseInt(currentSemester)
-            ]
-        },
+        degree,
         // @ts-ignore
-        _id: { $nin: [ ...completedSubjects, ...subjects ]}
+        _id: { $nin: [ ...completedSubjects, ...subjects ]},
+        semester: {$lte: currentSemester}
     }).populate({
         path: 'subjects',
         populate: {

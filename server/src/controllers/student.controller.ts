@@ -1,7 +1,15 @@
 import Student from './../models/student.model';
 import { Request, Response } from "express";
 import log from "../logger";
-import { addStudent, deleteStudent, getStudent, getStudents, getStudentsByDepartment, getStudentsBySemester } from "../services/student.service";
+import {
+    addStudent,
+    addSubjectsToStudent,
+    deleteStudent,
+    getStudent,
+    getStudents,
+    getStudentsByDepartment,
+    getStudentsBySemester
+} from "../services/student.service";
 import { newResponse } from "../utils";
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
 import { getGradesByRole } from '../services/grade.service';
@@ -9,7 +17,7 @@ import { getGradesByRole } from '../services/grade.service';
 export async function handleAddStudent(req: Request, res: Response) {
     try {
         let  student = { ...req.body};
-        
+
         // TODO implement university everywhere where it's needed
         let university: string = req.body.university;
 
@@ -20,7 +28,7 @@ export async function handleAddStudent(req: Request, res: Response) {
         log.error(e.message);
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
-} 
+}
 
 export async function handleGetStudents(req: Request, res: Response) {
     try {
@@ -37,7 +45,7 @@ export async function handleGetStudents(req: Request, res: Response) {
 
 export async function handleGetStudent(req: Request, res: Response) {
     try {
-        
+
         let { id } = req.params;
 
         if(!id) return res.status(400).send({ message: 'Id studenta je obavezan' });
@@ -75,8 +83,8 @@ export async function handleDeleteStudent(req: Request, res: Response) {
 export async function handleAddStudentToSubjects(req: Request, res: Response) {
     try {
         let { id } = req.params;
-        let subjects = req.body.subjects;     
-        
+        let subjects = req.body.subjects;
+
         let resp = await addToModelArray(Student, id, 'subjects', subjects);
         return res.status(200).send(resp);
 
@@ -166,6 +174,19 @@ export async function handleGetStudentsByDepartment(req: Request, res: Response)
         let resp = await getStudentsByDepartment(id);
         return res.status(200).send(resp);
     } catch (e: any) {
-        return res.status(e.status || 500).send(e || 'Internal Server Error');   
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleAddSubjectsToStudent(req: Request, res: Response) {
+    try {
+        let { stud, uni } = req.params; // TODO <= Get from req.user
+        let {subjects} = req.body;
+
+
+        let resp = await addSubjectsToStudent(stud, subjects, uni);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

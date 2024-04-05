@@ -20,7 +20,7 @@ const SubjectSchema = new Schema({
     department: {type: Schema.ObjectId, ref: 'Department'},
     university: {type: Schema.ObjectId, ref: 'University'},
     degree: {type: String, enum: ['OAS', 'MAS', 'DAS']},
-    semester: {type: String, required: true},
+    semester: {type: Number, required: true},
     espb: {type: Number},
     type: {type: String, required: true, default: "R"},
     requiredSub: [{type: Schema.ObjectId, ref: 'Subject'}]
