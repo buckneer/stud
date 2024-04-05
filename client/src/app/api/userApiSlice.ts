@@ -120,5 +120,6 @@ export const {
 	useGetPendingQuery,
 	useLazyGetPendingQuery,
 	useDeleteUserMutation,
-	useGetUserUnisRoleQuery
+	useGetUserUnisRoleQuery,
+	useLazyGetUserUnisRoleQuery,
 } = userApiSlice
