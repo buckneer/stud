@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Period, { PeriodDocument } from '../models/period.model';
-import { addPeriod, getPeriod, getPeriods, getUniPeriods, updatePeriod } from '../services/period.service';
+import { addPeriod, getActivePeriod, getPeriod, getPeriods, getUniPeriods, setPeriodActive, updatePeriod } from '../services/period.service';
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
 
 export async function handleAddPeriod(req: Request, res: Response) {
@@ -104,6 +104,28 @@ export async function handleGetAvailableExamsInPeriod(req: Request, res: Respons
 
 		// let resp = await getAvailableExamsInPeriod(id);
 		return res.status(200).send("Implement");
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleSetPeriodActive(req: Request, res: Response) {
+	try {
+		let { uni, period } = req.params;
+
+		let resp = await setPeriodActive(period, uni);
+		return res.status(200).send(resp);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
+export async function handleGetActivePeriod(req: Request, res: Response) {
+	try {
+		let { uni } = req.params;
+
+		let resp = await getActivePeriod(uni);
+		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}

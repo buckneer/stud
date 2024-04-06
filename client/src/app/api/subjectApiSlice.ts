@@ -121,7 +121,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 		}),
 		getRequiredSubjects: builder.query <Subject[], GetReq> ({
 			query: ({ university, department, semester }) => ({
-				url: `/uni/${university}/dep/${department}/subject/req/`,
+				url: `/uni/${university}/subject/department/${department}/required`,
 				params: { semester }
 			}),
 			providesTags: (result, error, arg) => (result) 
@@ -142,7 +142,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 		}),
 		deleteRequiredSubject: builder.mutation <unknown, DelReq> ({
 			query: ({ university, subject, body }) => ({
-				url: `/university/${university}/subject/${subject}/required`,
+				url: `/uni/${university}/subject/${subject}/required`,
 				method: 'DELETE',
 				body
 			}),
@@ -152,7 +152,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 		}),
 		getAvailableSubjects: builder.query <Subject[], { university: string, department: string }> ({
 			query: ({ university, department }) => ({
-				url: `/uni/${university}/dep/${department}/subject/`
+				url: `/uni/${university}/subject/department/${department}/`
 			}),
 			providesTags: (result, error, arg) => (result)
 				? [{ type: 'University' as const, id: arg.university },

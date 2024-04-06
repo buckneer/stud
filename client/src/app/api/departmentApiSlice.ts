@@ -124,12 +124,12 @@ const departmentApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'Department' as const, id: arg.department }, { type: 'Subject' as const, id: arg.body.subject }] 
 				: [],
 		}),
-		getStudentsByDepartment: builder.query <Student[], string> ({
-			query: (id) => ({
-				url: `/department/${id}/student/`,
+		getStudentsByDepartment: builder.query <Student[], { university: string; id: string; }> ({
+			query: ({ university, id}) => ({
+				url: `/uni/${university}/department/${id}/student/`,
 			}),
-			providesTags: (result, error, id) => (result)
-				? [{ type: 'Department' as const, id }, 
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Department' as const, id: arg.id }, 
 					...result.map((student: Student) => ({ type: 'Student' as const, id: student._id }))]
 				: [],
 		})

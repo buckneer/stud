@@ -42,7 +42,7 @@ const optionalApiSlice = apiSlice.injectEndpoints({
 		}),
 		getAvailableOptionals: builder.query <Optional[], { university: string; department: string}> ({
 			query: ({ university, department }) => ({
-				url: `/uni/${university}/dep/${department}/subject/optional/`
+				url: `/uni/${university}/subject/department/${department}/optional/`
 			}),
 			providesTags: (result, error, arg) => (result)
 				? [{ type: 'University' as const, id: arg.university },

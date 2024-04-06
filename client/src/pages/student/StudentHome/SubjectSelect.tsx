@@ -81,10 +81,10 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 
 
 	useEffect(() => {
-		if(availableSub) {
+		if(availableSub?.length) {
 			let reqSubjects: Subject[] = [];
 			let optSubjects: Subject[] = [];
-			availableSub.map(subj => {
+			availableSub!.map(subj => {
 				if(subj.type === "R") reqSubjects.push(subj);
 				if(subj.type === "O") optSubjects.push(subj);
 			});
@@ -92,7 +92,7 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 			setSubjects(reqSubjects);
 			setOptionalSubjects(optSubjects);
 		}
-	}, [isSubjLoading]);
+	}, [isSubjSuccess]);
 
 
 	const handleDropdown = (_id: string) => {
@@ -131,28 +131,35 @@ function SubjectSelect({session, uni} : ISubjectSelect) {
 			<div className="w-full flex justify-center">
 				<Table cols={cols}>
 					{isSubjLoading && <Loader />}
-					{!isSubjLoading && availableSub!.length !== 0 && subjects!.map(subj => (
-						<tr key={subj._id} className={`${subjectsToAdd.includes(subj._id!) ? 'bg-slate-100' : ''} `}>
-							<TD>{subj.code}</TD>
-							<TD>{subj.name}</TD>
-							<TD>
-								{/*@ts-ignore*/}
-								{subj.professors!.map(prof => prof.user.name)}
-							</TD>
-							<TD>{subj.type === "R" ? 'O' : 'I'}</TD>
-							<TD>{subj.espb}</TD>
-							<TD>
-								<input
-									type="checkbox"
-									className="rounded-2xl checked:bg-black size-4 checked:border-0"
-									name={subj._id}
-									checked={subjectsToAdd.includes(subj._id!)}
-									value={subj.espb}
-									onChange={handleCheck}
-								/>
-							</TD>
-						</tr>
-					))}
+					{isSubjSuccess && availableSub?.length !== 0 ?
+					<>
+						{ 
+							subjects!.map(subj => (
+								<tr key={subj._id} className={`${subjectsToAdd.includes(subj._id!) ? 'bg-slate-100' : ''} `}>
+									<TD>{subj.code}</TD>
+									<TD>{subj.name}</TD>
+									<TD>
+										{/*@ts-ignore*/}
+										{subj.professors!.map(prof => prof.user.name)}
+									</TD>
+									<TD>{subj.type === "R" ? 'O' : 'I'}</TD>
+									<TD>{subj.espb}</TD>
+									<TD>
+										<input
+											type="checkbox"
+											className="rounded-2xl checked:bg-black size-4 checked:border-0"
+											name={subj._id}
+											checked={subjectsToAdd.includes(subj._id!)}
+											value={subj.espb}
+											onChange={handleCheck}
+										/>
+									</TD>
+								</tr>
+							)) 
+						}
+					</> : <div className="p-5 font-black">Nema predmeta za prijavu...</div>
+					}	
+					
 					{isOptionalBlockLoading && <Loader />}
 					{!isOptionalBlockLoading &&
 					isOptionalBlockSuccess &&

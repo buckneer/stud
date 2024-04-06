@@ -41,7 +41,7 @@ router.get('/professor/',
 	userGuard,
 	AuthGuard([profRoles.professor]), handleGetProfessorSubjects);
 
-router.get('department/:dep/req/', handleGetAvailableReqSubjects);
+router.get('/department/:dep/required/', handleGetAvailableReqSubjects);
 
 router.get('/department/:dep/',
 	userGuard,

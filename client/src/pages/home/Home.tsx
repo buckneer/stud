@@ -31,8 +31,6 @@ export default function Home() {
 
   const handleDataChange = (changeTo: number) => {
     setSelectedData(changeTo);
-
-
   }
 
   return (
