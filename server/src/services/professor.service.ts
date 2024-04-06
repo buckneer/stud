@@ -24,13 +24,13 @@ export const addProfessor = async (_id: string, professor: ProfessorDocument) =>
     }
 }
 
-export const getProfessor = async (professor: string) => {
+export const getProfessor = async (_id: string, university: string) => {
     try {
         // admin and in uni check here
 
-        let professorObj = await Professor.findOne({ _id: professor });
+        let professorObj = await Professor.findOne({ _id, university });
 
-        if(!professor) throw newError(404, 'Greška prilikom pristupanja!');
+        if(!professorObj) throw newError(404, 'Greška prilikom pristupanja!');
 
         return professorObj;
     } catch (e: any) {
@@ -40,9 +40,9 @@ export const getProfessor = async (professor: string) => {
 
 export const getProfessors = async (university: string = '') => {
     try {
-        let query = university ? { universities: university } : {};
+        let query = university ? { university } : {};
         let professorsObj = await Professor.find(query).populate('user');
-        console.log(professorsObj);
+
         return professorsObj;
 
     } catch (e: any) {
@@ -157,4 +157,18 @@ export const giveSign = async (_id: string, professor: string, students: string[
     });
 
     return newResponse('Uspešno ste dali potpis!');
+}
+
+export const addUniToProfessor = async (_id: string, uni: string) => {
+    let uniObj = await University.findOne({ _id: uni });
+
+    if(!uniObj) throw newError(404, 'Univerzitet ne postoji!');
+
+    let professor = await Professor.findOneAndUpdate({ _id }, { $set: {
+        university: uni
+    }});
+
+    if(!professor) throw newError(404, 'Profesor ne postoji!');
+
+    return newResponse('Uspešno ste dodali univerzitet profesoru!', 200, { id: professor._id });
 }

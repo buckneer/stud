@@ -13,9 +13,9 @@ export interface UniDocument extends Document {
 const UniSchema = new Schema({
     name: {type: String, required: true},
     email: {type: String, required: false},
-    students: [{type: Schema.ObjectId, ref: 'User'}],
-    professors: [{type: Schema.ObjectId, ref: 'User'}],
-    services: [{type: Schema.ObjectId, ref: 'User'}],
+    students: [{type: Schema.ObjectId, ref: 'Student'}],
+    professors: [{type: Schema.ObjectId, ref: 'Professor'}],
+    services: [{type: Schema.ObjectId, ref: 'Service'}],
     departments: [{type: Types.ObjectId}],
     parentUni: {type: String}
 })

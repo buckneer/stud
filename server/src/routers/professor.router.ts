@@ -22,13 +22,13 @@ router.post('/', handleAddProfessor);
 router.patch('/:professor/', handleUpdateProfessor);
 router.patch('/:professor/subject/', handleAddProfessorToManySubjects);
 router.patch('/:professor/grade/', handleAddGradesToProfessor);
-router.patch(':professor/uni/', handleAddUniToProfessor);
+router.patch('/:professor/uni/', handleAddUniToProfessor);
 router.patch('/:professor/subject/', handleAddSubjectsToProfessor);
 
 
 router.delete('/:professor/grade/', handleRemoveGradeFromProfessor);
 router.delete('/:professor/uni/', handleRemoveUniFromProfessor);
-router.delete('/:professor/subject/', handleRemoveProfessorFromUni);
+// router.delete('/:professor/subject/', handleRemoveProfessorFromUni);
 
 
 export {router as professorRouter};

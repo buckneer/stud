@@ -11,7 +11,7 @@ import Loader from '../../../components/Loader/Loader';
 import MutationState from '../../../components/MutationState/MutationState';
 import InputField from '../../../components/InputField/InputField';
 
-type Option = {
+type SelectProps = {
 	value?: string;
 	label?: string
 }
@@ -27,13 +27,7 @@ const ProfessorAdd = () => {
 
 	const [title, setTitle] = useState('');
 	const [professor, setProfessor] = useState("");
-	const [subjects, setSubjects] = useState<string[]>([]);
-
-	const handleChange2 = (newSelections: MultiValue<Option>, actionMeta: ActionMeta<Option>) => {
-		let vals = newSelections.map(item => item.value!);
-
-		setSubjects([...vals]);
-	}
+	const [subjects, setSubjects] = useState<SelectProps[]>([]);
 
 	const {
 		data: subjectsData,
@@ -103,25 +97,28 @@ const ProfessorAdd = () => {
 		event.preventDefault();
 		event.stopPropagation();
 		try {
+			const subs: string[] = subjects.map(item => item.value as string);
 			const body = {
 
-				title, subjects: subjects!, university: uni!, user
+				title, subjects: subs, university: uni!, user
 			};
+
 			const result = await fetchAddProfessor({ university: uni!, body }).unwrap();
+			
 			// @ts-ignore
 			const resultBody: any = { professors: [result.id] };
 
 			// @ts-ignore
-			await addProfToUni({ university, body: resultBody });
+			await addProfToUni({ university, body: resultBody }).unwrap();
 
-			const subjectBody: any = { subjects: subjects! };
+			const subjectBody: any = { subjects: subs };
 
 			// @ts-ignore
-			await addProfToSub({ university, professor: result.id, body: subjectBody });
+			await addProfToSub({ university, professor: result.id, body: subjectBody }).unwrap();
 
 			const uniBody: any = { universities: [university] }
 			// @ts-ignore
-			await addUniToProf({ university, professor: result.id, body: uniBody });
+			await addUniToProf({ university, professor: result.id, body: uniBody }).unwrap();
 		} catch (e: any) {
 			console.error(e);
 		}
@@ -172,7 +169,7 @@ const ProfessorAdd = () => {
 							}
 							<InputField id="profesorId" name="Zvanje profesora" type="text" inputVal={title} setVal={(e) => setTitle(e.target.value)} />
 							<div className='form-control'>
-								<Select maxMenuHeight={200} onChange={handleChange2} placeholder="Izaberite predmete" className='w-full outline-none' required isMulti options={subjectsData.map((item) => {
+								<Select maxMenuHeight={200} onChange={(e: any) => setSubjects(e)} placeholder="Izaberite predmete" className='w-full outline-none' required isMulti options={subjectsData.map((item) => {
 									return { value: item._id, label: item.name };
 								})} />
 							</div>

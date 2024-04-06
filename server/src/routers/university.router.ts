@@ -24,7 +24,7 @@ router.patch('/:uni/service/', handleAddServicesToUni)
 router.delete('/:uni/service/', handleRemoveServiceFromUni)
 
 // PROFESSOR
-router.patch('/professor/', handleAddProfessorsToUni)
+router.patch('/:uni/professor/', handleAddProfessorsToUni)
 
 // STUDENT
 router.patch('/:uni/student/', handleAddStudentsToUni)

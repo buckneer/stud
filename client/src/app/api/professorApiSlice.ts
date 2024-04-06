@@ -56,7 +56,7 @@ const professorApiSlice = apiSlice.injectEndpoints({
 		}),
 		deleteProfessorFromUni: builder.mutation <unknown, DelProfUni> ({
 			query: ({ university, body }) => ({
-				url: `/uni/${university}/professor`,
+				url: `/uni/${university}/professor/uni/`,
 				method: 'DELETE',
 				body
 			}),

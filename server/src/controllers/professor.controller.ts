@@ -1,6 +1,6 @@
 import Professor, { ProfessorDocument } from '../models/professor.model';
 import { Request, Response } from "express";
-import { addProfessor, updateProfessor, getProfessor, getProfessors, addSubjectToProfessors, giveSign } from '../services/professor.service';
+import { addProfessor, updateProfessor, getProfessor, getProfessors, addSubjectToProfessors, giveSign, addUniToProfessor } from '../services/professor.service';
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
 import { getGradesByRole } from '../services/grade.service';
 
@@ -9,7 +9,7 @@ export async function handleAddProfessor(req: Request, res: Response) {
         let professor: ProfessorDocument = {
             ...req.body,
         }
-        let uni = req.body.university;
+        let { uni } = req.params;
 
         // add error handling here...
         let resp: any = await addProfessor(uni, professor);
@@ -22,9 +22,9 @@ export async function handleAddProfessor(req: Request, res: Response) {
 
 export async function handleGetProfessor(req: Request, res: Response) {
     try {
-        let professor: string = req.params.professor;
+        let { professor, uni } = req.params;
 
-        let resp = await getProfessor(professor);
+        let resp = await getProfessor(professor, uni);
 
         return res.status(200).send(resp);
     } catch (e: any) {
@@ -35,9 +35,9 @@ export async function handleGetProfessor(req: Request, res: Response) {
 // admin function
 export async function handleGetProfessors(req: Request, res: Response) {
     try {
-        let university = req.params.university;
+        let { uni } = req.params;
 
-        let resp = await getProfessors(university);
+        let resp = await getProfessors(uni);
 
         return res.status(200).send(resp);
     } catch (e: any) {
@@ -121,10 +121,9 @@ export async function handleRemoveGradeFromProfessor(req: Request, res: Response
 
 export async function handleAddUniToProfessor(req: Request, res: Response) {
     try {
-        let { professor, university } = req.params;
+        let { professor, uni } = req.params;
 
-        // @ts-ignore
-        let resp = await addToModelArray(Professor, professor, 'universities', [ university ]);
+        let resp = await addUniToProfessor(professor, uni);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
@@ -136,7 +135,7 @@ export async function handleRemoveUniFromProfessor(req: Request, res: Response) 
         let { professor } = req.params;
         let { university } = req.body;
 
-        let resp = await removeFromModelArray(Professor, professor, 'universities', university);
+        let resp = await removeFromModelArray(Professor, professor, 'university', university);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
