@@ -101,6 +101,16 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				? [...arg.body.subjects.map((subj: string) => ({ type: 'Subject' as const, id: subj })),
 					{ type: 'University' as const, id: arg.university }]
 				: []
+		}),
+		getStudentOnSubject: builder.query <Student[], { university: string; subject: string }> ({
+			query: ({ university, subject }) => ({
+				url: `/uni/${university}/student/subject/${subject}`
+			}),
+			providesTags: (result, error, arg) => (result)
+			? [{ type: 'University' as const, id: arg.university },
+				{ type: 'Subject' as const, id: arg.subject },
+				...result.map((stud: Student) => ({ type: 'Student' as const, id: stud._id }))]	
+				: [],
 		})
 		// addCompleted: builder.mutation <unknown, unknown> ({
 		// 	query: ({  }) => ({
@@ -120,5 +130,6 @@ export const {
 	useDeleteStudentMutation,
 	useRemoveStudentExamMutation,
 	useAddSubjectsToStudentMutation,
-	useUpdateStudentMutation
+	useUpdateStudentMutation,
+	useGetStudentOnSubjectQuery
 } = studentApiSlice;

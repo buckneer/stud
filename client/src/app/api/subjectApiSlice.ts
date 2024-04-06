@@ -70,7 +70,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 		}),
 		getDepSubjects: builder.query <Subject[], { university: string; department: string }> ({
 			query: ({ university, department }) => ({
-				url: `/uni/${university}/department/${department}/subject/`
+				url: `/uni/${university}/subject/department/${department}`
 			}),
 			providesTags: (result, error, arg) => (result) 
 				? [ ...result.map((subject: Subject) => ({ type: 'Subject' as const, id: subject._id })),

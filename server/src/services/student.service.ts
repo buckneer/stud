@@ -82,7 +82,10 @@ export const getStudentsBySubject = async (_id: string) => {
     const subject = await Subject.find({_id});
     if(!subject) throw newError(404, 'Predmet ne postoji');
 
-    return Student.find({subjects: _id});
+    return Student.find({subjects: _id}).populate({
+        path: 'user',
+        select: 'name email'
+    });
 }
 
 

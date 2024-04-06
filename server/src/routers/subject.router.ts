@@ -37,9 +37,9 @@ router.delete('/:sub/required/', handleRemoveRequiredFromSubject);
 router.get('/:sub/role/:role/', handleGetSubjectRole);
 router.patch('/:sub/sign/', handleGiveSign);
 
-router.get('/professor/',
+router.get('/professor/active/',
 	userGuard,
-	AuthGuard([profRoles.professor]), handleGetProfessorSubjects);
+	/*AuthGuard([profRoles.professor]),*/ handleGetProfessorSubjects);
 
 router.get('/department/:dep/required/', handleGetAvailableReqSubjects);
 

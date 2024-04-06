@@ -101,7 +101,7 @@ export const roleGuard = (roles: string[]) => {
                 if(!req.params.subj) return res.status(404).send(newError(401, 'Predmet nije pronađen'));
 
                 let professorSubj = professor.subjects.map(subj => subj.toString());
-                if(!professorSubj.includes(req.params.subj)) return res.status(401).send(newError(401, 'Nemate pristup ovom predmetu'));
+                if(!professorSubj.includes(req.params.subj)) return res.status(403).send(newError(403, 'Nemate pristup ovom predmetu'));
 
 
                 return next();
@@ -119,7 +119,7 @@ export const roleGuard = (roles: string[]) => {
                 console.log("You are a service");
                 // checks only university
                 // Every service can access every department if on same uni.
-                if(!req.params.university) return  res.status(401).send(newError(401, 'Id univerziteta je obavezan'));
+                if(!req.params.university) return  res.status(403).send(newError(403, 'Id univerziteta je obavezan'));
 
                 let service = await getServiceByUserId(req.user.id);
 

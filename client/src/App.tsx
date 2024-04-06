@@ -33,6 +33,7 @@ import StudentEdit from './pages/service/StudentEdit/StudentEdit';
 import ExamEdit from './pages/service/ExamEdit/ExamEdit';
 import Departments from "./pages/department/DepartmentHome/DepartmentHome"
 import ProfessorHome from "./pages/professor/ProfessorHome/ProfessorHome";
+import OptionalAdd from './pages/service/OptionalAdd/OptionalAdd';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -75,6 +76,7 @@ function App() {
               <Route path='/uni/:uni/grade/add' element={<GradeAdd/>} />
               <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
               <Route path='/uni/:uni/department/:department/edit' element={<DepartmentEdit />} />
+              <Route path="/uni/:uni/optional/add" element={<OptionalAdd />} />
               {/* STUDENT ROUTES */}
               <Route path='/uni/:uni/student' element={<StudentHome />} />
               <Route path='/uni/:uni/departments/' element={<Departments />} />

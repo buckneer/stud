@@ -151,7 +151,6 @@ export async function handleGetProfessorSubjects(req: Request, res: Response) {
     try {
     //     660d4b4f2fc0467794196e9f
         let {uni} = req.params;
-
         let resp = await getProfessorSubjects(req.user!.id, uni);
         return res.status(200).send(resp);
     } catch (e: any) {

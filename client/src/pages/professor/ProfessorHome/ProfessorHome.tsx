@@ -1,5 +1,5 @@
 import {Helmet} from "react-helmet";
-import React from "react";
+import React, { useEffect } from "react";
 import SidebarItem from "../../../components/SidebarItem/SidebarItem";
 import {Book, CalendarCheck, GraduationCap, LayoutList} from "lucide-react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -12,7 +12,7 @@ function ProfessorHome() {
 
 	const session = useSelector((state: RootState) => state.session);
 	const dispatch = useDispatch();
-
+	
 	const handleDataChange = (changeTo: number) => {
 		dispatch(setMetadata({ professorTab: changeTo }));
 	}

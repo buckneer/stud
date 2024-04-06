@@ -1,5 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { Professor, ProfBody, AddProfUni, DelProfUni, AddProfSub, DelProfSub, AddProfGrade, DelProfGrade, AddUniProf, DelUniProf, GiveSign } from "./types/types";
+import { Professor, ProfBody, AddProfUni, DelProfUni, AddProfSub, DelProfSub, AddProfGrade, DelProfGrade, AddUniProf, DelUniProf, GiveSign, Subject } from "./types/types";
 
 // TODO: add delete professor later...
 
@@ -134,7 +134,16 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'Subject' as const, id: arg.subject },
 					...arg.body.students.map((student: string) => ({ type: 'Student' as const, id: student }))]
 				: [],
-		})
+		}),
+		getSubjectProfessors: builder.query <Subject[], string> ({
+			query: (university) => ({
+				url: `/uni/${university}/subject/professor/active`
+			}),
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'University' as const, id: arg },
+					...result.map((sub: Subject) => ({ type: 'Subject' as const, id: sub._id }))]
+				: [],
+		}),
 	})
 });
 
@@ -150,6 +159,7 @@ export const {
 	useAddProfessorGradeMutation,
 	useDeleteProfessorGradeMutation,
 	useAddProfessorUnisMutation,
+	useGiveSignMutation,
 	useDeleteProfessorUniMutation,
-
+	useGetSubjectProfessorsQuery,
 } = professorApiSlice;

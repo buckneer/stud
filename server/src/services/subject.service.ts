@@ -96,7 +96,7 @@ export const getProfessorSubjects = async (_id: string, uni: string) => {
 
     let professor = await Professor.findOne({user: _id});
     if(!professor) throw newError(404, 'Profesor nije pronađen');
-
+    
     return Subject.find({professors: professor._id, university: uni});
 }
 
