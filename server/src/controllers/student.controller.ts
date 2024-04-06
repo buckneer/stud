@@ -8,7 +8,7 @@ import {
     getStudent,
     getStudents,
     getStudentsByDepartment,
-    getStudentsBySemester
+    getStudentsBySemester, getStudentsBySubject
 } from "../services/student.service";
 import { newResponse } from "../utils";
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
@@ -185,6 +185,18 @@ export async function handleAddSubjectsToStudent(req: Request, res: Response) {
         let {id} = req.user!;
 
         let resp = await addSubjectsToStudent(id, subjects, uni);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetStudentsBySubject(req: Request, res: Response) {
+    try {
+        let { sub } = req.params;
+
+        let resp = await getStudentsBySubject(sub);
+
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

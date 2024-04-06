@@ -7,6 +7,7 @@ import { UserRequest, UserToken } from './UserRequest';
 import {getService, getServiceByUserId, getServicesByUserId} from '../services/service.service';
 import log from "../logger";
 import Professor from "../models/professor.model";
+import Subject from "../models/subject.model";
 
 
 
@@ -40,7 +41,14 @@ export const isServiceInUniversity = async (req: Request) => {
 };
 
 export const isProfessorOnSubject = async (req: Request) => {
-    //TODO [1] implement this!
+    if(!req.params.sub) return false;
+    if(!req.user) return false;
+    let professor = await Professor.findOne({user: req.user.id});
+    if(!professor) return false;
+    let subject = await Subject.findOne({_id: req.params.sub});
+    if(!subject) return false;
+
+    return professor.subjects.includes(subject._id)
 }
 
 

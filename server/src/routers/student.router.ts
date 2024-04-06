@@ -8,13 +8,13 @@ import {
 	handleGetStudent,
 	handleGetStudentGrades,
 	handleGetStudents,
-	handleGetStudentsBySemester,
+	handleGetStudentsBySemester, handleGetStudentsBySubject,
 	handleRemoveStudentFromSubject,
 	handleUpdateStudent,
 	removeExamFromStudent
 } from "../controllers/student.controller";
 import {handleGetAvailableExamsInPeriod} from "../controllers/period.controller";
-import {AuthGuard, userGuard} from "../middleware/routeGuard";
+import {AuthGuard, isProfessorOnSubject, isServiceInUniversity, userGuard} from "../middleware/routeGuard";
 
 
 const studentRoles = {
@@ -40,8 +40,20 @@ router.patch('/:stud/subject/', handleAddStudentToSubjects);
 router.delete('/:stud/subject/', handleRemoveStudentFromSubject);
 router.patch('/:stud/subject/completed/', handleAddSubjectsToCompleted);
 router.get('/semester/', handleGetStudentsBySemester);
-router.patch('/subject/',
+router.patch('/subject/add',
 	userGuard,
 	AuthGuard([studentRoles.student]), handleAddSubjectsToStudent);
+
+router.get('/subject/:sub/', userGuard,
+	AuthGuard([
+		{
+			role: 'professor',
+			when: isProfessorOnSubject
+		},
+		{
+			role: 'service',
+			when: isServiceInUniversity
+		}
+	]), handleGetStudentsBySubject);
 
 export {router as studentRouter};

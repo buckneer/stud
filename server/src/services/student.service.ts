@@ -1,8 +1,8 @@
-import { Types } from "mongoose";
-import Student, { StudentDocument } from "../models/student.model";
+import {Types} from "mongoose";
+import Student, {StudentDocument} from "../models/student.model";
 import User from "../models/user.model";
-import { randomBytes } from 'crypto';
-import { newError, newResponse } from "../utils";
+import {randomBytes} from 'crypto';
+import {newError, newResponse} from "../utils";
 import University from "../models/university.model";
 import Department from '../models/department.model';
 import Subject from "../models/subject.model";
@@ -78,6 +78,14 @@ export const getStudentsByDepartment = async (_id: string) => {
     return Student.find({ department: _id });
 }
 
+export const getStudentsBySubject = async (_id: string) => {
+    const subject = await Subject.find({_id});
+    if(!subject) throw newError(404, 'Predmet ne postoji');
+
+    return Student.find({subjects: _id});
+}
+
+
 export const addSubjectsToStudent = async (_id: string, subjects: string[], uni: string) => {
     let student = await Student.findOne({user: _id, university: uni});
     if(!student) throw newError(404, 'Student ne postoji!');
@@ -87,12 +95,12 @@ export const addSubjectsToStudent = async (_id: string, subjects: string[], uni:
     let availableSubj = await Subject.find({_id: subjects});
     if(availableSubj.length !== subjects.length) throw newError(404, 'Predmeti ne postoje');
 
-    let enrollable = availableSubj.filter(subj => subj.semester == enrolledSemester)
-    console.log(availableSubj);
+    // let enrollable = availableSubj.filter(subj => subj.semester == enrolledSemester)
+    // console.log(availableSubj);
     let update = await Student.updateOne({user:_id}, {
-        $addToSet: {subjects: enrollable}
+        $addToSet: {subjects: availableSubj}
     });
-    return newResponse('Predmeti su sacuvani');
+    return newResponse('Predmeti su sačuvani');
 }
 
 // export const addStudentToSubjects = async (_id: string, subjects: string[]) => {

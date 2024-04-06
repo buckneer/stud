@@ -1,6 +1,7 @@
 export interface Meta {
 	university?: string;
 	studentTab?: number;
+	professorTab?: number;
 	serviceHome?: number;
 	role?: string;
 }
@@ -134,7 +135,7 @@ export interface Service {
 	university?: string | University;
 }
 
-// Subject 
+// Subject
 export interface UniUser {
 	university: string,
 	body: Student

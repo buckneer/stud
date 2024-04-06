@@ -140,7 +140,7 @@ export const getEnrollableSubjects = async (user: string | undefined, university
         degree,
         // @ts-ignore
         _id: { $nin: [ ...completedSubjects, ...subjects ]},
-        semester: {$lte: currentSemester}
+        semester: {$lte: currentSemester! + 1} // TODO +1 Quick fix!
     }).populate({
         path: 'professors',
         select: 'user',

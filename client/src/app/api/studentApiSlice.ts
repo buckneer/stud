@@ -93,7 +93,7 @@ const studentApiSlice = apiSlice.injectEndpoints({
 		}),
 		addSubjectsToStudent: builder.mutation <any, AddStSub> ({
 			query: ({ university, body }) => ({
-				url: `/uni/${university}/student/subject/`,
+				url: `/uni/${university}/student/subject/add`,
 				method: 'PATCH',
 				body
 			}),
