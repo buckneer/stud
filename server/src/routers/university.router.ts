@@ -9,6 +9,8 @@ import {
 } from "../controllers/university.controller";
 import {handleGetUniPeriods} from "../controllers/period.controller";
 import {handleGetUniExams} from "../controllers/exam.controller";
+import { handleGetUserRolesInUni } from "../controllers/user.controller";
+import { userGuard } from "../middleware/routeGuard";
 
 
 const router = express.Router({mergeParams: true});
@@ -38,5 +40,9 @@ router.get('/:uni/period/',  handleGetUniPeriods);
 
 // EXAM
 router.get('/:uni/exam/', handleGetUniExams)
+
+
+// USER
+router.get('/:uni/user/', userGuard, handleGetUserRolesInUni);
 
 export {router as uniRouter};

@@ -10,6 +10,7 @@ import Student from "../models/student.model";
 import Professor from "../models/professor.model";
 import Service from "../models/service.model";
 import Reset from "../models/reset.model";
+import University from "../models/university.model";
 
 export const registerUser = async (serviceId: string, user: UserDocument) => {
 	let userExists = await User.findOne({ email: user.email });
@@ -285,4 +286,31 @@ export const deleteUserById = async (_id: string) => {
 	// 	{ user: _id },
 	// 	{ $pull: { students: _id } }
 	// );
+}
+
+export const getUserRolesInUni = async (user: string, _id: string) => {
+	let uni = await University.findOne({ _id });
+
+	if(!uni) throw newError(404, 'Ne postoji univerzitet!');
+
+	// Shitty solution but whatever...
+	let roles = [];
+
+	let student = await Student.findOne({ user, university: _id });
+	let professor = await Professor.findOne({ user, university: _id  });
+	let service = await Service.findOne({ user, university: _id });
+
+	if(student) {
+		roles.push('student');
+	}
+
+	if(professor) {
+		roles.push('professor');
+	}
+
+	if(service) {
+		roles.push('service');
+	}
+
+	return roles;
 }
