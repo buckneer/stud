@@ -24,6 +24,7 @@ function Sidebar({children, role = 'student'} : SidebarProps) {
 	const session = useSelector((state: RootState) => state.session);
   const {uni} = useParams();
 	// const [currentUni, setCurrentUni] = useState("PMF"); if we want to switch uni
+
 	const {
         data: uniData,
         isLoading: isUniDataLoading,
@@ -35,8 +36,8 @@ function Sidebar({children, role = 'student'} : SidebarProps) {
 	});
 
 	const setUniversity = (university: string) => {
-		dispatch(setMetadata({ university }))
-		navigate(`/uni/${university}/${session.metadata.role}`);
+		dispatch(setMetadata({ university }));
+		navigate(`/uni/${university}/${role}`);
 	}
 
 	let uniContent: any;
@@ -55,9 +56,10 @@ function Sidebar({children, role = 'student'} : SidebarProps) {
 
 	return (
 		<div className='sidebar flex flex-col items-center divide-y-2 bg-slate-100 px-5 py-5'>
-			<div className="flex flex-col items-center gap-5 px-5 pb-4">
+			<div className="flex flex-col items-center gap-3 px-5 pb-4">
 				<University className="text-gray-700" size={100} />
 				{/* Maybe change this to state? */}
+				<p>Nalog {role === 'service' ? 'STUD službe' : role === 'professor' ? 'profesora' : 'STUDenta'}</p>
 				<select value={session.metadata.university} className="border-0 rounded-xl w-full" onChange={(e: any) => setUniversity(e.target.value)}>
 					{ uniContent }
 				</select>

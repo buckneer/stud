@@ -107,6 +107,15 @@ const userApiSlice = apiSlice.injectEndpoints({
 					 { type: 'Role' as const, id: arg.role } ]  // <- maybe delete this one...
 				: [],
 		}),
+		getUserUniRole: builder.query <any, string> ({
+			query: (university) => ({
+				url: `/uni/${university}/user`,
+			}),
+			providesTags: (result, error, id) => (result)
+				? [{ type: 'University' as const, id },
+					...result?.map((role: any) => ({ type: 'Role' as const, id: role }))]
+				: [],
+		})
 	})
 });
 
@@ -122,4 +131,5 @@ export const {
 	useDeleteUserMutation,
 	useGetUserUnisRoleQuery,
 	useLazyGetUserUnisRoleQuery,
+	useGetUserUniRoleQuery
 } = userApiSlice

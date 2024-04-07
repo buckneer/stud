@@ -35,6 +35,7 @@ import ExamEdit from './pages/service/ExamEdit/ExamEdit';
 import Departments from "./pages/department/DepartmentHome/DepartmentHome"
 import ProfessorHome from "./pages/professor/ProfessorHome/ProfessorHome";
 import OptionalAdd from './pages/service/OptionalAdd/OptionalAdd';
+import RoleGuard from './components/auth/RoleGuard';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -60,39 +61,45 @@ function App() {
 
             {/* User has to be logged in to access these */}
             <Route element={<TokenRequired />}>
-              <Route path='/uni/:uni/service' element={<Home />} />
-              {/* TODO: check if user is in uni :uni service here... */}
-              <Route path='/uni/:uni/register' element={<Register/>} />
-              <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
-              <Route path='/uni/:uni/subject/:id/edit' element={<SubjectEdit />} />
-              <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
-              <Route path='/uni/:uni/student/:id/edit' element={<StudentEdit />} />
-              <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
-              <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
-              <Route path='/uni/:uni/department/:id/edit' element={<DepartmentEdit/>} />
-              <Route path='/uni/:uni/period/add' element={<PeriodAdd/>} />
-              <Route path='/uni/:uni/period/:id/edit' element={<PeriodEdit/>} />
-              <Route path='/uni/:uni/period/:period/exam/add' element={<ExamAdd/>} />
-              <Route path='/uni/:uni/exam/:id/edit' element={<ExamEdit />} />
-              <Route path='/uni/:uni/grade/add' element={<GradeAdd/>} />
-              <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
-              <Route path='/uni/:uni/department/:department/edit' element={<DepartmentEdit />} />
-              <Route path="/uni/:uni/optional/add" element={<OptionalAdd />} />
-              {/* STUDENT ROUTES */}
-              <Route path='/uni/:uni/student' element={<StudentHome />} />
-              <Route path='/uni/:uni/departments/' element={<Departments />} />
+              {/* WHILE TESTING REPLACE THIS WITH roles={['service', 'professor', 'student']} IF NEEDED */}
+              <Route element={<RoleGuard roles={['service']}/>}>
+                <Route path='/uni/:uni/service' element={<Home />} />
+                <Route path='/uni/:uni/register' element={<Register/>} />
+                <Route path='/uni/:uni/subject/add' element={<SubjectAdd/>} />
+                <Route path='/uni/:uni/subject/:id/edit' element={<SubjectEdit />} />
+                <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
+                <Route path='/uni/:uni/student/:id/edit' element={<StudentEdit />} />
+                <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
+                <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
+                <Route path='/uni/:uni/department/:id/edit' element={<DepartmentEdit/>} />
+                <Route path='/uni/:uni/period/add' element={<PeriodAdd/>} />
+                <Route path='/uni/:uni/period/:id/edit' element={<PeriodEdit/>} />
+                <Route path='/uni/:uni/period/:period/exam/add' element={<ExamAdd/>} />
+                <Route path='/uni/:uni/exam/:id/edit' element={<ExamEdit />} />
+                <Route path='/uni/:uni/grade/add' element={<GradeAdd/>} />
+                <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
+                <Route path='/uni/:uni/department/:department/edit' element={<DepartmentEdit />} />
+                <Route path="/uni/:uni/optional/add" element={<OptionalAdd />} />
+                <Route path='/uni/:uni/department/' element={<Departments />} />
+              </Route>
 
-              {/* PROFESSOR ROUTES */}
-              <Route path='/uni/:uni/professor' element={<ProfessorHome />} />
+              <Route element={<RoleGuard roles={['student']} />}>
+                <Route path='/uni/:uni/student' element={<StudentHome />} />
+              </Route>
+
+              <Route element={<RoleGuard roles={['professor']} />}>
+                <Route path='/uni/:uni/professor' element={<ProfessorHome />} />
+              </Route>
+              
               {/* User has to have admin privileges */}
               {/* TODO: CHANGE THIS TO AdminRequired! */}
               <Route element={<TokenRequired />}>
                 <Route path='/admin/uni/add' element={<UniAdd />}/>
               </Route>
 
+              <Route path="/" element={<Navigate to={`/uni/${session.metadata.university}/${session.metadata.role}`} />} />
             </Route>
 
-            <Route path="/" element={<Navigate to={`/uni/${session.metadata.university}/${session.metadata.role}`} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>
