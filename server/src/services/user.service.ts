@@ -312,5 +312,7 @@ export const getUserRolesInUni = async (user: string, _id: string) => {
 		roles.push('service');
 	}
 
+	if(!roles.length) throw newError(404, 'Ne postoji univerzitet!');
+
 	return roles;
 }

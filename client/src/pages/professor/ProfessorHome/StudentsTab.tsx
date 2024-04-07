@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Loader from "../../../components/Loader/Loader";
 import Table from "../../../components/Table/Table";
 import TD from "../../../components/Table/TableColumn";
-import { useGetSubjectProfessorsQuery } from "../../../app/api/professorApiSlice";
+import { useGetSubjectProfessorsQuery, useGiveSignMutation } from "../../../app/api/professorApiSlice";
 import { useParams } from "react-router-dom";
 import { useGetStudentOnSubjectQuery } from "../../../app/api/studentApiSlice";
 import Select from "react-select";
@@ -36,6 +36,23 @@ function StudentsTab() {
 	} = useGetStudentOnSubjectQuery({ university: uni!, subject: subject?.value! }, {
 		skip: !subjectData?.length || !isSubjectSuccess || !subject?.value
 	});
+
+	const [
+		addSign,
+		{
+			isLoading: isAddSignLoading,
+			isSuccess: isAddSignSuccess,
+			isError: isAddSignError
+		}
+	] = useGiveSignMutation();
+
+	const handleAddSign = async () => {
+		try {
+			// ADD LOGIC HERE...
+		} catch (e: any) {
+			console.error(e);
+		}
+	}
 
 	return (
 		<>

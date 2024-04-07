@@ -97,9 +97,9 @@ function App() {
                 <Route path='/admin/uni/add' element={<UniAdd />}/>
               </Route>
 
+              <Route path="/" element={<Navigate to={`/uni/${session.metadata.university}/${session.metadata.role}`} />} />
             </Route>
 
-            <Route path="/" element={<Navigate to={`/uni/${session.metadata.university}/${session.metadata.role}`} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>
