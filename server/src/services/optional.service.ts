@@ -1,22 +1,36 @@
 import Optional from "../models/optional.model";
 import Subject from "../models/subject.model"
+import University from "../models/university.model";
 import { newError, newResponse } from "../utils";
 
-export const addOptional = async (data: any) => {
-  let subjectsObj = await Subject.find({ _id: data.subjects, university: data.university, type: 'O' });
+export const addOptional = async (_id: string, data: any) => {
+  let university = await University.findOne({ _id });
 
-  if(subjectsObj.length !== data.subjects.length) throw newError(400, 'Ne postoji jedan od predmeta!');
+  if(!university) throw newError(404, 'Ne postoji univerzitet!');
+
+  if(data?.subjects?.length) {
+    let subjectsObj = await Subject.find({ 
+      _id: data.subjects, 
+      university: _id, 
+      department: data.department, 
+      degree: data.degree, 
+      semester: data.semester,
+      type: 'O' 
+    });
   
-  let isEveryValid = subjectsObj.every((e: any) => {
-    return (
-        e.semester === subjectsObj[0].semester 
-        && e.department.toString() === subjectsObj[0].department.toString()
-        && e.department.toString() === data.department
-        && e.semester === data.semester
-    )
-  });
-
-  if(!isEveryValid) throw newError(400, 'Greška: uneti su nevalidni podaci!')
+    if(subjectsObj.length !== data.subjects.length) throw newError(400, 'Uneti su nevalidni podaci!');
+    
+    // let isEveryValid = subjectsObj.every((e: any) => {
+    //   return (
+    //       e.semester === subjectsObj[0].semester 
+    //       && e.department.toString() === subjectsObj[0].department.toString()
+    //       && e.department.toString() === data.department
+    //       && e.semester === data.semester
+    //   )
+    // });
+  
+    // if(!isEveryValid) throw newError(400, 'Greška: uneti su nevalidni podaci!')
+  }
 
   let optional = await Optional.create(data);
 

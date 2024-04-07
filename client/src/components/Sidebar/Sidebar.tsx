@@ -24,8 +24,7 @@ function Sidebar({children, role = 'student'} : SidebarProps) {
 	const session = useSelector((state: RootState) => state.session);
   const {uni} = useParams();
 	// const [currentUni, setCurrentUni] = useState("PMF"); if we want to switch uni
-
-	const{
+	const {
         data: uniData,
         isLoading: isUniDataLoading,
         isSuccess: isUniDataSuccess,

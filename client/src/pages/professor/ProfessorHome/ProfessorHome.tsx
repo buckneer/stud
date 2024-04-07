@@ -26,7 +26,7 @@ function ProfessorHome() {
 			<div className="flex h-full bg-white">
 			{/*	CONTENT */}
 				{session.metadata.professorTab == 0 && (<StudentsTab />)}
-				<Sidebar>
+				<Sidebar role='professor'>
 					<div className="pt-1">
 						<SidebarItem name="Studenti" active={session.metadata.professorTab == 0} to={0} changeData={handleDataChange} Icon={GraduationCap} />
 						<SidebarItem name="Ispitni Rokovi" active={session.metadata.professorTab == 1} to={1} changeData={handleDataChange} Icon={CalendarCheck} />

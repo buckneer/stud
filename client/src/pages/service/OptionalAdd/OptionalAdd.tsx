@@ -9,7 +9,9 @@ import { Helmet } from 'react-helmet';
 import Select from 'react-select';
 import { useGetUniDepartmentsQuery } from '../../../app/api/departmentApiSlice';
 import Loader from '../../../components/Loader/Loader';
-import { useGetDepSubjectsQuery } from '../../../app/api/subjectApiSlice';
+import { useAddOptionalMutation } from '../../../app/api/optionalApiSlice';
+import { useGetAvailableOptionalSubjectsQuery } from '../../../app/api/subjectApiSlice';
+import { createNoSubstitutionTemplateLiteral } from 'typescript';
 
 type SelectProps = {
 	value?: string;
@@ -26,9 +28,9 @@ const OptionalAdd = () => {
 	const session = useSelector((state: RootState) => state.session);
 	const { uni } = useParams();
 
-	const [ name, setName ] = useState("");
-	const [ subjects, setSubjects ] = useState<SelectProps>();
+	const [ name, setName ] = useState('');
 	const [ semester, setSemester ] = useState('');
+	const [ subjects, setSubjects ] = useState<SelectProps[]>([]);
 	const [ degree, setDegree ] = useState('');
 	const [ department, setDepartment ] = useState('');
 	const [ espb, setEspb ] = useState('');
@@ -47,15 +49,36 @@ const OptionalAdd = () => {
 		isLoading: isSubjectLoading,
 		isSuccess: isSubjectSuccess,
 		isError: isSubjectError
-	} = useGetDepSubjectsQuery({ university: uni!, department: department! }, {
-		skip: !department || !departmentData?.length 
+	} = useGetAvailableOptionalSubjectsQuery({ university: uni!, department, sem: semester, degree }, {
+		skip: !uni || !department || !semester || !degree
 	})
+
+	const [
+		addOptional,
+		{
+			isLoading: isAddOptionalLoading,
+			isSuccess: isAddOptionalSuccess,
+			isError: isAddOptionalError
+		}
+	] = useAddOptionalMutation();
 
 	const handleAddOptional = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-	};
 
+		try {
+			let selectedSub = subjects?.map((e: SelectProps) => e.value);
+			let body = { 
+				name, semester, degree, department, espb,
+				subjects: selectedSub
+			}
+
+			// @ts-ignore
+			await addOptional({ university: uni!, body }).unwrap();
+		} catch (e: any) {
+			console.error(e);
+		}
+	};
 
 	let content: any;
 
@@ -71,6 +94,9 @@ const OptionalAdd = () => {
 							<div className="form-desc" >Kreiranje novog izbornog bloka</div>
 							<MutationState
 								// @ts-ignore
+								isLoading={isSubjectLoading || isAddOptionalLoading}
+								isSuccess={isAddOptionalSuccess}
+								isError={isAddOptionalError}
 								errorMessage={'Greška prilikom dodavanja izbornog bloka!'}
 								successMessage='Uspešno dodat izborni blok!'
 							/>
@@ -89,11 +115,16 @@ const OptionalAdd = () => {
 							</div>
 
 							{
-
+								department &&  semester && degree && isSubjectSuccess ?
+								<div className="form-control">
+									<Select maxMenuHeight={200} onChange={(e: any) => setSubjects(e)} isClearable isMulti isSearchable placeholder="Izaberite izborne predmete" className='w-full outline-none' options={subjectData!.map((item: any) => ({
+										value: item._id, label: item.name
+									}))} />
+								</div> : null
 							}
 
 							<div className='footer flex items-center justify-center flex-col'>
-								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' >Kreiraj Odsek</button>
+								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit' >Kreiraj Izborni Blok</button>
 							</div>
 						</form>
 					</div>

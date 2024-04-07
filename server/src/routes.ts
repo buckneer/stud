@@ -1,14 +1,8 @@
-
-import { handleAddGradesToProfessor, handleAddProfessor, handleAddProfessorsToSubject, handleAddSubjectsToProfessor, handleAddUniToProfessor, handleGetProfessor, handleGetProfessorGrades, handleGetProfessors, handleGiveSign, handleRemoveGradeFromProfessor, handleRemoveUniFromProfessor, handleUpdateProfessor } from "./controllers/professor.controller";
-import { handleAddStudentsUni, handleGetAllUnis, handleNewUni, handleGetUni, handleAddProfessorsToUni, handleAddStudentsToUni, handleAddDepartmentsToUni, handleRemoveDepartmentFromUni, handleAddServicesToUni, handleRemoveServiceFromUni, handleRemoveProfessorFromUni } from "./controllers/university.controller";
 import {
     handleAddUnisToUser,
     handleGetPendingUsers,
     handleGetUser,
     handleGetUserUnisByRole,
-    handleLogin,
-    handleLogout,
-    handleRefresh,
     handleRegister,
     handleRemoveUniFromUser,
     handleSendPasswordMail,

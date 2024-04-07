@@ -180,3 +180,11 @@ export const getOptionalSubjects = async (user: string | undefined, university: 
 
     return subjectObj;
 }
+
+export const getAvailableOptionalSubjects = async (university: string, department: string, semester: string | number, degree: string) => {
+    let depObj = await Department.findOne({ _id: department, university });
+
+    if(!depObj) throw newError(404, 'Ne postoji odsek!');
+
+    return Subject.find({ university, department, semester, degree, type: 'O' });
+}

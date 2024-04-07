@@ -5,6 +5,7 @@ import { useLogoutMutation } from "../../app/api/sessionApiSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { useGetUserUnisRoleQuery } from "../../app/api/userApiSlice";
+import { Link } from "react-router-dom";
 
 function HamburgerMenu() {
 	const session = useSelector((state: RootState) => state.session);
@@ -46,10 +47,12 @@ function HamburgerMenu() {
 					<div className="w-full flex flex-col justify-between h-[90%] overflow-y-hidden">
 						<div className="divide-y-2">
 							<div className="">	
-								<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
-									<CircleUser />
-									<div className="font-black">Profil</div>
-								</div>
+								<Link onClick={() => setOpen(prevState => !prevState)} to={`/uni/${session.metadata.university}/${session.metadata.role}`}>
+									<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+										<CircleUser />
+										<div className="font-black">Profil</div>
+									</div>
+								</Link>
 								<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
 									<GraduationCap />
 									<div className="font-black">Studenti</div>

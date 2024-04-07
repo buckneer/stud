@@ -47,7 +47,7 @@ function RegularMenu() {
 			<div className='menu flex-1 text-center flex gap-2 justify-center align-center'>
 				<NavItem to='/' title="Početna" Icon={Home} />
 				<NavItem to='/login' title='Raspored Ispita' Icon={Table} />
-				<NavItem to={`/uni/${"66057fc6f97b2ad52a249310"}/register`} title='Ispitni rokovi' Icon={ListChecks} />
+				<NavItem to={`/uni/${session.metadata.university}/register`} title='Ispitni rokovi' Icon={ListChecks} />
 			</div>
 
 			<div className='user flex flex-1  text-end justify-end items-center'>
@@ -68,10 +68,11 @@ function RegularMenu() {
 												</Link>
 												{session.user.roles!.includes('service') && (
 													<>
-														<Link to={`/uni/${session.metadata.university}/department/add`} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi odsek</Link>
+														<Link to={`/uni/${session.metadata.university}/department/add`} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Odsek</Link>
 														<Link to={`/uni/${session.metadata.university}/register`} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Korisnik</Link>
 														<Link to={`/uni/${session.metadata.university}/period/add`} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Rok</Link>
 														<Link to={`/uni/${session.metadata.university}/subject/add`} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Predmet</Link>
+														<Link to={`/uni/${session.metadata.university}/optional/add`} className="text-gray-700 block px-4 py-2 text-sm  hover:text-black hover:font-black transition-all" role="menuitem" id="menu-item-1">Novi Izborni Blok</Link>
 													</>
 												)}
 
