@@ -14,7 +14,7 @@ const ProfessorSchema = new Schema({
     user: { type: Schema.ObjectId, ref: 'User' },
     subjects: [{ type: Schema.ObjectId, ref: 'Subject', index: true }], 
     grades: [{ type: Schema.ObjectId, ref: 'Grade', index: true }],
-    university: { type: Schema.ObjectId, ref: 'Univeristy', index: true }
+    university: { type: Schema.ObjectId, ref: 'University', index: true }
 });
 
 const Professor = model<ProfessorDocument>('Professor', ProfessorSchema);

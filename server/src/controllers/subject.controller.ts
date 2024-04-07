@@ -7,7 +7,8 @@ import {
     getSubjectRole,
     getSubjects,
     updateSubject,
-    getEnrollableSubjects, getOptionalSubjects
+    getEnrollableSubjects, getOptionalSubjects,
+    getAvailableOptionalSubjects
 } from "../services/subject.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Subject from "../models/subject.model";
@@ -151,7 +152,6 @@ export async function handleGetProfessorSubjects(req: Request, res: Response) {
     try {
     //     660d4b4f2fc0467794196e9f
         let {uni} = req.params;
-
         let resp = await getProfessorSubjects(req.user!.id, uni);
         return res.status(200).send(resp);
     } catch (e: any) {
@@ -199,13 +199,24 @@ export async function handleGetEnrollableSubjects(req: Request, res: Response) {
 export async function handleGetOptionalSubjects(req: Request, res: Response) {
     try {
         let { uni, dep, sem } = req.params;
-        // WHILE TESTING:
         let user = req?.user?.id;
 
         let resp = await getOptionalSubjects(user, uni, dep);
-
         return res.status(200).send(resp);
     } catch(e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetAvailableOptionalSubjects(req: Request, res: Response) {
+    try {
+        let { uni, dep } = req.params;
+        let { sem, degree } = req.query;
+        
+        // @ts-ignore
+        let resp = await getAvailableOptionalSubjects(uni, dep, sem, degree); 
+        return res.status(200).send(resp);       
+    } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

@@ -1,6 +1,9 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from './app/store';
+import { Navigate } from 'react-router-dom';
 
 import Login from './pages/Login/Login';
 import Register from './pages/service/Register/Register';
@@ -19,8 +22,6 @@ import GradeAdd from './pages/service/GradeAdd/GradeAdd';
 import ServiceAdd from './pages/service/ServiceAdd/ServiceAdd';
 
 import TokenRequired from './components/auth/TokenRequired';
-import { useSelector } from 'react-redux';
-import { RootState } from './app/store';
 import UniAdd from './pages/admin/UniAdd/UniAdd';
 import Container from './components/container';
 import Navbar from './components/Navbar';
@@ -33,6 +34,7 @@ import StudentEdit from './pages/service/StudentEdit/StudentEdit';
 import ExamEdit from './pages/service/ExamEdit/ExamEdit';
 import Departments from "./pages/department/DepartmentHome/DepartmentHome"
 import ProfessorHome from "./pages/professor/ProfessorHome/ProfessorHome";
+import OptionalAdd from './pages/service/OptionalAdd/OptionalAdd';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -75,6 +77,7 @@ function App() {
               <Route path='/uni/:uni/grade/add' element={<GradeAdd/>} />
               <Route path='/uni/:uni/service/add' element={<ServiceAdd/>} />
               <Route path='/uni/:uni/department/:department/edit' element={<DepartmentEdit />} />
+              <Route path="/uni/:uni/optional/add" element={<OptionalAdd />} />
               {/* STUDENT ROUTES */}
               <Route path='/uni/:uni/student' element={<StudentHome />} />
               <Route path='/uni/:uni/departments/' element={<Departments />} />
@@ -89,6 +92,7 @@ function App() {
 
             </Route>
 
+            <Route path="/" element={<Navigate to={`/uni/${session.metadata.university}/${session.metadata.role}`} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>

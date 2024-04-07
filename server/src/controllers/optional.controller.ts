@@ -3,9 +3,10 @@ import { addOptional, getOptional } from '../services/optional.service';
 
 export async function handleAddOptional(req: Request, res: Response) {
 	try {
+		let { uni } = req.params;
 		let data = req.body;
 
-		let resp = await addOptional(data);
+		let resp = await addOptional(uni, data);
 		return res.status(200).send(resp);
 	} catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');

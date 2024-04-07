@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Select, { ActionMeta, MultiValue, SingleValue } from 'react-select';
+import Select from 'react-select';
 import { useAddProfessorMutation, useAddProfessorToSubjectMutation, useAddProfessorToUniMutation, useAddProfessorUnisMutation } from '../../../app/api/professorApiSlice';
 import { useGetUserQuery } from "../../../app/api/userApiSlice";
 import { useLazyGetPendingQuery } from '../../../app/api/userApiSlice';

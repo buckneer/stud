@@ -96,7 +96,7 @@ export const getProfessorSubjects = async (_id: string, uni: string) => {
 
     let professor = await Professor.findOne({user: _id});
     if(!professor) throw newError(404, 'Profesor nije pronađen');
-
+    
     return Subject.find({professors: professor._id, university: uni});
 }
 
@@ -179,4 +179,12 @@ export const getOptionalSubjects = async (user: string | undefined, university: 
     });
 
     return subjectObj;
+}
+
+export const getAvailableOptionalSubjects = async (university: string, department: string, semester: string | number, degree: string) => {
+    let depObj = await Department.findOne({ _id: department, university });
+
+    if(!depObj) throw newError(404, 'Ne postoji odsek!');
+
+    return Subject.find({ university, department, semester, degree, type: 'O' });
 }

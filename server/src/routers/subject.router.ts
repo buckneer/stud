@@ -2,6 +2,7 @@ import express from "express";
 import {
 	handleAddRequiredsToSubject,
 	handleAddSubject,
+	handleGetAvailableOptionalSubjects,
 	handleGetAvailableReqSubjects,
 	handleGetEnrollableSubjects,
 	handleGetOptionalSubjects,
@@ -37,7 +38,7 @@ router.delete('/:sub/required/', handleRemoveRequiredFromSubject);
 router.get('/:sub/role/:role/', handleGetSubjectRole);
 router.patch('/:sub/sign/', handleGiveSign);
 
-router.get('/professor/',
+router.get('/professor/active/',
 	userGuard,
 	AuthGuard([profRoles.professor]), handleGetProfessorSubjects);
 
@@ -52,4 +53,5 @@ router.get('/department/:dep/optional',
 	AuthGuard([{role: 'student'}]),
 	handleGetOptionalSubjects);
 
+	router.get('/department/:dep/optional/available', handleGetAvailableOptionalSubjects);
 export {router as subjectRouter};

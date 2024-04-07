@@ -85,11 +85,11 @@ export interface Subject {
 export interface Optional {
 	_id?: string;
 	name?: string;
-	espb?: number;
+	espb?: number | string;
 	subjects?: string[] | Subject[];
 	semester?: any;
-	department: string | Department;
-	university: string | University;
+	department?: string | Department;
+	university?: string | University;
 }
 
 export interface Grade {

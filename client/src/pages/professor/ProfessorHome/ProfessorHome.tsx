@@ -1,5 +1,5 @@
 import {Helmet} from "react-helmet";
-import React from "react";
+import React, { useEffect } from "react";
 import SidebarItem from "../../../components/SidebarItem/SidebarItem";
 import {Book, CalendarCheck, GraduationCap, LayoutList} from "lucide-react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
@@ -12,7 +12,7 @@ function ProfessorHome() {
 
 	const session = useSelector((state: RootState) => state.session);
 	const dispatch = useDispatch();
-
+	
 	const handleDataChange = (changeTo: number) => {
 		dispatch(setMetadata({ professorTab: changeTo }));
 	}
@@ -26,7 +26,7 @@ function ProfessorHome() {
 			<div className="flex h-full bg-white">
 			{/*	CONTENT */}
 				{session.metadata.professorTab == 0 && (<StudentsTab />)}
-				<Sidebar>
+				<Sidebar role='professor'>
 					<div className="pt-1">
 						<SidebarItem name="Studenti" active={session.metadata.professorTab == 0} to={0} changeData={handleDataChange} Icon={GraduationCap} />
 						<SidebarItem name="Ispitni Rokovi" active={session.metadata.professorTab == 1} to={1} changeData={handleDataChange} Icon={CalendarCheck} />

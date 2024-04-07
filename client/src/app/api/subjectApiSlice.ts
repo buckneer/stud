@@ -70,7 +70,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 		}),
 		getDepSubjects: builder.query <Subject[], { university: string; department: string }> ({
 			query: ({ university, department }) => ({
-				url: `/uni/${university}/department/${department}/subject/`
+				url: `/uni/${university}/subject/department/${department}`
 			}),
 			providesTags: (result, error, arg) => (result) 
 				? [ ...result.map((subject: Subject) => ({ type: 'Subject' as const, id: subject._id })),
@@ -160,6 +160,17 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 					...result.map((subject: Subject ) => ({ type: 'Subject' as const, id: subject._id }))]
 				: [],
 		}),
+		getAvailableOptionalSubjects: builder.query <Subject[], { university: string, department: string, sem: string | number, degree: string }> ({
+			query: ({ university, department, sem, degree }) => ({
+				url: `/uni/${university}/subject/department/${department}/optional/available`,
+				params: { sem, degree }
+			}),
+			providesTags: (result, error, arg) => (result)
+				? [ ...result.map((subj: Subject) => ({ type: 'Subject' as const, id: subj._id })),
+					{ type: 'Department' as const, id: arg.department },
+					{ type: 'University' as const, id: arg.university } ]
+				: [],
+		})
 	})
 });
 
@@ -174,5 +185,6 @@ export const {
 	useAddRequiredSubjectsMutation,
 	useDeleteRequiredSubjectMutation,
 	useGetRequiredSubjectsQuery,
-	useGetAvailableSubjectsQuery
+	useGetAvailableSubjectsQuery,
+	useGetAvailableOptionalSubjectsQuery
 } = subjectApiSlice;

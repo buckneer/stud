@@ -9,6 +9,7 @@ const initialState: Session = {
 	metadata: {
 		studentTab: 0,
 		serviceHome: 0,
+		professorTab: 0,
 		role: ''
 	}
 }
