@@ -376,7 +376,6 @@ export interface GiveSign {
 	subject: string;
 	university: string;
 	body: {
-		professor: string;
 		students: string[];
 	}
 }

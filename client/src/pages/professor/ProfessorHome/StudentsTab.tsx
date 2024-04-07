@@ -1,5 +1,5 @@
 import StudTitle from "../../../components/StudTitle/StudTitle";
-import React, { useState } from "react";
+import React, {ChangeEvent, useState} from "react";
 import Loader from "../../../components/Loader/Loader";
 import Table from "../../../components/Table/Table";
 import TD from "../../../components/Table/TableColumn";
@@ -18,7 +18,7 @@ type SelectProps = {
 function StudentsTab() {
 	const { uni } = useParams();
 	const [ subject, setSubject ] = useState<SelectProps>(); // this one is temp
-
+	const [studentsSelected, setStudentsSelected] = useState<string[]>([]);
 
 	const cols = ['Broj indeksa', 'Ime i prezime', 'Naziv predmeta', 'Potpis']
 	const {
@@ -46,9 +46,24 @@ function StudentsTab() {
 		}
 	] = useGiveSignMutation();
 
+	const handleSelected = (e: ChangeEvent<HTMLInputElement>) => {
+		if(e.target.checked) {
+			setStudentsSelected((prevState : string[]) => [...prevState, e.target.name]);
+		} else {
+			setStudentsSelected((prevState : string[]) => prevState.filter(name => name !== e.target.name))
+		}
+	}
+
 	const handleAddSign = async () => {
+		const body = {
+			university: uni!,
+			subject: subject!.value!,
+			body: {
+				students: studentsSelected
+			}
+		}
 		try {
-			// ADD LOGIC HERE...
+			await addSign(body);
 		} catch (e: any) {
 			console.error(e);
 		}
@@ -56,7 +71,7 @@ function StudentsTab() {
 
 	return (
 		<>
-			<MutationState 
+			<MutationState
 				isLoading={isSubjectLoading || isStudentDataLoading}
 			/>
 			<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full">
@@ -65,12 +80,12 @@ function StudentsTab() {
 					<div className="search-container flex justify-center items-center gap-5">
 						<h1 className="font-bold">Studenti na predmetu: </h1>
 						{
-							isSubjectSuccess && subjectData?.length ? 
+							isSubjectSuccess && subjectData?.length ?
 								<Select maxMenuHeight={200} className="border-0 rounded-xl bg-slate-100" isClearable isSearchable placeholder="Predmeti" onChange={(e: any) => setSubject(e)} options={subjectData.map((item: any) => {
-									return { value: item._id, label: item.name  } 
+									return { value: item._id, label: item.name  }
 								})} />
 								: <div className="p-5">Nema ispita...</div>
-								
+
 						}
 					</div>
 				</div>
@@ -91,7 +106,9 @@ function StudentsTab() {
 												<input
 													type="checkbox"
 													className="rounded-2xl checked:bg-black size-4 checked:border-0 cursor-pointer"
-													/* ADD LOGIC HERE... */
+													name={student._id}
+													checked={studentsSelected.includes(student._id!)}
+													onChange={handleSelected}
 												/>
 												</TD>
 											</>
@@ -99,10 +116,26 @@ function StudentsTab() {
 									}
 								</>
 								: !subject?.value ? <div className="p-5 font-black">Izaberite predmet...</div> : <div className="p-5 font-black">Nema STUDenta...</div>
-								
-								
 						}
 					</Table>
+				</div>
+				<div className="flex justify-center p-5">
+					<div className="bg-green-600
+					shadow-xl
+					text-white
+					rounded-full
+					px-3 py-2
+					font-black
+					cursor-pointer
+					transition-all
+
+					hover:bg-green-800
+
+
+					disabled:bg-gray-500
+					disabled:cursor-not-allowed
+					disabled:shadow-none
+					disabled:text-white" onClick={() => { handleAddSign() }}>Dodeli potpise</div>
 				</div>
 			</div>
 		</>

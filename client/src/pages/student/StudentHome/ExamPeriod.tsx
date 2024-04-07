@@ -113,8 +113,23 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 					</Table>
 				)}
 			</div>
-			<div className="flex justify-end p-5">
-				<div className="bg-slate-100 rounded-2xl px-3 py-2 font-bold cursor-pointer transition-all hover:bg-white hover:border-black border-[1px] border-slate-100" onClick={() => { handleSend() }}>Prijavi izabrane ispite</div>
+			<div className="flex justify-center p-5">
+				<div className="bg-green-600
+					shadow-xl
+					text-white
+					rounded-full
+					px-3 py-2
+					font-black
+					cursor-pointer
+					transition-all
+
+					hover:bg-green-800
+
+
+					disabled:bg-gray-500
+					disabled:cursor-not-allowed
+					disabled:shadow-none
+					disabled:text-white" onClick={() => { handleSend() }}>Prijavi izabrane ispite</div>
 			</div>
 		</div>
 	);

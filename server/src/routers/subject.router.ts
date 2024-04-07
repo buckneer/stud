@@ -15,7 +15,7 @@ import {
 	handleUpdateSubject
 } from "../controllers/subject.controller";
 import {handleAddProfessorsToSubject, handleGiveSign} from "../controllers/professor.controller";
-import {AuthGuard, userGuard} from "../middleware/routeGuard";
+import {AuthGuard, isProfessorOnSubject, userGuard} from "../middleware/routeGuard";
 
 const profRoles = {
 	professor: {role: 'professor'},
@@ -36,7 +36,12 @@ router.delete('/:sub/professor/', handleRemoveProfessorFromSubject);
 router.patch('/:sub/required/', handleAddRequiredsToSubject);
 router.delete('/:sub/required/', handleRemoveRequiredFromSubject);
 router.get('/:sub/role/:role/', handleGetSubjectRole);
-router.patch('/:sub/sign/', handleGiveSign);
+router.patch('/:sub/sign/', userGuard, AuthGuard([
+	{
+		role: 'professor',
+		when: isProfessorOnSubject
+	}
+]), handleGiveSign);
 
 router.get('/professor/active/',
 	userGuard,

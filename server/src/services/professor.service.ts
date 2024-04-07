@@ -9,7 +9,7 @@ import { newError, newResponse } from "../utils";
 export const addProfessor = async (_id: string, professor: ProfessorDocument) => {
     try {
         let universityObj = await University.findOne({ _id });
-       
+
         if(!universityObj) throw newError(404, 'Greška prilikom pristupanja!');
 
         let newProfessor = new Professor (professor);
@@ -17,7 +17,7 @@ export const addProfessor = async (_id: string, professor: ProfessorDocument) =>
         let added = await newProfessor.save();
 
         if(!added) throw newError(500, 'Internal Server Error');
-        
+
         return {id: added._id};
     } catch (e: any) {
         throw e;
@@ -56,7 +56,7 @@ export const updateProfessor = async (professor: string, data: ProfessorDocument
 
         if(!professorObj) throw newError(404, 'Greška prilikom pristupanja!');
 
-        let updated = await Professor.updateOne({ _id: professorObj._id }, { 
+        let updated = await Professor.updateOne({ _id: professorObj._id }, {
             $set: {
                 ...data
             }
@@ -78,7 +78,7 @@ export const addSubjectsToProfessor = async (_id: string, subjects: string[]) =>
 
     // @ts-ignore
     professorObj.subjects = [ ...professorObj.subjects, ...subjects ];
-    
+
     let updated = await professorObj.save();
     if(!updated) throw newError();
 
@@ -90,7 +90,7 @@ export const removeSubjectsFromProfessor = async (_id: string, subjects: string[
 
     if(!professorObj) throw newError(404, 'Ne postoji profesor sa tim id-em');
 
-    // @ts-ignore 
+    // @ts-ignore
     professorObj.subjects = professorObj.subjects?.filter(subject => subjects.indexOf(subject) === -1);
 
     let updated = await professorObj.save();
@@ -118,7 +118,7 @@ export const removeGradesFromProfessor = async (_id: string, grades: string[]) =
 
     if(!professorObj) throw newError(404, 'Ne postoji profesor sa tim id-em');
 
-    // @ts-ignore 
+    // @ts-ignore
     professorObj.subjects = professorObj.subjects?.filter(subject => subjects.indexOf(subject) === -1);
 
     let updated = await professorObj.save();
@@ -140,15 +140,16 @@ export const addSubjectToProfessors = async (_id: string, professors: string[]) 
 }
 
 export const giveSign = async (_id: string, professor: string, students: string[]) => {
-    let professorObj = await Professor.findOne({ _id: professor });
+    let professorObj = await Professor.findOne({ user: professor });
+
 
     if(!professorObj) throw newError(404, 'Ne postoji profesor!');
-
+    console.log(professorObj._id);
     let studentsObj = await Student.find({ _id:  students, subjects: _id });
 
     if(!studentsObj.length) throw newError(400, 'Niste dodali studente!');
 
-    let subject = await Subject.findOne({ _id, professors: professor });
+    let subject = await Subject.findOne({ _id });
 
     if(!subject) throw newError(404, 'Ne postoji predmet!');
 

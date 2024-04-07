@@ -11,17 +11,17 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 				body
 			}),
-			invalidatesTags: (result, error, body) => (result) 
+			invalidatesTags: (result, error, body) => (result)
 				// @ts-ignore
-				? ['Professor'/*, ...body.universities.map((uni: string) => ({ type: 'Uni' as const, id: uni }))*/] 
+				? ['Professor'/*, ...body.universities.map((uni: string) => ({ type: 'Uni' as const, id: uni }))*/]
 				: [],
 		}),
 		getProfessor: builder.query <Professor, { university: string; professor: string }> ({
 			query: ({ university, professor }) => ({
 				url: `/uni/${university}/professor/${professor}/`
-			}), 
-			providesTags: (result, error, arg) => (result) 
-				? [{ type: 'Professor' as const, id: arg.professor }] 
+			}),
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Professor' as const, id: arg.professor }]
 				: [],
 		}),
 		getProfessors: builder.query <Professor[], string | undefined> ({
@@ -30,7 +30,7 @@ const professorApiSlice = apiSlice.injectEndpoints({
 			}),
 			providesTags: (result, error, id) => (result)
 				? [...result.map((prof: Professor) => ({ type: 'Professor' as const, id: prof._id })),
-					{ type: 'Uni' as const, id }] 
+					{ type: 'Uni' as const, id }]
 				: [],
 		}),
 		updateProfessor: builder.mutation <Professor, ProfBody> ({
@@ -39,7 +39,7 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
+			invalidatesTags: (result, error, arg) => (result)
 				? [{ type: 'Professor' as const, id: arg.professor }]
 				: [],
 		}),
@@ -49,9 +49,9 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
+			invalidatesTags: (result, error, arg) => (result)
 				? [...arg.body.professors.map((prof: string) => ({ type: 'Professor' as const, id: prof })),
-					{ type: 'Uni' as const, id: arg.university }] 
+					{ type: 'Uni' as const, id: arg.university }]
 				: [],
 		}),
 		deleteProfessorFromUni: builder.mutation <unknown, DelProfUni> ({
@@ -60,8 +60,8 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
-				? [{ type: 'Professor' as const, id: arg.body.professor }, { type: 'Uni' as const, id: arg.university}]  
+			invalidatesTags: (result, error, arg) => (result)
+				? [{ type: 'Professor' as const, id: arg.body.professor }, { type: 'Uni' as const, id: arg.university}]
 				: [],
 		}),
 		addProfessorToSubject: builder.mutation <unknown, AddProfSub> ({
@@ -70,9 +70,9 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
-				? [{ type: 'Professor' as const, id: arg.professor }, 
-					...arg.body.subjects.map((subject:  string) => ({ type: 'Subject' as const, id: subject }))] 
+			invalidatesTags: (result, error, arg) => (result)
+				? [{ type: 'Professor' as const, id: arg.professor },
+					...arg.body.subjects.map((subject:  string) => ({ type: 'Subject' as const, id: subject }))]
 					: [],
 		}),
 		deleteProfessorFromSubject: builder.mutation <unknown, DelProfSub> ({
@@ -81,8 +81,8 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
-				? [{ type: 'Professor' as const, id: arg.professor }, { type: 'Subject' as const, id: arg.body.subject }] 
+			invalidatesTags: (result, error, arg) => (result)
+				? [{ type: 'Professor' as const, id: arg.professor }, { type: 'Subject' as const, id: arg.body.subject }]
 				: [],
 		}),
 		addProfessorGrade: builder.mutation <unknown, AddProfGrade> ({
@@ -91,9 +91,9 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error,arg ) => (result) 
-				? [{ type: 'Professor' as const, id: arg.professor }, 
-					...arg.body.grades.map((grade: string) => ({ type: 'Grade' as const, id: grade}))] 
+			invalidatesTags: (result, error,arg ) => (result)
+				? [{ type: 'Professor' as const, id: arg.professor },
+					...arg.body.grades.map((grade: string) => ({ type: 'Grade' as const, id: grade}))]
 				: [],
 		}),
 		deleteProfessorGrade: builder.mutation <unknown, DelProfGrade> ({
@@ -109,9 +109,9 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				url: `/uni/${university}/professor/${professor}/uni/`,
 				method: 'PATCH'
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
-				? [{ type: 'Professor', id: arg.professor }, 
-				{ type: 'Uni' as const, id: arg.university }] 
+			invalidatesTags: (result, error, arg) => (result)
+				? [{ type: 'Professor', id: arg.professor },
+				{ type: 'Uni' as const, id: arg.university }]
 				: [],
 		}),
 		deleteProfessorUni: builder.mutation <unknown, DelUniProf> ({
@@ -119,14 +119,14 @@ const professorApiSlice = apiSlice.injectEndpoints({
 				url: `/uni/${university}/professor/${professor}/uni/`,
 				method: 'DELETE'
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
+			invalidatesTags: (result, error, arg) => (result)
 				? [{ type: 'Professor' as const, id: arg.professor },
-					{ type: 'Uni' as const, id: arg.university }] 
+					{ type: 'Uni' as const, id: arg.university }]
 				: [],
 		}),
 		giveSign: builder.mutation <any, GiveSign> ({
 			query: ({ university, subject, body }) => ({
-				url: `/uni/${university}/sign/subject/${subject}/`,
+				url: `/uni/${university}/subject/${subject}/sign`,
 				method: 'PATCH',
 				body
 			}),

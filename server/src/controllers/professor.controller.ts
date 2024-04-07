@@ -156,9 +156,10 @@ export async function handleGetProfessorGrades(req: Request, res: Response) {
 export async function handleGiveSign(req: Request, res: Response) {
     try {
         let { sub } = req.params; // subject
-        let { professor, students } = req.body;
+        let { students } = req.body;
+        let professor = req.user?.id
 
-        let resp = await giveSign(sub, professor, students);
+        let resp = await giveSign(sub, professor!, students);
         return res.status(200).send(resp);
     } catch(e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
