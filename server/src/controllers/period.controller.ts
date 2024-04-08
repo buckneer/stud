@@ -1,6 +1,15 @@
 import { Request, Response } from 'express';
 import Period, { PeriodDocument } from '../models/period.model';
-import { addPeriod, getActivePeriod, getPeriod, getPeriods, getUniPeriods, setPeriodActive, updatePeriod } from '../services/period.service';
+import {
+	addPeriod,
+	getActivePeriod,
+	getPeriod,
+	getPeriods,
+	getUniPeriods,
+	setPeriodActive,
+	setPeriodFinished,
+	updatePeriod
+} from '../services/period.service';
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
 
 export async function handleAddPeriod(req: Request, res: Response) {
@@ -119,6 +128,18 @@ export async function handleSetPeriodActive(req: Request, res: Response) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
 	}
 }
+
+export async function handleSetPeriodFinished(req: Request, res: Response) {
+	try {
+		let { uni, period } = req.params;
+
+		let resp = await setPeriodFinished(period, uni);
+		return res.status(200).send(resp);
+	} catch (e: any) {
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+	}
+}
+
 
 export async function handleGetActivePeriod(req: Request, res: Response) {
 	try {

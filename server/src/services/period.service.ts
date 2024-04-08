@@ -64,14 +64,14 @@ export const setPeriodActive = async (_id: string, uni: string) => {
 	let university = await University.findOne({ _id: uni });
 
 	if(!university) throw newError(404, 'Ne postoji univerzitet!');
-	
+
 	let utcDate = new Date().toISOString();
-	console.log(utcDate)
+
 	let period = await Period.findOneAndUpdate(
-		{ 
-			_id, university: uni, active: false, 
-			acceptDate: { $gt: utcDate }
-		}, 
+		{
+			_id, university: uni, active: false,
+			// acceptDate: { $gt: utcDate }
+		},
 		{
 			$set: { active: true }
 		}
@@ -82,6 +82,25 @@ export const setPeriodActive = async (_id: string, uni: string) => {
 	return newResponse('Uspešno ste objavili rok!', 200);
 }
 
+export const setPeriodFinished = async (_id: string, uni: string) => {
+	let university = await University.findOne({ _id: uni });
+
+	if(!university) throw newError(404, 'Ne postoji univerzitet!');
+
+	let period = await Period.findOneAndUpdate(
+		{
+			_id, university: uni
+		},
+		{
+			$set: { active: false }
+		}
+	);
+
+	if(!period) throw newError(400, 'Ne postoji rok i/ili je već aktivan!');
+
+	return newResponse('Uspešno ste zatvorili rok!', 200);
+}
+
 export const getActivePeriod = async (_id: string) => {
 	let university = await University.findOne({ _id });
 
@@ -89,7 +108,7 @@ export const getActivePeriod = async (_id: string) => {
 
 	let utcDate = new Date().toISOString();
 
-	let period = await Period.findOne({ university: _id, active: true, 
+	let period = await Period.findOne({ university: _id, active: true,
 		end: { $gt: utcDate }
 	});
 

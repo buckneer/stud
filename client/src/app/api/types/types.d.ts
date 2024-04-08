@@ -114,6 +114,7 @@ export interface Period {
 	exams?: string[] | Exam[];
 	university?: string | University;
 	acceptDate?: string;
+	active?: boolean;
 }
 
 export interface Exam {

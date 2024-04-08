@@ -5,7 +5,7 @@ import {
 	handleGetActivePeriod,
 	handleGetPeriod,
 	handleGetPeriods, handleRemoveExamFromPeriod,
-	handleSetPeriodActive,
+	handleSetPeriodActive, handleSetPeriodFinished,
 	handleUpdatePeriod
 } from "../controllers/period.controller";
 
@@ -20,6 +20,7 @@ router.get('/status/active/', handleGetActivePeriod);
 router.post('/', handleAddPeriod);
 
 router.patch('/:period/active/', handleSetPeriodActive);
+router.patch('/:period/finished/', handleSetPeriodFinished);
 router.patch('/:period/', handleUpdatePeriod);
 router.patch('/:period/exam/', handleAddExamToPeriod);
 

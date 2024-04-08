@@ -24,6 +24,7 @@ import { RootState } from '../../app/store';
 import DepartmentHome from '../department/DepartmentHome/DepartmentHome';
 import { setMetadata } from '../../app/slices/sessionSlice';
 import SubjectsTab from '../service/Subjects/SubjectsTab';
+import ServicePeriod from "./ServicePeriod";
 
 const university: string = "65fafc2da919db458f7ed90d";
 const role: string = "student";
@@ -48,6 +49,7 @@ export default function Home() {
         { session.metadata.serviceHome === 0 && <UserContent title={titles[0]} university={uni!} role={engRoles[0]} /> }
         { session.metadata.serviceHome === 1 && <UserContent title={titles[1]} university={uni!} role={engRoles[1]} /> }
         { session.metadata.serviceHome === 2 && <UserContent title={titles[2]} university={uni!} role={engRoles[2]} /> }
+        { session.metadata.serviceHome === 3 && <ServicePeriod /> }
         { session.metadata.serviceHome === 5 && <DepartmentHome /> }
         { session.metadata.serviceHome === 6 && <SubjectsTab /> }
         <Sidebar role="service">
@@ -57,10 +59,10 @@ export default function Home() {
             <SidebarItem name="STUD Služba" to={2} Icon={FolderArchive} active={session.metadata.serviceHome === 2} changeData={handleDataChange}/>
           </div>
           <div className="pt-1">
-            <SidebarItem name="Ispitni Rokovi" Icon={CalendarCheck} />
+            <SidebarItem name="Ispitni Rokovi" to={3} active={session.metadata.serviceHome === 3} changeData={handleDataChange} Icon={CalendarCheck} />
             <SidebarItem name="Ispiti" Icon={LayoutList} />
             <SidebarItem name="Odseci" to={5} Icon={Component} active={session.metadata.serviceHome === 5} changeData={handleDataChange} />
-            <SidebarItem name="Predmeti" to={6} Icon={Book} active={session.metadata.serviceHome === 6} changeData={handleDataChange} />  
+            <SidebarItem name="Predmeti" to={6} Icon={Book} active={session.metadata.serviceHome === 6} changeData={handleDataChange} />
           </div>
         </Sidebar>
       </div>

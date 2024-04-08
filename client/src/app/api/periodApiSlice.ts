@@ -31,24 +31,24 @@ const periodApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 				body
 			}),
-			invalidatesTags: (result, error) => (result) 
-				? [{ type: 'Period' as const }] 
+			invalidatesTags: (result, error) => (result)
+				? [{ type: 'Period' as const }]
 				: [],
 		}),
 		getPeriod: builder.query <Period, { university: string; id: string }> ({
 			query: ({ university, id }) => ({
 				url: `/period/${id}/`
 			}),
-			providesTags: (result, error, arg) => (result) 
-				? [{ type: 'Period' as const, id: arg.id }] 
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Period' as const, id: arg.id }]
 				: [],
 		}),
 		getUniPeriods: builder.query <Period[], { university: string }> ({
-			query: (university) => ({
+			query: ({university}) => ({
 				url: `/uni/${university}/period`
 			}),
-			providesTags: (result, error) => (result) 
-				? [...result.map((period: Period) => ({ type: 'Period' as const, id: period._id }))] 
+			providesTags: (result, error) => (result)
+				? [...result.map((period: Period) => ({ type: 'Period' as const, id: period._id }))]
 				: [],
 		}),
 		updatePeriod: builder.mutation <unknown, UpdatePeriod> ({
@@ -57,8 +57,8 @@ const periodApiSlice = apiSlice.injectEndpoints({
 				method: 'PATCH',
 				body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
-			? [{ type: 'Period' as const, id: arg.id }] 
+			invalidatesTags: (result, error, arg) => (result)
+			? [{ type: 'Period' as const, id: arg.id }]
 			: [],
 		}),
 		addPeriodExams: builder.mutation <unknown, PeriodExam> ({
@@ -67,9 +67,9 @@ const periodApiSlice = apiSlice.injectEndpoints({
 					method: 'PATCH',
 					body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
-				? [{ type: 'Period' as const, id: arg.period }, 
-					...arg.body.exams.map((exam: string) => ({ type: 'Exam' as const, id: exam}))] 
+			invalidatesTags: (result, error, arg) => (result)
+				? [{ type: 'Period' as const, id: arg.period },
+					...arg.body.exams.map((exam: string) => ({ type: 'Exam' as const, id: exam}))]
 				: [],
 		}),
 		deletePeriodExam: builder.mutation <unknown, DelPeriod> ({
@@ -78,23 +78,23 @@ const periodApiSlice = apiSlice.injectEndpoints({
 				method: 'DELETE',
 				body
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
-			? [{ type: 'Period' as const, id: arg.period }, { type: 'Exam' as const, id: arg.body.exam }] 
+			invalidatesTags: (result, error, arg) => (result)
+			? [{ type: 'Period' as const, id: arg.period }, { type: 'Exam' as const, id: arg.body.exam }]
 			: [],
 		}),
-		setPeriodActive: builder.mutation <any, { university: string, period: string }> ({
-			query: ({ university, period }) => ({
-				url: `/uni/${university}/period/${period}/active`,
+		setPeriodActive: builder.mutation <any, { university: string, period: string, active: string }> ({
+			query: ({ university, period, active }) => ({
+				url: `/uni/${university}/period/${period}/${active}`,
 				method: 'PATCH'
 			}),
-			invalidatesTags: (result, error, arg) => (result) 
+			invalidatesTags: (result, error, arg) => (result)
 				? [{ type: 'Period' as const }]
 				: [],
 		}),
 		getActivePeriod: builder.query <Period | any, string> ({
 			query: (university) => ({
 				url: `/uni/${university}/period/active/`
-			}), 
+			}),
 			providesTags: (result, error, id) => (result)
 				? [{ type: 'University' as const, id },
 					{ type: 'Period' as const, id: result?.id || 'NONE' }]
@@ -110,5 +110,6 @@ export const {
 	useUpdatePeriodMutation,
 	useAddPeriodExamsMutation,
 	useDeletePeriodExamMutation,
+	useSetPeriodActiveMutation,
 	useGetActivePeriodQuery
 } = periodApiSlice;
