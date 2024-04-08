@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Select, { ActionMeta, MultiValue } from 'react-select';
-import { useAddProfessorToSubjectMutation, useAddProfessorToUniMutation, useAddProfessorUnisMutation, useGetProfessorQuery, useUpdateProfessorMutation } from '../../../app/api/professorApiSlice';
+import { useAddProfessorToSubjectMutation, useAddProfessorToUniMutation, useAddProfessorUnisMutation, useGetProfessorQuery, useGetSubjectProfessorsQuery, useUpdateProfessorMutation } from '../../../app/api/professorApiSlice';
 import { useGetUserQuery } from "../../../app/api/userApiSlice";
 import { useLocation, useParams } from 'react-router-dom';
 import { useGetUniSubjectsQuery } from '../../../app/api/subjectApiSlice';
@@ -33,9 +33,16 @@ const ProfessorEdit = () => {
 		isLoading: isProfessorDataLoading,
 		isSuccess: isProfessorDataSuccess,
 		isError: isProfessorDataError
-	} = useGetProfessorQuery(profId!, {
+	} = useGetProfessorQuery({university: uni!, professor: profId!}!, {
 		skip: !profId || !session.accessToken
 	});
+
+	const {
+		data: profSubjectsData,
+		isLoading: isProfSubjectsLoading,
+		isSuccess: isProfSubjectsSuccess,
+		isError: isProfSubjectstError
+	} = useGetSubjectProfessorsQuery(uni!);
 
 	const {
 		data: userData,
@@ -58,7 +65,7 @@ const ProfessorEdit = () => {
 	// ----------------FUNCTIONS---------------- //
 	
 	const [
-		EditProfessor,
+		editProfessor,
 		{
 			isLoading: isProfessorEditLoading,
 			isSuccess: isProfessorEditSuccess,
@@ -187,6 +194,12 @@ const ProfessorEdit = () => {
 		}
 
 	}, [isProfessorDataSuccess, isUserDataSuccess]);
+
+	useEffect(() => {
+		// @ts-ignore
+		setSubjects(profSubjectsData);
+		console.log(subjectsData)
+	},[isProfSubjectsSuccess])
 
 	return (
 		<>
