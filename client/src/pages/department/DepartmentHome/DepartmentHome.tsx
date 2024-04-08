@@ -4,7 +4,7 @@ import StudTitle from "../../../components/StudTitle/StudTitle";
 import Loader from "../../../components/Loader/Loader";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import SidebarItem from "../../../components/SidebarItem/SidebarItem";
-import { Book, CalendarCheck, CirclePlus, Delete, LayoutList, Pencil, Settings, Trash2, University } from "lucide-react";
+import { Book, CalendarCheck, CirclePlus, Delete, LayoutList, Pencil, Settings, Trash2, University, X } from 'lucide-react';
 import { useGetUniDepartmentsQuery } from "../../../app/api/departmentApiSlice";
 import { useParams } from "react-router";
 import { RootState } from '../../../app/store';
@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import { useGetUniQuery } from "../../../app/api/uniApiSlice";
 import Modal from "../../../components/Modal/Modal";
 import InputField from "../../../components/InputField/InputField";
+import Table from "../../../components/Table/Table";
+import TD from "../../../components/Table/TableColumn";
 
 function DepartmentHome() {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -46,14 +48,15 @@ function DepartmentHome() {
 		const { _id, name } = department;
 		const studentNumber = department.students?.length;
 		return (
-			<tr className="border-b-2">
-				{/* @ts-ignore */}
-				<td className="py-2">{name}</td>
-				<td className="py-2">{studentNumber ? studentNumber : "Nema studenata"}</td>
-				<td className="py-2 flex gap-3 justify-center">
-					<Link to={`http://localhost:3000/uni/${uni}/department/${_id}/edit`} className="hover:rotate-12 transition"><Pencil /></Link>
-					<div className="hover:rotate-12 transition "><Trash2 onClick={() => { setIsOpen(true); setDepName(name); setDepId(_id) }} /></div>
-				</td>
+			<tr key={_id}>
+				<TD>{ name }</TD>
+				<TD>{studentNumber ? studentNumber : "Nema studenata"}</TD>
+				<TD>
+					<div className="flex w-full justify-center gap-2">
+						<Link to={`http://localhost:3000/uni/${uni}/department/${_id}/edit`} className="hover:rotate-12 transition"><Pencil /></Link>
+						<div className="hover:rotate-12 transition cursor-pointer hover:text-red-500 "><Trash2 onClick={() => { setIsOpen(true); setDepName(name); setDepId(_id) }} /></div>
+					</div>
+				</TD>
 			</tr>
 		)
 	});
@@ -93,33 +96,25 @@ function DepartmentHome() {
 				<title>Odseci | Stud</title>
 			</Helmet>
 		
-			<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full">
+			<div className="lists-container flex-1 h-full overflow-y-scroll w-full bg-white">
 				<Modal isOpen={isOpen} setIsOpen={setIsOpen} id={depId} content={Modalcontent} message="Da li ste sigurni da zelite da obrisete odsek?" deleteFunc={handleDeleteDep} >
 					<div className="lists-container flex-1 h-full py-5 w-full">
-						<div className="list-header flex justify-end p-5 ">
-							<div className="search-container flex items-center gap-2">
-								<Link to={`http://localhost:3000/uni/${uni}/department/add`} className="flex gap-2 items-center">
-									<div className="font-semibold">
-										Dodaj odsek
-									</div>
-									<CirclePlus size={26} />
-								</Link>
-								<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
+						<div className="list-header flex justify-between p-5 items-center">
+								<StudTitle text='Odseci'/>
+								<div className="search-container flex items-center gap-2">
+									<Link to={`http://localhost:3000/uni/${uni}/department/add`} className="add-field flex gap-3 rounded-2xl bg-slate-100 p-2 border-[1px] border-slate-200 cursor-pointer hover:bg-slate-200">
+										<div className="font-semibold">
+											Novi odsek
+										</div>
+										<CirclePlus size={26} />
+									</Link>
+									<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
 							</div>
 						</div>
 						<div className="w-full flex justify-center">
-							<table className="w-4/5 text-center mt-5 rounded-2xl overflow-hidden">
-								<thead>
-									<tr className="border-b-2 bg-slate-100 h-12">
-										<th className="text-lg">Odsek</th>
-										<th className="text-lg">Broj Studenata</th>
-										<th className="text-lg">Akcije</th>
-									</tr>
-								</thead>
-								<tbody>
-									{tableContent}
-								</tbody>
-							</table>
+							<Table cols={['Odsek', 'Broj studenata', 'Akcije']}>								
+								{ tableContent }
+							</Table>
 						</div>
 					</div>
 				</Modal>

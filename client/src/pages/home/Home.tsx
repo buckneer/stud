@@ -25,6 +25,7 @@ import DepartmentHome from '../department/DepartmentHome/DepartmentHome';
 import { setMetadata } from '../../app/slices/sessionSlice';
 import SubjectsTab from '../service/Subjects/SubjectsTab';
 import ServicePeriod from "./ServicePeriod";
+import ServiceExam from './ServiceExam';
 
 const university: string = "65fafc2da919db458f7ed90d";
 const role: string = "student";
@@ -50,6 +51,7 @@ export default function Home() {
         { session.metadata.serviceHome === 1 && <UserContent title={titles[1]} university={uni!} role={engRoles[1]} /> }
         { session.metadata.serviceHome === 2 && <UserContent title={titles[2]} university={uni!} role={engRoles[2]} /> }
         { session.metadata.serviceHome === 3 && <ServicePeriod /> }
+        { session.metadata.serviceHome === 4 && <ServiceExam /> }
         { session.metadata.serviceHome === 5 && <DepartmentHome /> }
         { session.metadata.serviceHome === 6 && <SubjectsTab /> }
         <Sidebar role="service">
@@ -60,7 +62,7 @@ export default function Home() {
           </div>
           <div className="pt-1">
             <SidebarItem name="Ispitni Rokovi" to={3} active={session.metadata.serviceHome === 3} changeData={handleDataChange} Icon={CalendarCheck} />
-            <SidebarItem name="Ispiti" Icon={LayoutList} />
+            <SidebarItem name="Ispiti" to={4} active={session.metadata.serviceHome === 4} changeData={handleDataChange}  Icon={LayoutList} />
             <SidebarItem name="Odseci" to={5} Icon={Component} active={session.metadata.serviceHome === 5} changeData={handleDataChange} />
             <SidebarItem name="Predmeti" to={6} Icon={Book} active={session.metadata.serviceHome === 6} changeData={handleDataChange} />
           </div>

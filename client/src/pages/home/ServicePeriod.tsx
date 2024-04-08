@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import StudTitle from "../../components/StudTitle/StudTitle";
 import {BadgeAlert, BadgeCheck, Check, PlusCircle, SquareCheckBig, X} from "lucide-react";
 import Table from "../../components/Table/Table";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useGetUniPeriodsQuery, useSetPeriodActiveMutation} from "../../app/api/periodApiSlice";
 import Loader from "../../components/Loader/Loader";
 import TD from "../../components/Table/TableColumn";
@@ -54,10 +54,12 @@ function ServicePeriod() {
 		<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full bg-white">
 			<div className="list-header flex justify-between p-5 items-center ">
 				<StudTitle text={"Ispitni Rokovi"} />
-				<div className="add-field flex gap-3 rounded-2xl bg-slate-100 p-2 border-[1px] border-slate-200 cursor-pointer hover:bg-slate-200">
-					<h1 className="font-bold">Novi ispitni rok</h1>
-					<PlusCircle />
-				</div>
+				<Link to={`/uni/${uni}/period/add`}>
+					<div className="add-field flex gap-3 rounded-2xl bg-slate-100 p-2 border-[1px] border-slate-200 cursor-pointer hover:bg-slate-200">
+						<h1 className="font-bold">Novi ispitni rok</h1>
+						<PlusCircle />
+					</div>
+				</Link>
 			</div>
 			<div className="w-full flex justify-center">
 				{isLoading || periodActiveLoading && <Loader />}
@@ -65,8 +67,8 @@ function ServicePeriod() {
 					<Table cols={cols}>
 						{periodData && periodData.map(period => (
 							<tr key={period._id}>
-								<TD>{period.type}</TD>
-								<TD>{period.semester}</TD>
+								<TD>{period.type == 0 ? 'Vanredni' : 'Regularni'}</TD>
+								<TD>{period.semester ==	1 ? 'Zimski' : period.semester == 0 ? 'Letnji' : 'Oba'}</TD>
 								<TD>{period.name}</TD>
 								<TD>{formatDate(period.start!)}</TD>
 								<TD>{formatDate(period.end!)}</TD>

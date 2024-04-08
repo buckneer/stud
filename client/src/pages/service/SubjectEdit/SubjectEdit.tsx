@@ -115,14 +115,14 @@ const SubjectAdd = () => {
 			<div className='flex-grow flex justify-center items-center'>
 				<div className='card'>
 					<div className='form-header'>
-						<div className="form-title">Azuriranje Predmeta</div>
-						<div className="form-desc" >Azurirajte predmet</div>
+						<div className="form-title">Ažuriranje Predmeta</div>
+						<div className="form-desc" >Ažurirajte predmet</div>
 						<MutationState
 							isLoading={isUpdateSubjectLoading}
 							isSuccess={isUpdateSubjectSuccess}
-							successMessage='Uspešno azuriranje predmeta!'
+							successMessage='Uspešno ažuriranje predmeta!'
 							isError={isUpdateSubjectError}
-							errorMessage='Greška prilikom azuriranja predmeta'
+							errorMessage='Greška prilikom ažuriranja predmeta!'
 						/>
 					</div>
 					<form className='flex flex-col' onSubmit={handleSubjectEdit}>

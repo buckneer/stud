@@ -47,7 +47,7 @@ function RegularMenu() {
 			<div className='menu flex-1 text-center flex gap-2 justify-center align-center'>
 				<NavItem to='/' title="Početna" Icon={Home} />
 				<NavItem to='/login' title='Raspored Ispita' Icon={Table} />
-				<NavItem to={`/uni/${session.metadata.university}/register`} title='Ispitni rokovi' Icon={ListChecks} />
+				<NavItem to={`/uni/${session.metadata.university}/register`} title='Registracija' Icon={ListChecks} />
 			</div>
 
 			<div className='user flex flex-1  text-end justify-end items-center'>

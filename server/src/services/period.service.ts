@@ -66,6 +66,12 @@ export const setPeriodActive = async (_id: string, uni: string) => {
 	if(!university) throw newError(404, 'Ne postoji univerzitet!');
 
 	let utcDate = new Date().toISOString();
+	
+	// await Period.updateMany({ university: uni }, {
+	// 	$set: {
+	// 		active: false
+	// 	}
+	// });
 
 	let period = await Period.findOneAndUpdate(
 		{
@@ -76,6 +82,7 @@ export const setPeriodActive = async (_id: string, uni: string) => {
 			$set: { active: true }
 		}
 	);
+
 
 	if(!period) throw newError(400, 'Ne postoji rok i/ili je već aktivan!');
 

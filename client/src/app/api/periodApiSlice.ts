@@ -93,7 +93,7 @@ const periodApiSlice = apiSlice.injectEndpoints({
 		}),
 		getActivePeriod: builder.query <Period | any, string> ({
 			query: (university) => ({
-				url: `/uni/${university}/period/active/`
+				url: `/uni/${university}/period/status/active/`
 			}),
 			providesTags: (result, error, id) => (result)
 				? [{ type: 'University' as const, id },

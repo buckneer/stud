@@ -6,6 +6,7 @@ import {Session} from "../../../app/api/types/types";
 import StudTitle from "../../../components/StudTitle/StudTitle";
 import Loader from "../../../components/Loader/Loader";
 import TD from "../../../components/Table/TableColumn";
+import { useGetActivePeriodQuery } from "../../../app/api/periodApiSlice";
 
 export interface IExamPeriod {
 	session: Session,
@@ -34,6 +35,13 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 		isSuccess: isExamSuccess,
 		isError: isExamError,
 	} = useGetAvailableExamsQuery({ university: uni, id: session.user._id });
+
+	const {
+		data: activeExamData,
+		isLoading: isAcExamLoading,
+		isSuccess: isAcExamSuccess,
+		isError: isAcExamError
+	} = useGetActivePeriodQuery(uni!);
 
 	const [
 		addExams,
@@ -84,7 +92,11 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 	return (
 		<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full">
 			<div className="list-header flex justify-between p-5 ">
-				<StudTitle text={"Januarsko-Februarski ispitni rok"} />
+				{ isAcExamLoading && <Loader /> }
+				{ 
+					<StudTitle text={isAcExamSuccess && activeExamData?.name ? activeExamData.name : 'Nema ispitnog roka...'} />
+				}
+				
 				<div className="search-container">
 					<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
 				</div>
