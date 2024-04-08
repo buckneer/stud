@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addGrade, getGrade, getGrades, updateGrade } from "../services/grade.service";
+import { addGrade, getGrade, getGrades, getStats, updateGrade } from "../services/grade.service";
 
 export async function handleAddGrade(req: Request, res: Response) {
     try {
@@ -56,3 +56,14 @@ export async function handleUpdateGrade(req: Request, res: Response) {
     }
 }
 
+export async function handleGetStats(req: Request, res: Response) {
+    try {
+        let { uni } = req.params;
+        let { id } = req!.user!;
+
+        let resp = await getStats(id, uni);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}

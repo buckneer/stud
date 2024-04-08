@@ -50,6 +50,14 @@ export const getStudent = async (_id: string) => {
     return student;
 }
 
+export const getStudentByUser = async (user: string, university: string) => {
+    let student = await Student.findOne({ user, university }).populate('user');
+
+    if(!student) throw newError(404, 'Ne postoji student!');
+
+    return student;
+}
+
 export const updateStudent = async (studentId: string, student: StudentDocument) => {
     // TODO implmenet update student;
 }

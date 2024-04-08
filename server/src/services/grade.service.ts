@@ -81,3 +81,40 @@ export const getGradesByRole = async (_id: string, ModelParam: Model<any>, confi
         select: '_id name'
     });
 }
+
+// TODO: maybe add subject progress...
+export const getStats = async (user: string, university: string) => {
+    let student = await Student.findOne({ user, university });
+
+    if(!student) throw newError(400, 'Ne postoji student!');
+
+    let grades = await Grade.find({ student }, { serviceGrade: 1, _id: 0 });
+    let examCount = await Exam.count({ students: student._id, ended: true });
+    let subjects = await Subject.find({ _id: student.completedSubjects }, { espb: 1 });
+
+    let espb = 0;
+    let passed = subjects.length;
+    let failed = grades.length - passed;
+    let average = 0;
+
+    let gradesNum = [
+        { grade: 6, count: 0 },
+        { grade: 7, count: 0 },
+        { grade: 8, count: 0 },
+        { grade: 9, count: 0 },
+        { grade: 10, count: 0 },
+    ];
+
+    subjects.forEach((sub) => espb += sub.espb);
+
+    grades.forEach((grade: any) => {
+        if(grade.serviceGrade > 5) {
+            gradesNum[grade.serviceGrade - 6].count++;
+        } 
+    });
+    
+
+    average = parseFloat((average / grades.length).toFixed(2)) || 0;
+    
+    return { average, passed, failed, examCount, gradesNum, espb }
+}

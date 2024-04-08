@@ -54,6 +54,16 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 					{ type: 'Role' as const, id: arg.role }] // remove this perhaps
 				: [],
 		}),
+		getStats: builder.query <any, string> ({
+			query: (university) => ({
+				url: `/uni/${university}/grade/student/stats`
+			}), 
+			providesTags: (result, error, id) => (result)
+				? [{ type: 'University' as const, id },
+					{ type: 'Grade' as const }
+				]
+				: []
+		})
 	})
 });
 
@@ -63,4 +73,5 @@ export const {
 	useGetGradesQuery,
 	useUpdateGradeMutation,
 	useGetGradesByRoleQuery,
+	useGetStatsQuery
 } = gradeApiSlice;

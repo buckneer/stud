@@ -96,7 +96,7 @@ function StudentsTab() {
 							isSubjectSuccess && isStudentDataSuccess && studentData?.length ?
 								<>
 									{
-										studentData.map((student) => (
+										studentData.map((student: any) => (
 											<>
 												<TD>{ student.studentId }</TD>
 												{/* @ts-ignore */}

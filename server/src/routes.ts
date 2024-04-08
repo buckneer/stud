@@ -9,7 +9,7 @@ import {
     handleSetPassword, handleUserDelete
 } from "./controllers/user.controller";
 import { Express, Request, Response } from "express";
-import {AuthGuard, isServiceInUniversity, roleGuard, userGuard} from "./middleware/routeGuard";
+import {AuthGuard, isServiceInUniversity, userGuard} from "./middleware/routeGuard";
 import {depRouter} from "./routers/department.router";
 import {sessionRouter} from "./routers/user.router";
 import {uniRouter} from "./routers/university.router";
@@ -21,6 +21,7 @@ import {gradeRouter} from "./routers/grade.router";
 import {examRouter} from "./routers/exam.router";
 import {periodRouter} from "./routers/period.router";
 import {serviceRouter} from "./routers/service.router";
+import { handleGetStudentByUser } from "./controllers/student.controller";
 
 
 // TEST TOKENS:
@@ -52,6 +53,7 @@ export default function (app: Express) {
     app.get('/uni/:uni/user/:role/pending/', handleGetPendingUsers);
     app.delete('/user', handleUserDelete);
     app.get('/user/:id/uni/role/:role/', handleGetUserUnisByRole);
+    app.get('/uni/:uni/user/student', userGuard, handleGetStudentByUser)
 
     app.use('/', sessionRouter);
     app.use('/uni', uniRouter);

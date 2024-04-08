@@ -42,6 +42,15 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'Student' as const, id: arg.id }]
 				: []
 		}),
+		getStudentByUser: builder.query <Student, string> ({
+			query: (university) => ({
+				url: `/uni/${university}/user/student`,
+			}),
+			providesTags: (result, err, id) => (result)
+				? [{ type: 'University' as const, id },
+					{ type: 'Student' as const, id: result._id}]
+				: [],
+		}), 
 		deleteStudent: builder.mutation <unknown, string> ({
 			query: (id) => ({
 				url: `/student/${id}/`,
@@ -125,6 +134,7 @@ export const {
 	useAddStudentToUniMutation,
 	useAddStudentExamsMutation,
 	useGetStudentQuery,
+	useGetStudentByUserQuery,
 	useGetUniStudentsQuery,
 	useDeleteStudentUniMutation,
 	useDeleteStudentMutation,

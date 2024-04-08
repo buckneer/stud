@@ -6,6 +6,7 @@ import {
     addSubjectsToStudent,
     deleteStudent,
     getStudent,
+    getStudentByUser,
     getStudents,
     getStudentsByDepartment,
     getStudentsBySemester, getStudentsBySubject
@@ -54,6 +55,18 @@ export async function handleGetStudent(req: Request, res: Response) {
         return res.status(200).send(resp);
     } catch (e: any) {
         log.error(e.message);
+		return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetStudentByUser(req: Request, res: Response) {
+    try {
+        let { uni } = req.params;
+        let { id } = req?.user!;
+
+        let resp = await getStudentByUser(id, uni);
+        return res.status(200).send(resp);
+    } catch (e: any) {
 		return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }
