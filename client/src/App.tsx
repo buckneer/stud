@@ -36,6 +36,7 @@ import Departments from "./pages/department/DepartmentHome/DepartmentHome"
 import ProfessorHome from "./pages/professor/ProfessorHome/ProfessorHome";
 import OptionalAdd from './pages/service/OptionalAdd/OptionalAdd';
 import RoleGuard from './components/auth/RoleGuard';
+import ProfessorEdit from './pages/service/ProfessorEdit/ProfessorEdit';
 
 function App() {
   const session = useSelector((state: RootState) => state.session);
@@ -70,6 +71,7 @@ function App() {
                 <Route path='/uni/:uni/student/add' element={<StudentAdd/>} />
                 <Route path='/uni/:uni/student/:id/edit' element={<StudentEdit />} />
                 <Route path='/uni/:uni/professor/add' element={<ProfessorAdd/>} />
+                <Route path='/uni/:uni/professor/:id/edit' element={<ProfessorEdit/>} />
                 <Route path='/uni/:uni/department/add' element={<DepartmentAdd/>} />
                 <Route path='/uni/:uni/department/:id/edit' element={<DepartmentEdit/>} />
                 <Route path='/uni/:uni/period/add' element={<PeriodAdd/>} />
