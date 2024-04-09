@@ -51,7 +51,7 @@ const Login = () => {
 			// TODO get university where this user is service. (FROM service model)
 			let redirectUrl = `/uni/${unis[0].university._id}/${result.user.roles![0]}`;
 
-			(location?.state?.from) ? navigate(location.state.from) : navigate(redirectUrl);
+			(location?.state.from.startsWith(redirectUrl)) ? navigate(location.state.from) : navigate(redirectUrl);
 
 
 		} catch (error: any) {

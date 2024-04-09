@@ -1,15 +1,17 @@
 import React, {useState} from "react";
-import {CircleUser, CircleX, GraduationCap, LogOutIcon, Menu} from "lucide-react";
+import {Book, CalendarCheck, CircleUser, CircleX, Component, FolderArchive, GraduationCap, LayoutList, LogOutIcon, Menu, User} from "lucide-react";
 import NavItem from "./NavItem";
 import { useLogoutMutation } from "../../app/api/sessionApiSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { useGetUserUnisRoleQuery } from "../../app/api/userApiSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { setMetadata } from "../../app/slices/sessionSlice";
 
 function HamburgerMenu() {
 	const session = useSelector((state: RootState) => state.session);
-
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
 
 	const [ logout ] = useLogoutMutation();
@@ -25,6 +27,19 @@ function HamburgerMenu() {
 	const {
 		data: uniData
 	} = useGetUserUnisRoleQuery({ user: session.user._id!, role: session.metadata.role! });
+
+	const handleLinkChange = (index: number, url = `/uni/${session.metadata.university}/${session.metadata.role}`) => {
+		if(session.metadata.role === 'service') {
+			dispatch(setMetadata({ serviceHome: index }));
+		}	else if (session.metadata.role === 'professor') {
+			dispatch(setMetadata({ professorTab: index }));
+		} else {
+			dispatch(setMetadata({ studentTab: index }));
+		}
+		
+		navigate(url);
+		setOpen(false);
+	}
 
 	return (
 		<div className="navbar bg-black pb-5 text-white mx-7 mt-3 flex align-center justify-between z-[999]">
@@ -46,35 +61,116 @@ function HamburgerMenu() {
 					</div>
 					<div className="w-full flex flex-col justify-between h-[90%] overflow-y-hidden">
 						<div className="divide-y-2">
-							<div className="">	
-								<Link onClick={() => setOpen(prevState => !prevState)} to={`/uni/${session.metadata.university}/${session.metadata.role}`}>
-									<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
-										<CircleUser />
-										<div className="font-black">Profil</div>
-									</div>
-								</Link>
-								<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
-									<GraduationCap />
-									<div className="font-black">Studenti</div>
-								</div>
-								<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
-									<GraduationCap />
-									<div className="font-black">Studenti</div>
-								</div>
-							</div>
 							<div className="">
-								<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
-									<GraduationCap />
-									<div className="font-black">Studenti</div>
-								</div>
-								<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
-									<GraduationCap />
-									<div className="font-black">Studenti</div>
-								</div>
-								<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
-									<GraduationCap />
-									<div className="font-black">Studenti</div>
-								</div>
+								{
+									session.metadata.role === 'service' ? 
+										<>
+											<div className="divide-y-2">
+												<div>
+													<div onClick={() => handleLinkChange(0)}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<GraduationCap />
+															<div className="font-black">STUDenti</div>
+														</div>
+													</div>
+													<div onClick={() => handleLinkChange(1)}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<User />
+															<div className="font-black">Profesori</div>
+														</div>
+													</div>
+													<div onClick={() => handleLinkChange(2)}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<FolderArchive />
+															<div className="font-black">STUD služba</div>
+														</div>
+													</div>
+												</div>
+												<div>
+													<div onClick={() => handleLinkChange(3)}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<CalendarCheck />
+															<div className="font-black">Ispitni rokovi</div>
+														</div>
+													</div>
+													<div onClick={() => handleLinkChange(4)}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<LayoutList />
+															<div className="font-black">Ispiti</div>
+														</div>
+													</div>
+													<div onClick={() => handleLinkChange(5)}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<Component />
+															<div className="font-black">Odseci</div>
+														</div>
+													</div>
+													<div onClick={() => handleLinkChange(6 )}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<Book />
+															<div className="font-black">Predmeti</div>
+														</div>
+													</div>
+												</div>
+											</div>
+												
+										</>
+									: session.metadata.role === 'professor' ? 
+										<>
+										<div onClick={() => handleLinkChange(0)}>
+											<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+												<GraduationCap />
+												<div className="font-black">STUDenti</div>
+											</div>
+										</div>
+										<div onClick={() => handleLinkChange(1)}>
+											<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+												<CalendarCheck />
+												<div className="font-black">Ispitni rokovi</div>
+											</div>
+										</div>
+										<div onClick={() => handleLinkChange(2)}>
+											<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+												<LayoutList />
+												<div className="font-black">Ispiti</div>
+											</div>
+										</div>	
+										<div onClick={() => handleLinkChange(3)}>
+											<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+												<Book />
+												<div className="font-black">Predmeti</div>
+											</div>
+										</div>	
+										
+										</>
+									: 
+										<>
+											<div onClick={() => handleLinkChange(0)}>
+												<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+													<CircleUser />
+													<div className="font-black">Početna</div>
+												</div>
+											</div>
+											<div onClick={() => handleLinkChange(1)}>
+												<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+													<CalendarCheck />
+													<div className="font-black">Ispitni rokovi</div>
+												</div>
+											</div>
+											<div onClick={() => handleLinkChange(2)}>
+												<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+													<LayoutList />
+													<div className="font-black">Ispiti</div>
+												</div>
+											</div>
+											<div onClick={() => handleLinkChange(3)}>
+												<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+													<Book />
+													<div className="font-black">Predmeti</div>
+												</div>
+											</div>
+										</>
+								}
 							</div>
 						</div>
 						<div className="">

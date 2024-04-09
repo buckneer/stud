@@ -34,11 +34,11 @@ const Navbar = () => {
 
 	React.useEffect(() => {
 		const handleNavBar = () => {
-			if (window.innerWidth < 1245 && regular) {
+			if (window.innerWidth < 1280 && regular) {
 				setRegular(false);
 			}
 
-			if (window.innerWidth >= 1245) {
+			if (window.innerWidth >= 1280) {
 				setRegular(true);
 			}
 		};
