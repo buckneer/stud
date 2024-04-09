@@ -10,6 +10,7 @@ import TD from '../../../components/Table/TableColumn';
 import ModelNum from './ModelNum';
 import ExamCard from '../../../components/ExamCard/ExamCard';
 import { BookOpenCheck, CaptionsOff, LayoutList, LineChart, Link } from 'lucide-react';
+import ChartBar from '../../../components/ChartBar/ChartBar';
 
 export interface IProfile {
 	session: Session;
@@ -33,7 +34,7 @@ const Profile = ({ session, uni }: IProfile) => {
 	} = useGetStatsQuery(uni!, {
 		skip: !studentData
 	});
-	
+
 	return (
 		<>
 			<Helmet>
@@ -89,15 +90,16 @@ const Profile = ({ session, uni }: IProfile) => {
 							</div>
 						</div>
 
-						<div className="w-full flex justify-center">
+						<div className="w-full flex justify-center my-3">
+							<div className="w-4/5 h-[300px] flex justify-center">
+								<ChartBar 
+									title='OCENE'	
+									labels={['6', '7', '8', '9', '10']} 
+									data={stats.gradesNum.map((grade: any) => grade.count)} 
+									backgroundColor={['#b91c1c', '#a16207', '#713f12', '#15803d', '#166534']} 
+								/>
+							</div>
 							{/* Ovo treba u bar graph */}
-							{
-								stats.gradesNum.map((grade: any) => 
-									<>
-										{ grade.grade } - { grade.count }
-									</>
-								)
-							}
 						</div>
 
 						<div className="w-full flex justify-center">
