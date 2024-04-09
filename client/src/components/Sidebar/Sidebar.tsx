@@ -92,7 +92,7 @@ function Sidebar({children, role = 'student'} : SidebarProps) {
 				{ 
 					isRolesSuccess && session?.user?.roles?.length! > 1 &&
 					<>
-						<select value={role} onChange={(e) => handleRoleChange(e.target.value)}>
+						<select value={role} onChange={(e) => handleRoleChange(e.target.value)} className="rounded-xl border-0 w-full">
 							{
 								rolesData?.map((role: any) => (
 									<>

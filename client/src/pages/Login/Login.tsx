@@ -3,16 +3,17 @@ import { useLoginMutation } from './../../app/api/sessionApiSlice';
 import {Link, useNavigate, Navigate, useLocation, redirect} from "react-router-dom";
 import { Helmet } from 'react-helmet';
 import { RootState } from '../../app/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MutationState from '../../components/MutationState/MutationState';
 import { useLazyGetUserUnisRoleQuery } from '../../app/api/userApiSlice';
+import { setMetadata } from '../../app/slices/sessionSlice';
 
 
 const Login = () => {
 	const navigate = useNavigate();
 	const session = useSelector((state: RootState) => state.session);
 	const location = useLocation();
-
+	const dispatch = useDispatch();
 	const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 
@@ -29,6 +30,8 @@ const Login = () => {
 	const [
 		getUnis,
 		{
+			isLoading: isGetUnisLoading,
+			isSuccess: isGetUnisSuccess,
 			isError: isGetUnisError
 		}
 	] = useLazyGetUserUnisRoleQuery();
@@ -46,12 +49,11 @@ const Login = () => {
 			const result = await login(body).unwrap();
 
 			const unis = await getUnis({ user: result.user._id!, role: result.user.roles![0] }).unwrap();
-
 			// @ts-ignore
 			// TODO get university where this user is service. (FROM service model)
 			let redirectUrl = `/uni/${unis[0].university._id}/${result.user.roles![0]}`;
-
-			(location?.state.from.startsWith(redirectUrl)) ? navigate(location.state.from) : navigate(redirectUrl);
+			dispatch(setMetadata({ university: unis[0].university._id!, role: result.user.roles![0] }));
+			(location?.state.from.startsWith(redirectUrl)) ? navigate(location?.state?.from) : navigate(redirectUrl);
 
 
 		} catch (error: any) {
@@ -62,7 +64,7 @@ const Login = () => {
 	return (
 		<>
 			{
-				!session.refreshToken ?
+				(!session.refreshToken && !isGetUnisSuccess) ?
 					<div>
 						<Helmet>
 							<title>Login | Stud</title>

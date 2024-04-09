@@ -13,14 +13,15 @@ export interface IExam {
 export interface ITable {
 	setExams?: SetStateAction<any>
 	cols?: string[],
-	children?: ReactNode
+	children?: ReactNode,
+	width?: string;
 }
 
 
-function Table({cols, children} : ITable) {
+function Table({cols, children, width='w-4/5'} : ITable) {
 
 	return (
-		<table className="w-4/5 rounded-2xl overflow-hidden">
+		<table className={`${width} rounded-2xl overflow-hidden`}>
 			<thead className="bg-slate-100">
 				<tr className="text-sm">
 					{cols && cols.map(item => (

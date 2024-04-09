@@ -10,6 +10,7 @@ const initialState: Session = {
 		studentTab: 0,
 		serviceHome: 0,
 		professorTab: 0,
+		university: '',
 		role: ''
 	}
 }

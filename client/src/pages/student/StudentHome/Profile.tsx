@@ -8,6 +8,8 @@ import StudTitle from '../../../components/StudTitle/StudTitle';
 import Table from '../../../components/Table/Table';
 import TD from '../../../components/Table/TableColumn';
 import ModelNum from './ModelNum';
+import ExamCard from '../../../components/ExamCard/ExamCard';
+import { BookOpenCheck, CaptionsOff, LayoutList, LineChart, Link } from 'lucide-react';
 
 export interface IProfile {
 	session: Session;
@@ -49,7 +51,7 @@ const Profile = ({ session, uni }: IProfile) => {
 						</div>
 
 						<div className="w-full flex justify-center">
-							<Table cols={['Informacije', '']}>
+							<Table width="w-4/5 md:w-2/3" cols={['Informacije', '']}>
 								<tr>
 									<TD>Ime i prezime</TD>
 									{/* @ts-ignore */}
@@ -78,18 +80,12 @@ const Profile = ({ session, uni }: IProfile) => {
 
 							</Table>
 						</div>
-
-						<div className="w-full flex flex-row justify-center items-center mt-3">
-							<div className="card flex flex-row justify-center items-center">
-								Položeni ispiti: { stats.passed }
-							</div>
-
-							<div className="card flex flex-row justify-center items-center">
-								Neuspeli ispiti: { stats.failed }
-							</div>
-
-							<div className="card flex flex-row justify-center items-center">
-								Prijavljeni ispiti: { stats.examCount }
+						<div className="w-full flex justify-center">
+							<div className="w-4/5 md:w-2/3 overflow-hidden grid grid-cols-2 gap-3 mt-3">
+								<ExamCard text='Položeni ispiti' Icon={BookOpenCheck} value={stats.passed} />
+								<ExamCard text="Neuspeli ispiti" Icon={CaptionsOff} value={stats.failed} color='text-red-500'/>
+								<ExamCard text="Prijavljeni ispiti" Icon={LayoutList} value={stats.examCount} color='text-slate-500' />
+								<ExamCard text="Prolaznost" Icon={LineChart} value={`${(stats.passed / (stats.examCount || 1) * 100).toFixed(2) as string}%`} color='text-blue-400' />
 							</div>
 						</div>
 
