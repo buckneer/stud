@@ -59,6 +59,15 @@ const examApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'Exam', id: arg.id }]
 				: [],
 		}),
+		getExamBySubject: builder.query <Exam, { university: string, period: string, subject: string }> ({
+			query: ({ university, period, subject }) => ({
+				url: `/uni/${university}/exam/period/${period}/subject/${subject}`
+			}),
+			// TODO Change this!
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Exam', id: result._id }]
+				: [],
+		}),
 		getExams: builder.query <Exam[], string> ({
 			query: (university) => ({
 				url: `/uni/${university}/exam/`,
@@ -140,5 +149,6 @@ export const {
 	useDeleteExamStudentMutation,
 	useAddExamGradesMutation,
 	useDeleteExamGradesMutation,
-	useGetAvailableExamsQuery
+	useGetAvailableExamsQuery,
+	useGetExamBySubjectQuery,
 } = examApiSlice;

@@ -6,22 +6,33 @@ import Service from "../models/service.model";
 import Student from "../models/student.model";
 import { Model } from 'mongoose';
 import Exam from "../models/exam.model";
+import Period from "../models/period.model";
+import {updateExam} from "./exam.service";
 
-export const addGrade = async (data: GradeDocument) => {
+export const addGrade = async (user: string, data: GradeDocument) => {
     // let subject = await Subject.findOne({_id: data.subject});
     // if (!subject) return newError(404, 'Predmet ne postoji');
 
-    // let professor = await Professor.findOne({_id: data.professor});
-    // if(!professor) return newError(404, 'Profesor ne postoji');
+    let professor = await Professor.findOne({user});
+    if(!professor) return newError(404, 'Profesor ne postoji');
+
+    data.professor = professor._id.toString();
+
+    let exam = await Exam.findOne({_id: data.exam});
+    if(!exam) throw newError(404, 'Ispit ne postoji');
+
+    let newGrade = new Grade(data);
+    let resp = await newGrade.save();
+
+    let saved = [...exam.grades!, resp._id];
+
+    await updateExam(exam._id, {grades: saved});
 
     // let service = await Service.findOne({_id: data.service});
     // if(!service) return newError(404, 'Studentska služba ne postoji');
 
     // let student = await Student.findOne({_id: data.student});
     // if(!student) return newError(404, 'Student ne postoji');
-
-    let newGrade = new Grade(data);
-    let resp = await newGrade.save();
 
     if(!resp) return newError(500, 'Internal Server Error');
 
@@ -67,7 +78,7 @@ export const getGradesByRole = async (_id: string, ModelParam: Model<any>, confi
     let userRole = await ModelParam.find({ _id });
 
     if(!userRole) throw newError(404, 'Greška prilikom pristupanja ocenama!');
-    
+
     // @ts-ignore
     const role = collectionObj[ModelParam.collection.name];
 

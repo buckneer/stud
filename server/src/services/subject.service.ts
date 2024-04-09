@@ -5,6 +5,7 @@ import Professor from "../models/professor.model";
 import Optional from "../models/optional.model";
 import User from "../models/user.model";
 import Student from "../models/student.model";
+import Period from "../models/period.model";
 
 
 export const addSubject = async (depId: string, data: SubjectDocument) => {
@@ -96,7 +97,7 @@ export const getProfessorSubjects = async (_id: string, uni: string) => {
 
     let professor = await Professor.findOne({user: _id});
     if(!professor) throw newError(404, 'Profesor nije pronađen');
-    
+
     return Subject.find({professors: professor._id, university: uni});
 }
 
@@ -187,4 +188,42 @@ export const getAvailableOptionalSubjects = async (university: string, departmen
     if(!depObj) throw newError(404, 'Ne postoji odsek!');
 
     return Subject.find({ university, department, semester, degree, type: 'O' });
+}
+
+export const getSubjectsForExam = async (_id: string, uni: string) => {
+    let period = await Period.findOne({_id, university: uni});
+    if(!period) throw newError(404, 'Ne postoji ispitni rok');
+
+    let query : any;
+    // @ts-ignore
+    switch (parseInt(period!.semester)) {
+    	case 0:
+    		query = {university: uni};
+    		break;
+    	case 1:
+    		query = {university: uni, semester: {$mod: [2, 0]}};
+
+    		break;
+    	case 2:
+    		query = {university: uni, semester: {$mod: [2, 1]}};
+    		break;
+    }
+
+
+    // Exclude already added?
+    // let excludedSubjectIds = await Exam.find({university: uni}).distinct('subject');
+    // query.subject = {$nin: excludedSubjectIds};
+
+    let subjects = await Subject.find(query).populate({
+        path: 'professors',
+        select: 'user',
+        populate: {
+            path: 'user',
+            select: 'name'
+        }
+    });
+
+    if(subjects.length === 0) throw newError(404, 'Predmeti ne postoje');
+
+    return subjects;
 }

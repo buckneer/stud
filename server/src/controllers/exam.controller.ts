@@ -3,7 +3,7 @@ import {
     addExam,
     addStudentToExams, examsCanAdd,
     getExam,
-    getExams,
+    getExams, getExamSubject,
     getGradesByExam, getPendingExamsProfessor,
     getStudentExams,
     updateExam
@@ -189,6 +189,18 @@ export async function handleGetPendingProfessorExams(req: Request, res: Response
         let resp = await getPendingExamsProfessor(req.user.id, period);
         return res.status(200).send(resp);
 
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function  handleGetExamSubject(req: Request, res: Response) {
+    try {
+        let {period, sub} = req.params;
+        let user = req.user!.id;
+        let resp = await getExamSubject(user, period, sub);
+
+        return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');
     }

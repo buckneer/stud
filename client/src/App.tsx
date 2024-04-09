@@ -92,7 +92,7 @@ function App() {
               <Route element={<RoleGuard roles={['professor']} />}>
                 <Route path='/uni/:uni/professor' element={<ProfessorHome />} />
               </Route>
-              
+
               {/* User has to have admin privileges */}
               {/* TODO: CHANGE THIS TO AdminRequired! */}
               <Route element={<TokenRequired />}>

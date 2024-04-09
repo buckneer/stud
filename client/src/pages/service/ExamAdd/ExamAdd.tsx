@@ -60,7 +60,7 @@ const ExamAdd = () => {
 		isLoading: isPeriodLoading,
 		isSuccess: isPeriodSuccess,
 		isError: isPeriodError
-	} = useGetPeriodQuery(period, {
+	} = useGetPeriodQuery({university: uni, id: period}, {
 		skip: !session.accessToken || !period
 	});
 

@@ -96,12 +96,13 @@ export interface Grade {
 	_id?: string;
 	subject?: string | Subject;
 	professor?: string | Professor;
-	profesorGrade?: number;
+	professorGrade?: number;
 	service?: string | Service;
 	serviceGrade?: number;
 	confirmed?: boolean;
 	student?: string | Student;
 	period?: string | Period;
+	exam?: string | Exam
 }
 
 export interface Period {

@@ -9,7 +9,7 @@ import {
 	handleGetProfessorSubjects,
 	handleGetSubject,
 	handleGetSubjectRole,
-	handleGetSubjects,
+	handleGetSubjects, handleGetSubjectsForExam,
 	handleRemoveProfessorFromSubject,
 	handleRemoveRequiredFromSubject,
 	handleUpdateSubject
@@ -30,6 +30,7 @@ router.post('/', handleAddSubject);
 router.patch('/:sub/', handleUpdateSubject);
 router.get('/:sub/', handleGetSubject);
 router.get('/subject/department/:dep/', handleGetSubjects);
+router.get('/period/:period', handleGetSubjectsForExam);
 router.get('/', handleGetSubjects);
 router.patch('/:sub/professor/', handleAddProfessorsToSubject);
 router.delete('/:sub/professor/', handleRemoveProfessorFromSubject);

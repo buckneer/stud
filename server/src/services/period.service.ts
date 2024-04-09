@@ -1,6 +1,8 @@
 import University from '../models/university.model';
 import Period, {PeriodDocument} from '../models/period.model';
 import {newError, newResponse} from '../utils';
+import Subject from "../models/subject.model";
+import {ExamDocument} from "../models/exam.model";
 
 export const addPeriod = async (data: PeriodDocument) => {
 	let uniObj = await University.findOne({ _id: data.university });
@@ -65,13 +67,11 @@ export const setPeriodActive = async (_id: string, uni: string) => {
 
 	if(!university) throw newError(404, 'Ne postoji univerzitet!');
 
-	let utcDate = new Date().toISOString();
-	
-	// await Period.updateMany({ university: uni }, {
-	// 	$set: {
-	// 		active: false
-	// 	}
-	// });
+	await Period.updateMany({ university: uni }, {
+		$set: {
+			active: false
+		}
+	});
 
 	let period = await Period.findOneAndUpdate(
 		{
