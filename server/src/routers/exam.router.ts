@@ -4,7 +4,7 @@ import {
 	handleAddGradesToExam,
 	handleAddStudentsToExam, handleAddStudentToExams, handleExamsCanAdd,
 	handleGetExam,
-	handleGetExams,
+	handleGetExams, handleGetExamSubject,
 	handleGetGradesByExam, handleGetPendingProfessorExams,
 	handleGetStudentExams,
 	handleRemoveGradeFromExam,
@@ -19,6 +19,7 @@ const router = express.Router({mergeParams: true});
 
 router.get('/', handleGetExams);
 router.get('/:exam/', handleGetExam);
+router.get('/period/:period/subject/:sub', userGuard, handleGetExamSubject);
 router.get('/:exam/grade/', handleGetGradesByExam);
 router.get('/student/:stud', handleExamsCanAdd);
 router.get('/student/:stud/status/:status', handleGetStudentExams);

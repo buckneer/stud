@@ -7,7 +7,9 @@ export async function handleAddGrade(req: Request, res: Response) {
             ...req.body
         }
 
-        let resp = await addGrade(data);
+        let user = req.user?.id!
+
+        let resp = await addGrade(user, data);
 
         return res.send(resp);
     } catch (e: any) {

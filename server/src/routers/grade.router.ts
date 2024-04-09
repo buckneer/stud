@@ -1,12 +1,12 @@
 import express from "express";
+import {userGuard} from "../middleware/routeGuard";
 import {handleAddGrade, handleGetGrade, handleGetGrades, handleGetStats, handleUpdateGrade} from "../controllers/grade.controller";
-import { userGuard } from "../middleware/routeGuard";
 
 
 
 const router = express.Router({mergeParams: true});
 
-router.post('/', handleAddGrade);
+router.post('/', userGuard, handleAddGrade);
 router.patch('/:grade/', handleUpdateGrade);
 router.get('/:grade/', handleGetGrade);
 router.get('/', handleGetGrades);

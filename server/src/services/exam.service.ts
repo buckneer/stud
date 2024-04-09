@@ -12,16 +12,20 @@ export const addExam = async (data: ExamDocument) => {
     // let date = new Date();
     // TODO: check if period is in future
     let period = await Period.findOne({ _id: data.period });
+    if(!period) throw newError(404, 'Ne postoji ispitni rok');
 
     let subject = await Subject.findOne({_id: data.subject});
     if(!subject) return newError(404, 'Predmet nije pronađen');
 
+
     let newExam = new Exam(data);
-
-
     let saved = await newExam.save();
 
+
     if(!saved) return newError(500, 'Internal Server Error');
+
+    period.exams = [...period.exams!, saved._id];
+    await period.save();
 
     return newResponse('Ispit je sačuvan');
 }
@@ -122,10 +126,10 @@ export const getPendingExamsProfessor = async (_id: string, period: string) => {
 export const examsCanAdd = async (_id: string, uni: string) => {
     // TODO filter by period!
     const exams = await Exam.find({ university: uni }).populate('professor subject');
-
+    console.log(exams);
 
     const filteredExams = await Promise.all(exams.map(async (exam) => {
-        return await canAddExam(_id, exam.subject!._id.toString(), exam._id.toString());
+        return await canAddExam(_id, exam.subject!._id.toString());
     }));
 
     const filteredResults = exams.filter((exam, index) => filteredExams[index]);
@@ -149,7 +153,7 @@ export const addStudentToExams = async (_id: string, exams: String[]) => {
 
     const filterAdd = exams.filter(exam => canAddIds.includes(exam));
 
-    await Exam.updateMany({_id: {"$in": filterAdd}}, {$push: {students: _id}});
+    await Exam.updateMany({_id: {"$in": filterAdd}}, {$push: {students: student._id}});
 
     return filterAdd;
 }
@@ -189,7 +193,28 @@ export const canAddExam = async (userId: string, subjectId: string, exam?: strin
     return required.every(requiredSub => completed.includes(requiredSub));
 }
 
+export const getExamSubject = async (user: string, period: string, sub: string)=> {
+    let professor = await Professor.findOne({user});
+    if(!professor) throw newError(404, 'Profesor ne postoji');
+    let exam = await Exam.findOne({
+        professor: professor._id,
+        period: period, subject: sub })
+        .populate({
+            path: 'students',
+            populate: {
+                path: 'user',
+                select: 'name'
+            }
+        }).populate('grades');
 
+    // grades.student!
+
+    // let exist = exam.grades.
+
+    if(!exam) throw newError(404, 'Ispit ne postoji');
+
+    return exam;
+}
 
 // export const updateStudents = async (_id: string, data: any) => {
 //     let examObject = await Exam.findOne({ _id });
