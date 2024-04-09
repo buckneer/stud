@@ -9,7 +9,7 @@ import { CirclePlus, Pencil, Trash2 } from 'lucide-react';
 
 const SubjectsTab = () => {
 	const { uni } = useParams();
-	const [ search, setSearch ] = useState(''); 
+	const [ search, setSearch ] = useState('');
 	// add other filters here...?
 	const {
 		data: subjectData,
@@ -41,14 +41,15 @@ const SubjectsTab = () => {
 					<Table cols={cols}>
 						{isSubjectLoading && <Loader />}
 						{
-							isSubjectSuccess && subjectData?.length !== 0 ? 
+							isSubjectSuccess && subjectData?.length !== 0 ?
 							<>
 								{
 									subjectData.map(subj => (
 										<tr key={ subj._id }>
 											<TD>{ subj.code }</TD>
 											<TD>{ subj.name }</TD>
-											<TD>{ subj?.professors!.map((prof) => <>{ prof }</>) }</TD>
+											{/*@ts-ignore*/}
+											<TD>{ subj?.professors!.map((prof) => <>{ prof.user.name }</>) }</TD>
 											<TD>{ subj.type === 'R' ? 'O' : 'I' }</TD>
 											<TD>{ subj.espb }</TD>
 											<TD>

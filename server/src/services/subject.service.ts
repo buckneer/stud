@@ -32,11 +32,18 @@ export const getSubjects = async (key?: string, value?: string) => {
 
     let subjects: any[];
     console.log(key, value);
+    let popQuery = {
+        path: 'professors',
+        populate: {
+            path: 'user',
+            select: 'name'
+        }
+    }
     if(key) {
         let field = key === 'university' ? { university: value } : { department: value }
-        subjects = await Subject.find(field);
+        subjects = await Subject.find(field).populate(popQuery);
     } else {
-        subjects = await Subject.find();
+        subjects = await Subject.find().populate(popQuery);
     }
 
     return subjects;

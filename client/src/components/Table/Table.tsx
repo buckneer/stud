@@ -25,7 +25,7 @@ function Table({cols, children, width='w-4/5'} : ITable) {
 			<thead className="bg-slate-100">
 				<tr className="text-sm">
 					{cols && cols.map(item => (
-						<th className="px-6 py-4 text-center font-medium text-black uppercase">{item}</th>
+						<th className="px-6 py-4 text-center font-medium text-black uppercase transition-width duration-500 ease-in-out w-auto overflow-hidden whitespace-nowrap">{item}</th>
 					))}
 				</tr>
 			</thead>

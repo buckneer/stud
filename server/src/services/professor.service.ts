@@ -5,6 +5,7 @@ import Student from "../models/student.model";
 import Subject from "../models/subject.model";
 import University from "../models/university.model";
 import { newError, newResponse } from "../utils";
+import mongoose, {Schema} from "mongoose";
 
 export const addProfessor = async (_id: string, professor: ProfessorDocument) => {
     try {
@@ -93,6 +94,8 @@ export const removeSubjectsFromProfessor = async (_id: string, subjects: string[
     // @ts-ignore
     professorObj.subjects = professorObj.subjects?.filter(subject => subjects.indexOf(subject) === -1);
 
+    // TODO remove from Subjects object!!!
+
     let updated = await professorObj.save();
     if(!updated) throw newError();
 
@@ -135,6 +138,12 @@ export const addSubjectToProfessors = async (_id: string, professors: string[]) 
     await Professor.updateMany({ _id: professors }, {
         $addToSet: { subjects: _id }
     });
+
+    let professorsOnSubject = professors.map(prof => new mongoose.Types.ObjectId(prof));
+
+    subject.professors = [...subject.professors, ...professorsOnSubject];
+    await subject.save();
+
 
     return newResponse('Uspešno dodavanje predmeta profesorima!', 200);
 }

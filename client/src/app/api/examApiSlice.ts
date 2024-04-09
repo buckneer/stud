@@ -65,7 +65,7 @@ const examApiSlice = apiSlice.injectEndpoints({
 			}),
 			// TODO Change this!
 			providesTags: (result, error, arg) => (result)
-				? [{ type: 'Exam', id: result._id }]
+				? [{ type: 'Exam', id: result._id }, 'EXAM']
 				: [],
 		}),
 		getExams: builder.query <Exam[], string> ({

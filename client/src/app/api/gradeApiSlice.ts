@@ -16,7 +16,7 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => (result)
-				? ['Grade']
+				? ['Grade', {type: "Exam", id: "EXAM_LIST"}]
 				: []
 		}),
 		getGrade: builder.query <Grade, { university: string, id: string}> ({
@@ -42,7 +42,7 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error, arg) => (result)
-				? [{ type: 'Grade' as const, id: arg.id }]
+				? [{ type: 'Grade' as const, id: arg.id }, 'EXAM']
 				: [],
 		}),
 		getGradesByRole: builder.query <Grade[], { role: string; id: string }> ({
