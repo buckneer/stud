@@ -1,11 +1,11 @@
-import {ReactNode} from "react";
+import {HTMLAttributes, ReactNode} from "react";
 
 
 export interface ITD {
 	children: ReactNode;
 }
 
-function TD({children, className} : ITD & React.HTMLAttributes<HTMLTableDataCellElement>) {
+function TD({children, className} : ITD & HTMLAttributes<HTMLTableDataCellElement>) {
 	return (
 		<td className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200 ${className}`}>
 			{children}

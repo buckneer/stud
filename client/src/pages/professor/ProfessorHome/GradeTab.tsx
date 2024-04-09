@@ -11,14 +11,17 @@ import Table from "../../../components/Table/Table";
 import TD from "../../../components/Table/TableColumn";
 import {Grade, Student, User} from "../../../app/api/types/types";
 import InputField from "../../../components/InputField/InputField";
-import {useAddGradeMutation} from "../../../app/api/gradeApiSlice";
+import {useAddGradeMutation, useUpdateGradeMutation} from "../../../app/api/gradeApiSlice";
+import GradeColumn from "../../../components/Table/GradeColumn";
 
 function GradeTab() {
 	const { uni } = useParams();
 	const [ subject, setSubject ] = useState<SelectProps>();
+	const [updateGrade, setUpdateGrade] = useState<string[]>([]);
 	const [grade, setGrade] = useState(0);
+	const [grades, setGrades] = useState<Grade[]>([]);
 	const [activePeriodId, setActivePeriodId] = useState("")
-	const cols = ['Broj indeksa', 'Ime i prezime', 'Ocena'];
+	const [cols, setCols] = useState(['Broj indeksa', 'Ime i prezime', 'Ocena'])
 
 	const {
 		data: activePeriod,
@@ -57,6 +60,16 @@ function GradeTab() {
 		}
 	] = useAddGradeMutation();
 
+	const [
+		updateGradeTrig,
+		{
+			isLoading: isGradeUpdateLoading,
+			isSuccess: isGradeUpdateSuccess,
+			isError: isGradeUpdateError
+		}
+	] = useUpdateGradeMutation();
+
+
 	const handleSetGrade = async (gradeNum: number, student: string) => {
 		let grade : Grade = {
 			subject: examData!.subject,
@@ -72,6 +85,51 @@ function GradeTab() {
 		} catch (e: any) {
 			console.log(e);
 		}
+	}
+
+	const handleUpdateGrade = async (gradeNum: number, student: string, gradeId?: string) => {
+
+		try {
+			await updateGradeTrig({
+				university: uni!,
+				id: gradeId!,
+				body: {
+					professorGrade: gradeNum
+				}
+			})
+
+
+		} catch (e: any) {
+			console.error(e);
+		}
+
+		handleDropdown(student);
+	}
+
+	const handleDropdown = (_id: string) => {
+		if(updateGrade.includes(_id)) {
+			setUpdateGrade(prevState => prevState.filter(name => name !== _id));
+		} else {
+			setUpdateGrade(prevState => [...prevState, _id]);
+		}
+	}
+
+	useEffect(() => {
+		if(examData) {
+			if(examData.grades && examData.grades.length > 0) {
+				setGrades((examData.grades as Grade[]));
+			}
+		}
+	}, [isExamLoading]);
+
+	function isIdIncluded(idToCheck: string) {
+		let grades = examData?.grades as Grade[];
+		return grades.some(grade => grade.student === idToCheck);
+	}
+
+	const getStudentGrade = (student: string) => {
+		let studGrade = grades.find(grade => grade.student === student);
+		return studGrade;
 	}
 
 	return (
@@ -102,17 +160,22 @@ function GradeTab() {
 								<tr>
 									<TD>{item.studentId}</TD>
 									<TD>{(item.user! as User).name}</TD>
-									<TD className="w-1/2">
-										<div className="flex gap-10 justify-center">
-											<p className="font-black text-2xl cursor-pointer" onClick={() => handleSetGrade(5, item._id!)}>5</p>
-											<p className="font-black text-2xl cursor-pointer" onClick={() => handleSetGrade(6, item._id!)}>6</p>
-											<p className="font-black text-2xl cursor-pointer" onClick={() => handleSetGrade(7, item._id!)}>7</p>
-											<p className="font-black text-2xl cursor-pointer" onClick={() => handleSetGrade(8, item._id!)}>8</p>
-											<p className="font-black text-2xl cursor-pointer" onClick={() => handleSetGrade(9, item._id!)}>9</p>
-											<p className="font-black text-2xl cursor-pointer" onClick={() => handleSetGrade(10, item._id!)}>10</p>
+									{isIdIncluded(item._id!) ? (
+										<>
+											{!updateGrade.includes(item._id!) && (
+												<TD>
+													<p className="font-black text-2xl transition-all hover:scale-125 cursor-pointer active:scale-75" onClick={() => handleDropdown(item._id!)}>{getStudentGrade(item._id!)?.professorGrade}</p>
+												</TD>
+											)}
+											{updateGrade.includes(item._id!) && (
+												<GradeColumn handleSetGrade={handleUpdateGrade} item={item._id!} gradeId={getStudentGrade(item._id!)!._id} />
+											)}
+										</>
 
-										</div>
-									</TD>
+									) : (
+										<GradeColumn handleSetGrade={handleSetGrade} item={item._id!} />
+									)}
+
 								</tr>
 							))
 						)}

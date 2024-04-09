@@ -92,7 +92,7 @@ export interface Optional {
 	university?: string | University;
 }
 
-export interface Grade {
+export type Grade = {
 	_id?: string;
 	subject?: string | Subject;
 	professor?: string | Professor;
