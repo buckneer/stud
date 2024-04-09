@@ -97,7 +97,7 @@ function StudentsTab() {
 								<>
 									{
 										studentData.map((student: any) => (
-											<>
+											<tr>
 												<TD>{ student.studentId }</TD>
 												{/* @ts-ignore */}
 												<TD>{ student?.user?.name! }</TD>
@@ -111,7 +111,7 @@ function StudentsTab() {
 													onChange={handleSelected}
 												/>
 												</TD>
-											</>
+											</tr>
 										))
 									}
 								</>
