@@ -6,6 +6,7 @@ import {newError, newResponse} from "../utils";
 import University from "../models/university.model";
 import Department from '../models/department.model';
 import Subject from "../models/subject.model";
+import Grade from "../models/grade.model";
 
 export const addStudent = async (student: StudentDocument, university: string) => {
 
@@ -113,7 +114,27 @@ export const addSubjectsToStudent = async (_id: string, subjects: string[], uni:
     });
     return newResponse('Predmeti su sačuvani');
 }
+// 22.04. 12h
+export const getStudentSubjects = async (user: string, university: string) => {
+    let student = await Student.findOne({ user, university }, { _id: 1 }).populate({
+        path: 'subjects completedSubjects',
+    });
 
+    if(!student) throw newError(404, 'Ne postoji student');
+
+    let { subjects, completedSubjects } = student;
+
+    let grades = await Grade.find({ subject: completedSubjects, student: student._id }, { serviceGrade: 1});
+
+    // @ts-ignore
+    completedSubjects = completedSubjects.map((sub, index) => sub.grade = grades[index]);
+
+    return {
+        student: student._id,
+        subjects,
+        completedSubjects
+    }
+}   
 // export const addStudentToSubjects = async (_id: string, subjects: string[]) => {
 //     let studentObj = await Student.findOne({ _id });
 

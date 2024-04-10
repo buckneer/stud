@@ -18,6 +18,7 @@ import ExamPeriod from "./ExamPeriod";
 import SubjectSelect from "./SubjectSelect";
 import {setMetadata} from "../../../app/slices/sessionSlice";
 import Profile from "./Profile";
+import StudentSubject from "./StudentSubject";
 
 
 
@@ -41,7 +42,7 @@ function StudentHome() {
 				{session.metadata.studentTab === 0 && (<Profile session={session} uni={uni} />)}
 				{session.metadata.studentTab === 1 && (<ExamPeriod session={session} uni={uni}/>)}
 				{session.metadata.studentTab === 2 && (<SubjectSelect session={session} uni={uni}/>)}
-				{session.metadata.studentTab === 3 && (<></>)}
+				{session.metadata.studentTab === 3 && (<StudentSubject session={session} uni={uni} />)}
 				<Sidebar>
 					<div className="pt-1">
 						<SidebarItem name="Profil" active={session.metadata.studentTab === 0} to={0} changeData={handleDataChange} Icon={User} />

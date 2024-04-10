@@ -115,6 +115,11 @@ const userApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'University' as const, id },
 					...result?.map((role: any) => ({ type: 'Role' as const, id: role }))]
 				: [],
+		}),
+		getUserSubjects: builder.query<any, string> ({
+			query: (university) => ({
+				url: `/uni/${university}/student/current/subject`
+			})
 		})
 	})
 });
@@ -131,5 +136,6 @@ export const {
 	useDeleteUserMutation,
 	useGetUserUnisRoleQuery,
 	useLazyGetUserUnisRoleQuery,
-	useGetUserUniRoleQuery
+	useGetUserUniRoleQuery,
+	useGetUserSubjectsQuery
 } = userApiSlice
