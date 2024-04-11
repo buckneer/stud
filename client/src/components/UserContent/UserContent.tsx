@@ -45,7 +45,7 @@ function UserContent({title, university, role}: UserContentProps) {
 				{isSuccess && (
 					data.length ? (
 						data.slice(0,3).map(user => (
-							<UserItem user={user} university={university} role={role}/>
+							<UserItem user={user} university={university} role={role} registered={false}/>
 						))
 					) :
 						<div className="">

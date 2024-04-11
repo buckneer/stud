@@ -120,7 +120,7 @@ const studentApiSlice = apiSlice.injectEndpoints({
 				{ type: 'Subject' as const, id: arg.subject },
 				...result.map((stud: Student) => ({ type: 'Student' as const, id: stud._id }))]	
 				: [],
-		})
+		}),
 		// addCompleted: builder.mutation <unknown, unknown> ({
 		// 	query: ({  }) => ({
 

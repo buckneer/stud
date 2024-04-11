@@ -27,7 +27,8 @@ export async function handleAddExam(req: Request, res: Response) {
 
 export async function handleGetExams(req: Request, res: Response) {
     try {
-        let exams = await getExams();
+        let { uni, period } = req.params;
+        let exams = await getExams(uni, period);
         return res.send(exams);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

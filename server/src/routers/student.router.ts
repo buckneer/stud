@@ -9,6 +9,7 @@ import {
 	handleGetStudentGrades,
 	handleGetStudents,
 	handleGetStudentsBySemester, handleGetStudentsBySubject,
+	handleGetStudentSubjects,
 	handleRemoveStudentFromSubject,
 	handleUpdateStudent,
 	removeExamFromStudent
@@ -40,6 +41,7 @@ router.patch('/:stud/subject/', handleAddStudentToSubjects);
 router.delete('/:stud/subject/', handleRemoveStudentFromSubject);
 router.patch('/:stud/subject/completed/', handleAddSubjectsToCompleted);
 router.get('/semester/', handleGetStudentsBySemester);
+router.get(['/:stud/current/subject', '/current/subject'], userGuard, handleGetStudentSubjects);
 router.patch('/subject/add',
 	userGuard,
 	AuthGuard([studentRoles.student]), handleAddSubjectsToStudent);

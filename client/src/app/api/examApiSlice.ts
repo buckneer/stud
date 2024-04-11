@@ -68,9 +68,9 @@ const examApiSlice = apiSlice.injectEndpoints({
 				? [{ type: 'Exam', id: result._id }, 'EXAM']
 				: [],
 		}),
-		getExams: builder.query <Exam[], string> ({
-			query: (university) => ({
-				url: `/uni/${university}/exam/`,
+		getExams: builder.query <Exam[], { university: string; period: string; }> ({
+			query: ({ university, period }) => ({
+				url: `/uni/${university}/period/${period}/exam`,
 			}),
 			providesTags: (result, error) => (result)
 				? ['Exam', ...result.map((exam: Exam) => ({ type: 'Uni' as const, id: exam.university }))]

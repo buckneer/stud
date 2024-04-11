@@ -17,28 +17,42 @@ export const addExam = async (data: ExamDocument) => {
     let subject = await Subject.findOne({_id: data.subject});
     if(!subject) return newError(404, 'Predmet nije pronađen');
 
+    let alreadyExists = await Exam.findOne({ period: data.period, subject: subject._id, professor: data.professor });
+
+    if(alreadyExists) throw newError(409, 'Već postoji ispit!');
 
     let newExam = new Exam(data);
     let saved = await newExam.save();
 
+    console.log(saved);
 
     if(!saved) return newError(500, 'Internal Server Error');
 
-    period.exams = [...period.exams!, saved._id];
-    await period.save();
-
+    await Period.updateOne({ _id: data.period }, {
+        $addToSet: { exams: saved._id }
+    });
     return newResponse('Ispit je sačuvan');
 }
 
 export const getExam = async (_id: string) => {
-    let exam = await Exam.findOne({_id}).populate('period');
+    let exam = await Exam.findOne({ _id }).populate('period');
     if(!exam) return newError(404, 'Ispit nije pronađen');
 
     return exam;
 }
 
-export const getExams = async () => {
-    let exams = await Exam.find();
+export const getExams = async (university: string, period: string) => {
+    let exams = await Exam.find({ university, period }).populate({
+        path: 'professor',
+        select: 'user',
+        populate: {
+            path: 'user',
+            select: 'name'
+        }
+    }).populate({
+        path: 'subject',
+        select: 'name code'
+    }).sort({ code: 1 });
 
     return exams;
 }

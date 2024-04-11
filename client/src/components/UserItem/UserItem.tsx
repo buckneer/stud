@@ -9,10 +9,11 @@ import MutationState from '../MutationState/MutationState';
 interface UserItemProps {
 	user: User,
 	university: string,
-	role: string
+	role: string,
+	registered?: boolean;
 }
 
-function UserItem({user, university, role}: UserItemProps) {
+function UserItem({user, university, role, registered = true}: UserItemProps) {
 
 	const navigate = useNavigate();
 	const handleRedirect = () => {
@@ -53,12 +54,17 @@ function UserItem({user, university, role}: UserItemProps) {
 			</div>
 			<div className="flex justify-between p-5 cursor-pointer" onClick={() => handleRedirect()}>
 				<div className="flex flex-col justify-center items-center font-black">
-					<div className="">
-						Nije
-					</div>
-					<div className="">
-						Registrovan
-					</div>
+					{
+						!registered && 
+							<>
+								<div className="">
+									Nije
+								</div>
+								<div className="">
+									Registrovan
+								</div>
+							</>
+					}
 				</div>
 				<div className="icon text-blue-300 mr-7">
 					<RandomBlob width={100} height={100} />

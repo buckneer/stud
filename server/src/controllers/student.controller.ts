@@ -9,7 +9,8 @@ import {
     getStudentByUser,
     getStudents,
     getStudentsByDepartment,
-    getStudentsBySemester, getStudentsBySubject
+    getStudentsBySemester, getStudentsBySubject,
+    getStudentSubjects
 } from "../services/student.service";
 import { newResponse } from "../utils";
 import { addToModelArray, removeFromModelArray } from '../utils/service.utils';
@@ -210,6 +211,22 @@ export async function handleGetStudentsBySubject(req: Request, res: Response) {
 
         let resp = await getStudentsBySubject(sub);
 
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetStudentSubjects(req: Request, res: Response) {
+    try {
+        let { stud, uni } = req.params;
+
+        if(!stud) {
+            stud = req.user?.id as string;
+        }
+
+
+        let resp = await getStudentSubjects(stud, uni);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

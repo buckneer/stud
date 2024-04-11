@@ -103,7 +103,7 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 			</div>
 			<div className="w-full flex justify-center">
 				{isExamLoading && (<Loader />)}
-				{!isExamLoading && (
+				{isExamSuccess && (
 					<Table cols={cols}>
 						{exams.length !== 0 ? exams.map(row => (
 							<tr key={row._id} className={`${examsToAdd.includes(row._id!) ? 'bg-slate-100' : ''} `}>
