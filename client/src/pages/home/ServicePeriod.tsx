@@ -7,6 +7,7 @@ import {Link, useParams} from "react-router-dom";
 import {useGetUniPeriodsQuery, useSetPeriodActiveMutation} from "../../app/api/periodApiSlice";
 import Loader from "../../components/Loader/Loader";
 import TD from "../../components/Table/TableColumn";
+import { formatDate } from "../../utils/formatDate";
 
 function ServicePeriod() {
 
@@ -14,16 +15,7 @@ function ServicePeriod() {
 	const { uni } = useParams();
 
 
-	const formatDate = (isoDate: string) => {
-		const date = new Date(isoDate);
-
-
-		const day = String(date.getUTCDate()).padStart(2, '0');
-		const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based in JavaScript
-		const year = date.getUTCFullYear();
-
-		 return `${day}.${month}.${year}`;
-	}
+	
 
 	const {
 		data: periodData,

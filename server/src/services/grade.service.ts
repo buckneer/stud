@@ -99,8 +99,8 @@ export const getStats = async (user: string, university: string) => {
 
     if(!student) throw newError(400, 'Ne postoji student!');
 
-    let grades = await Grade.find({ student }, { serviceGrade: 1, _id: 0 });
-    let examCount = await Exam.count({ students: student._id, ended: true });
+    let grades = await Grade.find({ student, confirmed: true }, { professorGrade: 1, serviceGrade: 1, _id: 0 });
+    let examCount = await Exam.count({ students: student._id  });
     let subjects = await Subject.find({ _id: student.completedSubjects }, { espb: 1 });
 
     let espb = 0;
@@ -119,8 +119,14 @@ export const getStats = async (user: string, university: string) => {
     subjects.forEach((sub) => espb += sub.espb);
 
     grades.forEach((grade: any) => {
-        if(grade.serviceGrade > 5) {
-            gradesNum[grade.serviceGrade - 6].count++;
+        if(grade?.serviceGrade) {
+            if(grade.serviceGrade > 5) {
+                gradesNum[grade.serviceGrade - 6].count++;
+            } 
+        } else {
+            if(grade.professorGrade > 5) {
+                gradesNum[grade.professorGrade - 6].count++;
+            } 
         }
     });
 

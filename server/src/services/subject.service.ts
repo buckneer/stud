@@ -6,6 +6,7 @@ import Optional from "../models/optional.model";
 import User from "../models/user.model";
 import Student from "../models/student.model";
 import Period from "../models/period.model";
+import Exam from "../models/exam.model";
 
 
 export const addSubject = async (depId: string, data: SubjectDocument) => {
@@ -217,9 +218,8 @@ export const getSubjectsForExam = async (_id: string, uni: string) => {
     }
 
 
-    // Exclude already added?
-    // let excludedSubjectIds = await Exam.find({university: uni}).distinct('subject');
-    // query.subject = {$nin: excludedSubjectIds};
+    let excludedSubjectIds = await Exam.find({university: uni, period: period._id}).distinct('subject');
+    query._id = {$nin: excludedSubjectIds};
 
     let subjects = await Subject.find(query).populate({
         path: 'professors',
@@ -228,7 +228,7 @@ export const getSubjectsForExam = async (_id: string, uni: string) => {
             path: 'user',
             select: 'name'
         }
-    });
+    }).sort({ code: 1 });
 
     if(subjects.length === 0) throw newError(404, 'Predmeti ne postoje');
 
