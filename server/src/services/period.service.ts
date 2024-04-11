@@ -7,8 +7,25 @@ import {ExamDocument} from "../models/exam.model";
 export const addPeriod = async (data: PeriodDocument) => {
 	let uniObj = await University.findOne({ _id: data.university });
 
+
+
 	if(!uniObj) return newError(404, 'Odsek nije pronađen');
 
+	let startDate = new Date(data.start!);
+	let endDate = new Date(data.end!);
+
+	let fStartDate = startDate.toISOString();
+	let fEndDate = endDate.toISOString();
+
+	let periods = await Period.find({
+		$or: [
+			{start: {$lte: fEndDate}, end: {$gte: fStartDate}},
+			{start: {$gte: fStartDate, $lte: fEndDate}},
+			{end: {$lte: fEndDate, $gte: fStartDate}},
+		],
+	});
+
+	if(periods.length > 0) throw newError(403, 'Ispitni rok postoji u tom intervalu');
 	let newPeriod = new Period(data);
 
 	let saved = await newPeriod.save();
@@ -16,6 +33,10 @@ export const addPeriod = async (data: PeriodDocument) => {
 	if(!saved) return newError(500, 'Internal Server Error');
 
 	return newResponse('Ispitni rok je sačuvan', 200, { id: saved._id });
+
+}
+
+export const compareTimes = () => {
 
 }
 
