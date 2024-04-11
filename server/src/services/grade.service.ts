@@ -21,18 +21,36 @@ export const addGrade = async (user: string, data: GradeDocument) => {
     let exam = await Exam.findOne({_id: data.exam});
     if(!exam) throw newError(404, 'Ispit ne postoji');
 
+    let currentDate = new Date();
+    let fCurrentDate = currentDate.toISOString();
+    let oneWeekFromNow = new Date(currentDate.getDate() + 7);
+    let fOneWeekFromNow = new Date(currentDate.getDate() + 10).toISOString();
+
+    console.log(oneWeekFromNow);
+
+    if(fCurrentDate < exam.date!) throw newError(403, 'Ispit je u toku!');
+    if(fOneWeekFromNow > exam.date!) throw newError(403, 'Vreme za dodelu ocene je isteklo!');
+
     let newGrade = new Grade(data);
     let resp = await newGrade.save();
 
     let saved = [...exam.grades!, resp._id];
+
 
     await updateExam(exam._id, {grades: saved});
 
     // let service = await Service.findOne({_id: data.service});
     // if(!service) return newError(404, 'Studentska služba ne postoji');
 
-    // let student = await Student.findOne({_id: data.student});
-    // if(!student) return newError(404, 'Student ne postoji');
+    if(data.professorGrade! > 5) {
+        let student = await Student.updateOne({_id: data.student}, {
+            $addToSet: { completedSubjects:  resp.subject}
+        });
+        if(!student) return newError(404, 'Student ne postoji');
+    }
+
+
+
 
     if(!resp) return newError(500, 'Internal Server Error');
 
@@ -101,7 +119,9 @@ export const getStats = async (user: string, university: string) => {
 
     let grades = await Grade.find({ student, confirmed: true }, { professorGrade: 1, serviceGrade: 1, _id: 0 });
     let examCount = await Exam.count({ students: student._id  });
-    let subjects = await Subject.find({ _id: student.completedSubjects }, { espb: 1 });
+    let subjects = await Subject.find({ _id: {$in: student.completedSubjects }}, { espb: 1 });
+
+    console.log(student.completedSubjects, subjects);
 
     let espb = 0;
     let passed = subjects.length;
@@ -122,11 +142,11 @@ export const getStats = async (user: string, university: string) => {
         if(grade?.serviceGrade) {
             if(grade.serviceGrade > 5) {
                 gradesNum[grade.serviceGrade - 6].count++;
-            } 
+            }
         } else {
             if(grade.professorGrade > 5) {
                 gradesNum[grade.professorGrade - 6].count++;
-            } 
+            }
         }
     });
 
@@ -136,3 +156,10 @@ export const getStats = async (user: string, university: string) => {
     return { average, passed, failed, examCount, gradesNum, espb }
 }
 
+
+export const getGradesBySubject = async (sub: string) => {
+    let grades = await Grade.find({subject: sub});
+    if(!grades) return newError(404, 'Ocene nisu pronadjene');
+
+    return grades;
+}
