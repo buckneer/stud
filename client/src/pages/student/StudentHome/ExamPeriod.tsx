@@ -7,6 +7,7 @@ import StudTitle from "../../../components/StudTitle/StudTitle";
 import Loader from "../../../components/Loader/Loader";
 import TD from "../../../components/Table/TableColumn";
 import { useGetActivePeriodQuery } from "../../../app/api/periodApiSlice";
+import {formatDate} from "../../../utils/formatDate";
 
 export interface IExamPeriod {
 	session: Session,
@@ -56,7 +57,7 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 				let newExam: IExam = {
 					_id: item._id,
 					code: item.subject.code,
-					professor: item.professor._id,
+					professor: item.professor.user.name,
 					subject: item.subject?.name,
 					date: item.date,
 					semester: item.subject?.semester!,
@@ -89,14 +90,23 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 	}
 
 
+	const handleAddAll = () => {
+		if(examsToAdd.length === examData.length) {
+			setExamsToAdd([]);
+		} else {
+			setExamsToAdd(examData.map((item: any) => item._id));
+		}
+	}
+
+
 	return (
 		<div className="lists-container flex-1 h-full overflow-y-scroll py-5 w-full">
 			<div className="list-header flex justify-between p-5 ">
 				{ isAcExamLoading && <Loader /> }
-				{ 
+				{
 					<StudTitle text={isAcExamSuccess && activeExamData?.name ? activeExamData.name : 'Nema ispitnog roka...'} />
 				}
-				
+
 				<div className="search-container">
 					<input className='border-0 rounded-2xl bg-slate-100' type="text" placeholder="Pretraga" />
 				</div>
@@ -110,8 +120,9 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 								<TD>{row.code}</TD>
 								<TD>{row.semester}</TD>
 								<TD>{row.subject}</TD>
+								{/*@ts-ignore*/}
 								<TD>{row.professor}</TD>
-								<TD>{row.date}</TD>
+								<TD>{formatDate(row.date!)}</TD>
 								<TD>
 									<input
 										type="checkbox"
@@ -122,6 +133,21 @@ function ExamPeriod({session, uni} : IExamPeriod) {
 								</TD>
 							</tr>
 						)) : (<div className="p-5 font-black">Nema Ispita</div> )}
+						<tr className="border-t-5 border-slate-100">
+							<TD>IZABERI SVE</TD>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<TD>
+								<input
+									type="checkbox"
+									className="rounded-2xl checked:bg-black size-4 checked:border-0"
+									checked={examsToAdd.length === examData.length}
+									onChange={handleAddAll}
+								/>
+							</TD>
+						</tr>
 					</Table>
 				)}
 			</div>

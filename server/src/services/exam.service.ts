@@ -139,11 +139,18 @@ export const getPendingExamsProfessor = async (_id: string, period: string) => {
 
 export const examsCanAdd = async (_id: string, uni: string) => {
     // TODO filter by period!
-    const exams = await Exam.find({ university: uni }).populate('professor subject');
+    const exams = await Exam.find({ university: uni }).populate({
+        path: 'professor',
+        select: 'user',
+        populate: {
+            path: 'user',
+            select: 'name'
+        }
+    }).populate('subject');
     console.log(exams);
 
     const filteredExams = await Promise.all(exams.map(async (exam) => {
-        return await canAddExam(_id, exam.subject!._id.toString());
+        return await canAddExam(_id, exam.subject!._id.toString(), exam._id.toString());
     }));
 
     const filteredResults = exams.filter((exam, index) => filteredExams[index]);
@@ -167,7 +174,8 @@ export const addStudentToExams = async (_id: string, exams: String[]) => {
 
     const filterAdd = exams.filter(exam => canAddIds.includes(exam));
 
-    await Exam.updateMany({_id: {"$in": filterAdd}}, {$push: {students: student._id}});
+
+    await Exam.updateMany({_id: {"$in": filterAdd}}, {$addToSet: {students: student._id}});
 
     return filterAdd;
 }
@@ -188,7 +196,7 @@ export const canAddExam = async (userId: string, subjectId: string, exam?: strin
         console.log(targetExam);
         if(!targetExam) return false;
         let students = targetExam.students!.map(item => item.toString());
-        if(students.includes(userId)) return false;
+        if(students.includes(student._id.toString())) return false;
     }
 
     // TODO implement semester later!
