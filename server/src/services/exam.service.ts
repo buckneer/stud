@@ -200,7 +200,6 @@ export const canAddExam = async (userId: string, subjectId: string, exam?: strin
 
     if(exam) {
         let targetExam = await Exam.findOne({_id: exam});
-        console.log(targetExam);
         if(!targetExam) return false;
         let students = targetExam.students!.map(item => item.toString());
         if(students.includes(student._id.toString())) return false;

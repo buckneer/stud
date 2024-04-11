@@ -1,5 +1,5 @@
 import express from "express";
-import {userGuard} from "../middleware/routeGuard";
+import {AuthGuard, userGuard} from "../middleware/routeGuard";
 import {handleAddGrade, handleGetGrade, handleGetGrades, handleGetStats, handleUpdateGrade} from "../controllers/grade.controller";
 
 
