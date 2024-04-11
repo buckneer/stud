@@ -1,5 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { Subject } from "./types/types";
+import { Professor, Subject } from "./types/types";
 
 interface UpdateSubject {
 	university: string;
@@ -94,7 +94,7 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 			}),
 			providesTags: (result, error, {uni}) => (result)
 				? [...result.map((subject: Subject) => ({ type: 'Subject' as const, id: subject._id })),
-					{ type: 'Uni' as const, id: uni }]
+					{ type: 'Uni' as const, id: uni }, { type: 'Exam', id: 'LIST' }]
 				: [],
 		}),
 		updateSubject: builder.mutation <unknown, UpdateSubject> ({
@@ -180,7 +180,17 @@ const subjectApiSlice = apiSlice.injectEndpoints({
 					{ type: 'Department' as const, id: arg.department },
 					{ type: 'University' as const, id: arg.university } ]
 				: [],
-		})
+		}),
+		getSubjectsProfessors: builder.query <Professor[], { university: string; subject: string; }> ({
+			query: ({ university, subject }) => ({
+				url: `/uni/${university}/subject/${subject}/professor`,
+			}), 
+			providesTags: (result, error, arg) => (result) 
+				? [{ type: 'Uni' as const, id: arg.university },
+					{ type: 'Subject' as const, id: arg.subject },
+					...result.map((prof: Professor) => ({ type: 'Professor' as const, id: prof._id }))]
+				: [],
+		}),
 	})
 });
 
@@ -197,5 +207,6 @@ export const {
 	useGetRequiredSubjectsQuery,
 	useGetAvailableSubjectsQuery,
 	useGetAvailableOptionalSubjectsQuery,
-	useGetSubjectsForExamQuery
+	useGetSubjectsForExamQuery,
+	useGetSubjectsProfessorsQuery,
 } = subjectApiSlice;

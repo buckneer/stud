@@ -6,6 +6,7 @@ import {
 	handleGetAvailableReqSubjects,
 	handleGetEnrollableSubjects,
 	handleGetOptionalSubjects,
+	handleGetProfessorsOnSubject,
 	handleGetProfessorSubjects,
 	handleGetSubject,
 	handleGetSubjectRole,
@@ -44,6 +45,7 @@ router.patch('/:sub/sign/', userGuard, AuthGuard([
 	}
 ]), handleGiveSign);
 
+router.get('/:sub/professor', handleGetProfessorsOnSubject);
 router.get('/professor/active/',
 	userGuard,
 	AuthGuard([profRoles.professor]), handleGetProfessorSubjects);

@@ -14,6 +14,9 @@ export const addExam = async (data: ExamDocument) => {
     let period = await Period.findOne({ _id: data.period });
     if(!period) throw newError(404, 'Ne postoji ispitni rok');
 
+    const currentDate = new Date();
+	const utcDate = new Date(currentDate.toISOString());
+
     let subject = await Subject.findOne({_id: data.subject});
     if(!subject) return newError(404, 'Predmet nije pronađen');
 
@@ -35,7 +38,11 @@ export const addExam = async (data: ExamDocument) => {
 }
 
 export const getExam = async (_id: string) => {
-    let exam = await Exam.findOne({ _id }).populate('period');
+    let exam = await Exam.findOne({ _id }).populate({
+        path: 'period'
+    }).populate({
+        path: 'department'
+    });
     if(!exam) return newError(404, 'Ispit nije pronađen');
 
     return exam;
