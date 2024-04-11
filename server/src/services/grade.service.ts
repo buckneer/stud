@@ -156,3 +156,10 @@ export const getStats = async (user: string, university: string) => {
     return { average, passed, failed, examCount, gradesNum, espb }
 }
 
+
+export const getGradesBySubject = async (sub: string) => {
+    let grades = await Grade.find({subject: sub});
+    if(!grades) return newError(404, 'Ocene nisu pronadjene');
+
+    return grades;
+}
