@@ -7,6 +7,7 @@ import User from "../models/user.model";
 import Student from "../models/student.model";
 import Period from "../models/period.model";
 import Exam from "../models/exam.model";
+import University from "../models/university.model";
 
 
 export const addSubject = async (depId: string, data: SubjectDocument) => {
@@ -233,4 +234,19 @@ export const getSubjectsForExam = async (_id: string, uni: string) => {
     if(subjects.length === 0) throw newError(404, 'Predmeti ne postoje');
 
     return subjects;
+}
+
+export const getProfessorsOnSubject = async (university: string, subject: string) => {
+    let uni = await University.findOne({ _id: university });
+
+    if(!uni) throw newError(404, 'Ne postoji univerzitet!');
+
+    let professorData = await Professor.find({ subjects: subject, university }, { _id: 1 }).populate({
+        path: 'user',
+        select: 'name'
+    });
+
+    if(!professorData) throw newError(404, 'Ne postoji predmet!');
+
+    return professorData;
 }

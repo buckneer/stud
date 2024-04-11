@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Loader from '../../../components/Loader/Loader';
 import { useGetExamQuery, useUpdateExamMutation } from '../../../app/api/examApiSlice';
-import { useGetProfessorsQuery } from '../../../app/api/professorApiSlice';
-import Select, { GroupBase } from 'react-select';
+import Select from 'react-select';
 import { RootState } from '../../../app/store';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetUniDepartmentsQuery } from '../../../app/api/departmentApiSlice';
-import { useGetDepSubjectsQuery } from '../../../app/api/subjectApiSlice';
 import InputField from '../../../components/InputField/InputField';
 import MutationState from '../../../components/MutationState/MutationState';
 import getLabel from '../../../utils/getLabel';
+import { useGetSubjectsProfessorsQuery } from '../../../app/api/subjectApiSlice';
+import { formatDate } from '../../../utils/formatDate';
 
 const ExamEdit = () => {
 	const navigate = useNavigate();
@@ -20,7 +19,7 @@ const ExamEdit = () => {
 	const [date, setDate] = useState("");
 	const [department, setDepartment] = useState('');
 	const [subject, setSubject] = useState('');
-	const [professor, setProfessor] = useState('');
+	const [professor, setProfessor] = useState<any>('');
 
 	const {
 		data: examData,
@@ -30,31 +29,13 @@ const ExamEdit = () => {
 	} = useGetExamQuery({ university: uni!, id });
 
 	const {
-		data: departmentsData,
-		isLoading: isDepLoading,
-		isSuccess: isDepSuccess,
-		isError: isDepError
-	} = useGetUniDepartmentsQuery(uni!, {
-		skip: !uni
-	});
-
-	const {
-		data: subjectsData,
-		isLoading: isSubjectsLoading,
-		isSuccess: isSubjectsSuccess,
-		isError: isSubjectsError
-		// @ts-ignore
-	} = useGetDepSubjectsQuery({ university: uni!, department }, {
-		skip: !uni || !session.accessToken || !department
-	});
-
-	const {
 		data: professorsData,
 		isLoading: isProfessorsLoading,
 		isSuccess: isProfessorsSuccess,
 		isError: isProfessorError
-	} = useGetProfessorsQuery(uni!, {
-		skip: !uni || !session.accessToken || !subject
+		// @ts-ignore
+	} = useGetSubjectsProfessorsQuery({ university: uni!, subject: examData?.subject } , {
+		skip: !uni || !examData?.subject
 	});
 
 
@@ -92,9 +73,9 @@ const ExamEdit = () => {
 
 	let content : any = null;
 
-	if (isDepLoading || isProfessorsLoading || isSubjectsLoading || isExamLoading) {
+	if (isProfessorsLoading || isExamLoading) {
 		content = <Loader />
-	} else if (isDepSuccess && isExamSuccess) {
+	} else if (isExamSuccess) {
 		content =
 			<>
 				<div className='flex-grow flex justify-center items-center'>
@@ -117,7 +98,7 @@ const ExamEdit = () => {
 								<p className="px-3 pt-3 text-sm">Trajanje ispitnog roka</p>
 								<div className="flex font-bold">
 									{/* @ts-ignore */}
-									<p className="px-3 text-sm">{examData.period?.start.split('-').reverse().join('.') }. - { examData.period?.end.split('-').reverse().join('.') }.</p>
+									<p className="px-3 text-sm">{formatDate(examData.period?.start)} - { formatDate(examData.period?.end) }.</p>
 								</div>
 							</div>
 							<div className='form-control mb-5'>
@@ -133,34 +114,20 @@ const ExamEdit = () => {
 							</div>
 							<div className='form-control mb-5'>
 								{/* @ts-ignore */}
-								<Select maxMenuHeight={200} value={getLabel(department, departmentsData, '_id', 'name')} onChange={(e: any) => setDepartment(e?.value)} placeholder="Izaberite odsek" className='w-full outline-none' isClearable isSearchable options={departmentsData.map((item:any) => {
-									return { value: item._id, label: item.name};
-								})} />
+								<InputField id='dep' name='Odsek' disabled={true} type='text' inputVal={examData.department.name} />
 							</div>
-							{
-								(department) && isSubjectsSuccess && 
-								<>
-									<div className='form-control mb-5'>
-										{/* @ts-ignore */}
-										<Select maxMenuHeight={200}	value={getLabel(subject, subjectsData, '_id', 'name')} onChange={(e: any) => setSubject(e?.value)} placeholder="Izaberite predmet" className='w-full outline-none' isClearable isSearchable options={subjectsData.map((item: any) => {
-											return { value: item._id, label: item.name};
-										})} />
-									</div>
-								</>
-							}
 							{	
-								department && isProfessorsSuccess && subject &&
+								isProfessorsSuccess &&
 								<>
 									<div className='form-control mb-5'>
+										<label htmlFor='prof' className="relative block overflow-hidden rounded-md bg-white px-3 shadow-sm w-full text-sm">Profesor</label>
 										{/* @ts-ignore */}
-										<Select maxMenuHeight={200} value={getLabel(professor, professorsData, '_id', 'user.name')} onChange={(e: any) => setProfessor(e?.value)} placeholder="Izaberite profesora" className='w-full outline-none' isClearable isSearchable options={professorsData.map((item: any) => {
-											return { value: item._id, label: item.user.name};
+										<Select maxMenuHeight={200} id='prof' value={getLabel(professor, professorsData, '_id', 'user.name')} onChange={(e: any) => setProfessor(e)} placeholder="Izaberite profesora" className='w-full outline-none' isClearable isSearchable options={professorsData.map((item: any) => {
+											return { value: item._id, label: item.user.name };
 										})} />
 									</div>
 								</>
 							}
-							
-							
 							<div className='footer flex items-center justify-center flex-col'>
 								<button className='mt-5 bg-black px-5 py-2 rounded-2xl text-white w-1/2 disabled:bg-gray-500' type='submit'>Ažuriraj Ispit!</button>
 							</div>
@@ -177,9 +144,10 @@ const ExamEdit = () => {
 
 		if(examData) {
 			setDate(examData?.date as string);
-			setDepartment(examData?.department as string);
+			setProfessor(examData?.professor);
+			// @ts-ignore
+			setDepartment(examData?.department?.name! as string);
 			setSubject(examData?.subject as string);
-			setProfessor(examData.professor as string);
 		}
 
 	}, [ isExamSuccess ]);

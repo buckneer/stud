@@ -8,7 +8,8 @@ import {
     getSubjects,
     updateSubject,
     getEnrollableSubjects, getOptionalSubjects,
-    getAvailableOptionalSubjects, getSubjectsForExam
+    getAvailableOptionalSubjects, getSubjectsForExam,
+    getProfessorsOnSubject
 } from "../services/subject.service";
 import { addToModelArray, removeFromModelArray } from "../utils/service.utils";
 import Subject from "../models/subject.model";
@@ -227,6 +228,17 @@ export async function handleGetSubjectsForExam(req: Request, res: Response) {
         let resp = await getSubjectsForExam(period, uni);
         return res.status(200).send(resp);
     } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
+    }
+}
 
+export async function handleGetProfessorsOnSubject(req: Request, res: Response) {
+    try {
+        let { uni, sub } = req.params;
+        let resp = await getProfessorsOnSubject(uni, sub);
+
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(e.status || 500).send(e || 'Internal Server Error');
     }
 }

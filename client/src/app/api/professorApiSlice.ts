@@ -161,5 +161,5 @@ export const {
 	useAddProfessorUnisMutation,
 	useGiveSignMutation,
 	useDeleteProfessorUniMutation,
-	useGetSubjectProfessorsQuery,
+	useGetSubjectProfessorsQuery
 } = professorApiSlice;

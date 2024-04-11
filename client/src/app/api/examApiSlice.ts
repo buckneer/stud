@@ -48,7 +48,7 @@ const examApiSlice = apiSlice.injectEndpoints({
 				body
 			}),
 			invalidatesTags: (result, error) => (result)
-				? ['Exam']
+				? ['Exam', { type: 'Exam', id: 'LIST' }]
 				: []
 		}),
 		getExam: builder.query <Exam, { university: string, id: string }> ({

@@ -95,7 +95,7 @@ const ServiceExam = () => {
 			console.error(e);
 		}
 	}
-
+	
 	// TODO implement later!
 	// const bulkAdd = (exam: Exam[]) => {
 	//
@@ -157,7 +157,7 @@ const ServiceExam = () => {
 																subject: subj._id,
 																professor: subj.professors![0], // TODO change to react-select
 																period: activePeriod?._id,
-																// department: activePeriod.department, TODO undefined!!
+																department: subj.department,
 																university: uni
 															})
 														}} />
