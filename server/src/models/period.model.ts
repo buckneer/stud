@@ -22,7 +22,7 @@ const PeriodSchema = new Schema({
     acceptDate: {type: Date, required: true},
     exams: [{type: Schema.ObjectId, ref: 'Exam'}],
     university: {type: Schema.ObjectId, ref: 'University'},
-    semester: {type: String, required: true},
+    semester: {type: Number, required: true},
     active: {type: Boolean, default: false}
     // department: {type: Schema.ObjectId, ref: 'Department'}
 });

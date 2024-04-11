@@ -153,7 +153,7 @@ export const giveSign = async (_id: string, professor: string, students: string[
 
 
     if(!professorObj) throw newError(404, 'Ne postoji profesor!');
-    console.log(professorObj._id);
+
     let studentsObj = await Student.find({ _id:  students, subjects: _id });
 
     if(!studentsObj.length) throw newError(400, 'Niste dodali studente!');
