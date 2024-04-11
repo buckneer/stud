@@ -40,7 +40,8 @@ export async function handleGetSubjects(req: Request, res: Response) {
         if(uni) {
             key = 'university';
             value = uni;
-        } else if (dep) {
+        } 
+        if (dep) {
             key = 'department';
             value = dep;
         }

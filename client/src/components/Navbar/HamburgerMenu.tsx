@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Book, CalendarCheck, CircleUser, CircleX, Component, FolderArchive, GraduationCap, LayoutList, LogOutIcon, Menu, User} from "lucide-react";
+import {Book, CalendarCheck, CircleUser, CircleX, Component, FolderArchive, GraduationCap, LayoutList, LogOutIcon, Menu, ScrollText, User} from "lucide-react";
 import NavItem from "./NavItem";
 import { useLogoutMutation } from "../../app/api/sessionApiSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -105,10 +105,16 @@ function HamburgerMenu() {
 															<div className="font-black">Odseci</div>
 														</div>
 													</div>
-													<div onClick={() => handleLinkChange(6 )}>
+													<div onClick={() => handleLinkChange(6)}>
 														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
 															<Book />
 															<div className="font-black">Predmeti</div>
+														</div>
+													</div>
+													<div onClick={() => handleLinkChange(7)}>
+														<div className="icon flex justify-center gap-4 p-3 m-3 rounded-md hover:bg-white hover:text-black transition-all cursor-pointer">
+															<ScrollText />
+															<div className="font-black">Ocene</div>
 														</div>
 													</div>
 												</div>

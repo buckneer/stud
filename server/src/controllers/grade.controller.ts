@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {addGrade, getGrade, getGrades, getGradesBySubject, getStats, updateGrade} from "../services/grade.service";
+import {addGrade, confirmGrade, getGrade, getGrades, getGradesByPeriod, getGradesBySubject, getStats, updateGrade} from "../services/grade.service";
 
 export async function handleAddGrade(req: Request, res: Response) {
     try {
@@ -74,6 +74,37 @@ export async function handleGetGradesBySubject(req: Request, res: Response) {
     try {
         let { uni, sub } = req.params;
         let resp = await getGradesBySubject(sub);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleConfirmGrade(req: Request, res: Response) {
+    try {
+        let { uni, grade } = req.params;
+
+        let resp = await confirmGrade(req.user?.id as string, uni, grade, req.body);
+        return res.status(200).send(resp);
+    } catch (e: any) {
+        return res.status(500).send(e || 'Internal Server Error');
+    }
+}
+
+export async function handleGetGradesByPeriod(req: Request, res: Response) {
+    try {
+        let { uni, sub, period } = req.params;
+
+        let { confirmed } = req.query;
+        let filter = {};
+
+        if(confirmed === '0') {
+            filter = { serviceGrade: { '$exists': false }};
+        } else if (confirmed === '1') {
+            filter = { serviceGrade: { '$exists': true }};
+        }
+ 
+        let resp = await getGradesByPeriod(uni, sub, period, filter);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(500).send(e || 'Internal Server Error');

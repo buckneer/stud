@@ -9,7 +9,8 @@ import {
   Settings,
   User,
   Component,
-  UserCircle
+  UserCircle,
+  ScrollText
 } from "lucide-react";
 
 import Loader from "../../components/Loader/Loader";
@@ -26,6 +27,7 @@ import { setMetadata } from '../../app/slices/sessionSlice';
 import SubjectsTab from '../service/Subjects/SubjectsTab';
 import ServicePeriod from "./ServicePeriod";
 import ServiceExam from './ServiceExam';
+import GradeConfirm from './GradeConfirm';
 
 const university: string = "65fafc2da919db458f7ed90d";
 const role: string = "student";
@@ -54,6 +56,7 @@ export default function Home() {
         { session.metadata.serviceHome === 4 && <ServiceExam /> }
         { session.metadata.serviceHome === 5 && <DepartmentHome /> }
         { session.metadata.serviceHome === 6 && <SubjectsTab /> }
+        { session.metadata.serviceHome === 7 && <GradeConfirm />} 
         <Sidebar role="service">
           <div className="">
             <SidebarItem name="Studenti" to={0} Icon={GraduationCap} active={session.metadata.serviceHome === 0} changeData={handleDataChange} />
@@ -65,6 +68,7 @@ export default function Home() {
             <SidebarItem name="Ispiti" to={4} active={session.metadata.serviceHome === 4} changeData={handleDataChange}  Icon={LayoutList} />
             <SidebarItem name="Odseci" to={5} Icon={Component} active={session.metadata.serviceHome === 5} changeData={handleDataChange} />
             <SidebarItem name="Predmeti" to={6} Icon={Book} active={session.metadata.serviceHome === 6} changeData={handleDataChange} />
+            <SidebarItem name="Ocene" to={7} Icon={ScrollText} active={session.metadata.serviceHome === 6} changeData={handleDataChange} />
           </div>
         </Sidebar>
       </div>
