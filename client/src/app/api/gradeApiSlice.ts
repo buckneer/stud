@@ -7,6 +7,14 @@ interface UpdateGrade {
 	body: Grade;
 }
 
+interface ConfirmGrade {
+	university: string;
+	grade: string;
+	body: {
+		serviceGrade: number | string;
+	}
+}
+
 const gradeApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		addGrade: builder.mutation <unknown, { university: string, body: Grade }> ({
@@ -63,6 +71,39 @@ const gradeApiSlice = apiSlice.injectEndpoints({
 					{ type: 'Grade' as const }
 				]
 				: []
+		}),
+		getGradesBySubject: builder.query <Grade[], { university: string; subject: string }> ({
+			query: ({ university, subject }) => ({
+				url: `/uni/${university}/grade/subject/${subject}/`
+			}),
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Uni' as const, id: arg.university },
+					{ type: 'Subject' as const, id: arg.subject },
+					...result.map((grade: Grade) => ({ type: 'Grade' as const, id: grade._id }))]
+				: [],
+		}),
+		getGradesBySubjectPeriod: builder.query <Grade[], { university: string; subject: string; period: string }> ({
+			query: ({ university, subject, period }) => ({
+				url: `/uni/${university}/grade/subject/${subject}/period/${period}/`
+			}),
+			providesTags: (result, error, arg) => (result)
+				? [{ type: 'Uni' as const, id: arg.university },
+					{ type: 'Subject' as const, id: arg.subject },
+					{ type: 'Period' as const, id: arg.period },
+					...result.map((grade: Grade) => ({ type: 'Grade' as const, id: grade._id }))]
+				: [],
+		}),
+		confirmGrade: builder.mutation <any, ConfirmGrade> ({
+			query: ({ university, grade, body }) => ({
+				url: `/uni/${university}/grade/${grade}/confirm`,
+				method: 'PATCH',
+				body
+			}),
+			invalidatesTags: (result, error, arg) => (result)
+				? [{ type: 'Uni' as const, id: arg.university },
+					{ type: 'Grade' as const },
+				]
+				: []
 		})
 	})
 });
@@ -73,5 +114,8 @@ export const {
 	useGetGradesQuery,
 	useUpdateGradeMutation,
 	useGetGradesByRoleQuery,
-	useGetStatsQuery
+	useGetStatsQuery,
+	useGetGradesBySubjectQuery,
+	useGetGradesBySubjectPeriodQuery,
+	useConfirmGradeMutation
 } = gradeApiSlice;

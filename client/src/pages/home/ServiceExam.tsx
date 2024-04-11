@@ -134,7 +134,7 @@ const ServiceExam = () => {
 							isSubjectsSuccess && subjectData?.length !== 0 ?
 								<>
 									{
-										subjectData.map(subj => (
+										subjectData.map((subj: any) => (
 											<tr key={ subj._id }>
 												<TD>{ subj.code }</TD>
 												<TD>{ subj.name }</TD>

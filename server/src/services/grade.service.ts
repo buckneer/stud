@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import Exam from "../models/exam.model";
 import Period from "../models/period.model";
 import {updateExam} from "./exam.service";
+import University from "../models/university.model";
 
 export const addGrade = async (user: string, data: GradeDocument) => {
     // let subject = await Subject.findOne({_id: data.subject});
@@ -150,7 +151,6 @@ export const getStats = async (user: string, university: string) => {
         }
     });
 
-
     average = parseFloat((average / grades.length).toFixed(2)) || 0;
 
     return { average, passed, failed, examCount, gradesNum, espb }
@@ -159,7 +159,60 @@ export const getStats = async (user: string, university: string) => {
 
 export const getGradesBySubject = async (sub: string) => {
     let grades = await Grade.find({subject: sub});
-    if(!grades) return newError(404, 'Ocene nisu pronadjene');
 
     return grades;
+}
+
+export const confirmGrade = async (user: string, university: string, grade: string, data: any) => {
+    let uni = await University.findOne({ _id: university });
+
+    if(!uni) throw newError(404, 'Ne postoji univerzitet!');
+
+    let gradeObj = await Grade.findOne({ _id: grade });
+
+    if(!gradeObj) throw newError(404, 'Ne postoji ocena!');
+
+    let exam = await Exam.findOne({ _id: gradeObj.exam, university });
+
+    if(!exam) throw newError(404, 'Ne postoji ispit!');
+
+    // TODO: add 28? days check here!!!
+
+    await Grade.updateOne({ _id: grade }, {
+        $set: {
+            serviceGrade: data.serviceGrade,
+            confirmed: true,
+            service: user
+        }
+    });
+
+    return newResponse('Uspešno ste potvrdili ocenu!', 200);
+}
+
+export const getGradesByPeriod = async (university: string, subject: string, period: string, filter: any) => {
+    let subjectObj = await Subject.findOne({ _id: subject, university });
+
+    if(!subjectObj) throw newError(404, 'Ne postoji predmet');
+
+    let grades = await Grade.find({ subject, period }).populate({
+        path: 'professor',
+        select: 'user',
+        populate: {
+            path: 'user',
+            select: 'name'
+        }
+    }).populate({
+        path: 'subject',
+        select: 'name'
+    }).populate({
+        path: 'student',
+        select: 'studentId user',
+        populate: {
+            path: 'user',
+            select: 'name'
+        }
+    });
+
+    return grades;
+
 }
