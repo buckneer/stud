@@ -9,13 +9,20 @@ import Department from "../models/department.model";
 
 
 export const addExam = async (data: ExamDocument) => {
-    // let date = new Date();
-    // TODO: check if period is in future
     let period = await Period.findOne({ _id: data.period });
     if(!period) throw newError(404, 'Ne postoji ispitni rok');
 
     const currentDate = new Date();
 	const utcDate = new Date(currentDate.toISOString());
+    
+    const examDate = new Date(new Date(data.date!).toISOString());
+    const startDate = new Date(new Date(period.start!).toISOString());
+    const endDate = new Date(new Date(period.end!).toISOString());
+    const acceptDate = new Date(new Date(period.acceptDate!).toISOString());
+    
+    if(utcDate > acceptDate) throw newError(400, 'Ne možete dodati ispit nakon isteka roka za prijavu!');
+    if(examDate < startDate || endDate < examDate) throw newError(400, 'Datum ispita mora biti u roku!'); 
+    if(examDate < utcDate) throw newError(400, 'Datum ne sme biti u prošlosti!');
 
     let subject = await Subject.findOne({_id: data.subject});
     if(!subject) return newError(404, 'Predmet nije pronađen');
@@ -26,8 +33,6 @@ export const addExam = async (data: ExamDocument) => {
 
     let newExam = new Exam(data);
     let saved = await newExam.save();
-
-    console.log(saved);
 
     if(!saved) return newError(500, 'Internal Server Error');
 
@@ -69,11 +74,29 @@ export const updateExam = async (_id: string, data: any) => {
 
     if(!examObj) throw newError(404, 'Greška prilikom pristupanja!');
 
+    let period = await Period.findOne({ exams: _id });
+
+    if(!period) throw newError(404, 'Ispitni rok ne postoji!');
+
+    const currentDate = new Date();
+	const utcDate = new Date(currentDate.toISOString());
+
+    const examDate = new Date(new Date(data.date!).toISOString());
+    const startDate = new Date(new Date(period.start!).toISOString());
+    const endDate = new Date(new Date(period.end!).toISOString());
+    const acceptDate = new Date(new Date(period.acceptDate!).toISOString());
+    
+    if(currentDate > acceptDate) throw newError(400, 'Ne možete dodati ispit nakon isteka roka za prijavu!');
+    if(examDate < startDate || endDate < examDate) throw newError(400, 'Datum ispita mora biti u roku!'); 
+    if(examDate < currentDate) throw newError(400, 'Datum ne sme biti u prošlosti!');
+
+
     let updated = await Exam.updateOne({ _id }, {
         $set: {
-            ...data
+            professor: data.professor,
+            date: data.date
         }
-    })
+    });
 
     if(!updated) throw newError(500, 'Internal Server Error');
 
