@@ -183,9 +183,9 @@ export async function handleGetStudentsBySemester(req: Request, res: Response) {
 
 export async function handleGetStudentsByDepartment(req: Request, res: Response) {
     try {
-        let { id } = req.params;
+        let { department } = req.params;
 
-        let resp = await getStudentsByDepartment(id);
+        let resp = await getStudentsByDepartment(department);
         return res.status(200).send(resp);
     } catch (e: any) {
         return res.status(e.status || 500).send(e || 'Internal Server Error');

@@ -84,7 +84,10 @@ export const getStudentsByDepartment = async (_id: string) => {
 
     if(!department) throw newError(404, 'Ne postoji odsek!');
 
-    return Student.find({ department: _id });
+    return Student.find({ department: _id }).populate({
+        path: 'user',
+        select: 'name'
+    });
 }
 
 export const getStudentsBySubject = async (_id: string) => {
