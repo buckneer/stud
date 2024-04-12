@@ -1,5 +1,5 @@
 import express from "express";
-import {AuthGuard, userGuard} from "../middleware/routeGuard";
+import {AuthGuard, isServiceInUniversity, userGuard} from "../middleware/routeGuard";
 import {
 	handleAddGrade,
 	handleConfirmGrade,
@@ -17,7 +17,10 @@ const router = express.Router({mergeParams: true});
 
 router.post('/', userGuard, handleAddGrade);
 router.patch('/:grade/', handleUpdateGrade);
-router.patch('/:grade/confirm', userGuard, handleConfirmGrade);
+router.patch('/:grade/confirm', userGuard, AuthGuard([{
+	role: 'service',
+	when: isServiceInUniversity
+}]), handleConfirmGrade);
 router.get('/:grade/', handleGetGrade);
 router.get("/subject/:sub", handleGetGradesBySubject);
 router.get("/subject/:sub/period/:period", handleGetGradesByPeriod)

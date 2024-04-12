@@ -72,6 +72,9 @@ function GradeTab() {
 
 
 	const handleSetGrade = async (gradeNum: number, student: string) => {
+
+
+
 		let grade : Grade = {
 			subject: examData!.subject,
 			professorGrade: gradeNum,
@@ -92,6 +95,7 @@ function GradeTab() {
 
 		try {
 			handleDropdown(student);
+			console.log(gradeNum, student, gradeId);
 			await updateGradeTrig({
 				university: uni!,
 				id: gradeId!,
@@ -172,7 +176,6 @@ function GradeTab() {
 														{updateGrade.includes(item._id!) && (
 															<>
 																<GradeColumn handleSetGrade={handleUpdateGrade} item={item._id!} gradeId={getStudentGrade(item._id!)!._id} close={handleDropdown} />
-
 															</>
 												)
 											}

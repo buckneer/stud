@@ -11,8 +11,6 @@ export interface IGradeColumnProps {
 
 function GradeColumn({handleSetGrade, item, gradeId, className, close} : IGradeColumnProps & HTMLAttributes<any>) {
 
-
-	const ref = useRef<HTMLParagraphElement>(null);
 	const [animate, setAnimate] = useState(false);
 
 	const getDurationClass = (index: number) => {

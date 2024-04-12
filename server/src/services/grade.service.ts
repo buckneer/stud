@@ -7,15 +7,15 @@ import Student from "../models/student.model";
 import { Model } from 'mongoose';
 import Exam from "../models/exam.model";
 import Period from "../models/period.model";
-import {updateExam} from "./exam.service";
+import {updateExam, updateGradesExam} from "./exam.service";
 import University from "../models/university.model";
 
 export const addGrade = async (user: string, data: GradeDocument) => {
-    // let subject = await Subject.findOne({_id: data.subject});
-    // if (!subject) return newError(404, 'Predmet ne postoji');
+    let subject = await Subject.findOne({_id: data.subject});
+    if (!subject) throw newError(404, 'Predmet ne postoji');
 
     let professor = await Professor.findOne({user});
-    if(!professor) return newError(404, 'Profesor ne postoji');
+    if(!professor) throw newError(404, 'Profesor ne postoji');
 
     data.professor = professor._id.toString();
 
@@ -24,10 +24,8 @@ export const addGrade = async (user: string, data: GradeDocument) => {
 
     let currentDate = new Date();
     let fCurrentDate = currentDate.toISOString();
-    let oneWeekFromNow = new Date(currentDate.getDate() + 7);
     let fOneWeekFromNow = new Date(currentDate.getDate() + 10).toISOString();
 
-    console.log(oneWeekFromNow);
 
     if(fCurrentDate < exam.date!) throw newError(403, 'Ispit je u toku!');
     if(fOneWeekFromNow > exam.date!) throw newError(403, 'Vreme za dodelu ocene je isteklo!');
@@ -37,9 +35,7 @@ export const addGrade = async (user: string, data: GradeDocument) => {
 
     let saved = [...exam.grades!, resp._id];
 
-
-    await updateExam(exam._id, {grades: saved});
-
+    await updateGradesExam(exam._id, saved);
     // let service = await Service.findOne({_id: data.service});
     // if(!service) return newError(404, 'Studentska služba ne postoji');
 
@@ -47,13 +43,12 @@ export const addGrade = async (user: string, data: GradeDocument) => {
         let student = await Student.updateOne({_id: data.student}, {
             $addToSet: { completedSubjects:  resp.subject}
         });
-        if(!student) return newError(404, 'Student ne postoji');
+        if(!student) throw newError(404, 'Student ne postoji');
+        if(!resp) throw newError(500, 'Internal Server Error');
     }
 
 
 
-
-    if(!resp) return newError(500, 'Internal Server Error');
 
     return newResponse('Nova ocena je kreirana');
 }
@@ -165,18 +160,17 @@ export const getGradesBySubject = async (sub: string) => {
 
 export const confirmGrade = async (user: string, university: string, grade: string, data: any) => {
     let uni = await University.findOne({ _id: university });
-
     if(!uni) throw newError(404, 'Ne postoji univerzitet!');
 
     let gradeObj = await Grade.findOne({ _id: grade });
-
     if(!gradeObj) throw newError(404, 'Ne postoji ocena!');
 
     let exam = await Exam.findOne({ _id: gradeObj.exam, university });
-
     if(!exam) throw newError(404, 'Ne postoji ispit!');
 
-    // TODO: add 28? days check here!!!
+    let service = await Service.findOne({ user });
+    if(!service) throw newError(404, 'Ne postoji služba!');
+
 
     await Grade.updateOne({ _id: grade }, {
         $set: {

@@ -14,14 +14,14 @@ export const addExam = async (data: ExamDocument) => {
 
     const currentDate = new Date();
 	const utcDate = new Date(currentDate.toISOString());
-    
+
     const examDate = new Date(new Date(data.date!).toISOString());
     const startDate = new Date(new Date(period.start!).toISOString());
     const endDate = new Date(new Date(period.end!).toISOString());
     const acceptDate = new Date(new Date(period.acceptDate!).toISOString());
-    
+
     if(utcDate > acceptDate) throw newError(400, 'Ne možete dodati ispit nakon isteka roka za prijavu!');
-    if(examDate < startDate || endDate < examDate) throw newError(400, 'Datum ispita mora biti u roku!'); 
+    if(examDate < startDate || endDate < examDate) throw newError(400, 'Datum ispita mora biti u roku!');
     if(examDate < utcDate) throw newError(400, 'Datum ne sme biti u prošlosti!');
 
     let subject = await Subject.findOne({_id: data.subject});
@@ -85,16 +85,37 @@ export const updateExam = async (_id: string, data: any) => {
     const startDate = new Date(new Date(period.start!).toISOString());
     const endDate = new Date(new Date(period.end!).toISOString());
     const acceptDate = new Date(new Date(period.acceptDate!).toISOString());
-    
-    if(currentDate > acceptDate) throw newError(400, 'Ne možete dodati ispit nakon isteka roka za prijavu!');
-    if(examDate < startDate || endDate < examDate) throw newError(400, 'Datum ispita mora biti u roku!'); 
-    if(examDate < currentDate) throw newError(400, 'Datum ne sme biti u prošlosti!');
+
+    if(utcDate > acceptDate) throw newError(400, 'Ne možete dodati ispit nakon isteka roka za prijavu!');
+    if(examDate < startDate || endDate < examDate) throw newError(400, 'Datum ispita mora biti u roku!');
+    if(examDate < utcDate) throw newError(400, 'Datum ne sme biti u prošlosti!');
 
 
     let updated = await Exam.updateOne({ _id }, {
         $set: {
             professor: data.professor,
             date: data.date
+        }
+    });
+
+    if(!updated) throw newError(500, 'Internal Server Error');
+
+    return newResponse('Ispit uspešno ažuriran');
+}
+
+
+export const updateGradesExam = async (_id: string, grades: String[]) => {
+    let examObj = await Exam.findOne({ _id });
+
+    if(!examObj) throw newError(404, 'Greška prilikom pristupanja!');
+
+    let period = await Period.findOne({ exams: _id });
+
+    if(!period) throw newError(404, 'Ispitni rok ne postoji!');
+
+    let updated = await Exam.updateOne({ _id }, {
+        $set: {
+            grades: grades
         }
     });
 
